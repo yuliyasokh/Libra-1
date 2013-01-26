@@ -18,9 +18,6 @@ import org.springframework.web.servlet.mvc.SimpleFormController;
  * @author MorrDeck
  */
 
-@Controller
-@RequestMapping("/register")
-
 public class RegistrationController extends SimpleFormController {
     
     private RegistrationService RegService;
