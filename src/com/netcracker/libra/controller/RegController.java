@@ -5,11 +5,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import com.netcracker.libra.dao.StudentJDBC;
 import com.netcracker.libra.model.Student;
-import com.netcracker.libra.model.registration.regData;
+
 
 @Controller
 public class RegController {
@@ -24,7 +23,8 @@ public class RegController {
 	   @RequestMapping(value = "/registration", method = RequestMethod.POST)
 	   public String createUser(@ModelAttribute("Student") Student regData, BindingResult result) {
 		  
-		  st.create(regData.getName(), regData.getLastName(), regData.getEmail(), regData.getPassword());
+		  String md5 = com.netcracker.libra.util.security.Security.getMD5hash(regData.getPassword());
+		  st.create(regData.getName(), regData.getLastName(), regData.getEmail(), md5);
 		  return "RegsuccessView";
 	   }
 	

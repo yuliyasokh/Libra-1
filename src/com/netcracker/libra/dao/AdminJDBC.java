@@ -2,6 +2,10 @@ package com.netcracker.libra.dao;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+@Repository
 public class AdminJDBC implements AdminDAO {
 
 	@Override
@@ -20,6 +24,13 @@ public class AdminJDBC implements AdminDAO {
 
 	@Override
 	public void delete(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	@Autowired
+	public void setDataSource(DataSource dataSource) {
 		// TODO Auto-generated method stub
 		
 	}

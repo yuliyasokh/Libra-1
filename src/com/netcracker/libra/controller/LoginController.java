@@ -5,6 +5,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.netcracker.libra.dao.StudentJDBC;
 import com.netcracker.libra.model.Student;
+import com.netcracker.libra.util.security.Security;
 
 @Controller
 public class LoginController {
@@ -29,9 +31,9 @@ public class LoginController {
    }
    
    @RequestMapping(value = "/submit", method = RequestMethod.POST)
-   public String verify(@RequestParam String email, @RequestParam String password) {
+   public String verify(@ModelAttribute("Student") Student student) {
  
-	   if (StudentJDBC.verifyLogin(email, password) > 0)
+	   if (StudentJDBC.verifyLogin(student.getEmail(), Security.getMD5hash(student.getPassword())) == 1)
 		   return "loginSuccesful";
 	   else
 		   return "loginFailed";

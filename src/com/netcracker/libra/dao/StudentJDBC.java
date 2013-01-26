@@ -67,10 +67,5 @@ public class StudentJDBC implements StudentDAO {
 	   result = jdbcTemplateObject.queryForInt(SQL, email, password);
 	   return result;
    }
-   
-   public int searchByEmail(String email) {
-	   String SQL = "select * from users where email=?";
-	   return jdbcTemplateObject.queryForInt(SQL, email);
-   }
 
 }
