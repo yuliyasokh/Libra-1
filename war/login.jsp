@@ -11,7 +11,7 @@
 <body>
 
 <h2>Введите данные для входа</h2>
-<form:form method="POST" action="/Libra/loginProceed">
+<form:form method="POST" action="/Libra/submit.html">
    <table>
    
     <tr>

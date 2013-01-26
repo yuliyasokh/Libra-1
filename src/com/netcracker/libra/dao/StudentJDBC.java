@@ -1,20 +1,24 @@
 package com.netcracker.libra.dao;
 
 import java.util.List;
+
 import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import com.netcracker.libra.model.Student;
 
+@Repository
 public class StudentJDBC implements StudentDAO {
-   private DataSource dataSource;
-   private JdbcTemplate jdbcTemplateObject;
+
+   private static JdbcTemplate jdbcTemplateObject;
    private static int userId = 1;
    private final int roleId = 1;
    
+   @Autowired
    public void setDataSource(DataSource dataSource) {
-      this.dataSource = dataSource;
-      this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+       jdbcTemplateObject = new JdbcTemplate(dataSource);
    }
 
    public void create(String name, String lastName, String email, String password) {
@@ -51,6 +55,18 @@ public class StudentJDBC implements StudentDAO {
       jdbcTemplateObject.update(SQL, name, lastName, email, password, id);
       System.out.println("Updated Record with ID = " + id );
       return;
+   }
+   
+   public static int verifyLogin(String email, String password)  {
+	   String SQL = "select count(*) from users where email=? and password=?";
+	   int result;
+	   result = jdbcTemplateObject.queryForInt(SQL, email, password);
+	   return result;
+   }
+   
+   public int searchByEmail(String email) {
+	   String SQL = "select * from users where email=?";
+	   return jdbcTemplateObject.queryForInt(SQL, email);
    }
 
 }

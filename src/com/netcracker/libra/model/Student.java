@@ -10,6 +10,9 @@ public class Student {
 	   private String password;
 	   private int roleId;
 	   private List customFields;
+	   
+	   public Student() {
+	   }
 
 	   public void setId(Integer id) {
 	      this.id = id;
