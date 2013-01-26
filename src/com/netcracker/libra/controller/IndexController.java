@@ -10,7 +10,7 @@ public class IndexController {
 	@RequestMapping("/index")
     public ModelAndView helloWorld() {
  
-        String message = "Hello World, Spring 3.0!";
+        String message = "Выберите действие: ";
         return new ModelAndView("index", "message", message);
  
 	}
