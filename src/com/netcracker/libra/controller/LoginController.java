@@ -10,6 +10,8 @@ import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
 
+//bbb
+
 public class LoginController {
 
     protected final Log logger = LogFactory.getLog(getClass());
