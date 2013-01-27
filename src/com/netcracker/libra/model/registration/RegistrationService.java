@@ -23,22 +23,14 @@ public class RegistrationService {
     }
     
     public static boolean checkEmail(String email){
-        Pattern p = Pattern.compile("[a-zA-Z]{1}[a-zA-Z\\d\\u002E\\u005F]+@([a-zA-Z]+\\u002E){1,2}((net)|(com)|(org))");
+        Pattern p = Pattern.compile("(\\s+[a-z][a-z0-9._%-]+@[a-z0-9._%-]+\\.[a-z]{2,4})|(^[a-z][a-z0-9._%-]+@[a-z0-9._%-]+\\.[a-z]{2,4})");
         Matcher m = p.matcher(email);
         boolean res = m.matches();
         return res;
     }
     
     public static boolean checkPassword(String password){
-        Pattern p = Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})");
-//  (			# Начало группы
-//  (?=.*\d)		#   должен содержать хотя бы одну цифру
-//  (?=.*[a-z])	#   должен содержать хотябы одну букву в нижнем регистре
-//  (?=.*[A-Z])	#   должен содержать хотябы одну букву в верхнем регистре
-//  (?=.*[@#$%])	#   должен содержать один специальный символ из "@#$%"
-//  .		        #     любое совпадение с предыдущими условиями  
-//  {6,20}	        #     длина от 6 до 20 символов
-//   )			# Конец группы
+        Pattern p = Pattern.compile("([_]|[-]|[a-z]|[A-Z]|\\d){6,25}");
         Matcher m = p.matcher(password);
         boolean res = m.matches();
         return res;

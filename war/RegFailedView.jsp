@@ -24,7 +24,7 @@
                                 <td align="right" valign="top">
                                     Office: +38 048 740 69 96<br />
                                     Mobile: + 38 050 333 40 58<br />
-                                    www.NetCracker.comвЂ‚
+                                    www.NetCracker.com
 
                                 </td>
                                 <tr>
@@ -50,7 +50,7 @@
                                                                 <td align="center"><font size="+1" color="red"> ${error} </font></td>
                                                             </tr>
                                                             <tr>
-                                                                <td align="center"><a href="reg.htm">Вернуться назад</a></td>
+                                                                <td align="center"><a href="register.html">Вернуться назад</a></td>
                                                             </tr>
                                                             
                                                         </tbody>

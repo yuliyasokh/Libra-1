@@ -25,7 +25,7 @@
                                 <td align="right" valign="top">
                                     Office: +38 048 740 69 96<br />
                                     Mobile: + 38 050 333 40 58<br />
-                                    www.NetCracker.comвЂ‚
+                                    www.NetCracker.com
 
                                 </td>
                                 <tr>
@@ -50,19 +50,19 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>Имя:</td>
-                                                        <td>${Name}</td>
+                                                        <td>${name}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Фамилия:</td>
-                                                        <td>${Surname}</td>
+                                                        <td>${lastname}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>E-mail:</td>
-                                                        <td>${Email}</td>
+                                                        <td>${email}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Пароль:</td>
-                                                        <td>${Password}</td>
+                                                        <td>${password}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
