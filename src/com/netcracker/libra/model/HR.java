@@ -4,7 +4,7 @@ import java.util.List;
 
 public class HR {
     private Integer id;
-    private String firstName;
+    private String name;
     private String lastName;
     private String email;
     private String password;
@@ -22,12 +22,12 @@ public class HR {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(String name) {
+        this.name = name;
     }
 
     public String getLastName() {
