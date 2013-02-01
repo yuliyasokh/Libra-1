@@ -10,5 +10,10 @@
 	<a href="register.html">Зарегистироваться</a>
 	<br>
 	<a href="login.html">Войти</a>
+        </br>
+        <a href="showTopics.html">Темы вопросов</a>
+        <a href="showTemplates.html">Шаблоны</a>
+        <a href="showTypes.html">Типы</a>
+        <a href="showColumns.html">Колонки</a>
 </body>
 </html>

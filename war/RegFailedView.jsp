@@ -48,9 +48,9 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td align="center"><font size="+1" color="red"> ${error} </font></td>
-                                                            </tr>
+                                                             </tr>
                                                             <tr>
-                                                                <td align="center"><a href="reg.htm">Вернуться назад</a></td>
+                                                                <td align="center"><a href="register.html">Вернуться назад</a></td>
                                                             </tr>
                                                             
                                                         </tbody>
