@@ -24,7 +24,7 @@ public class LoginController {
 		 this.jdbcTemplateObject = new JdbcTemplate(dataSource);
 	}
 	
-   @RequestMapping(value = "/login.html", method = RequestMethod.GET)
+   @RequestMapping(value = "/login", method = RequestMethod.GET)
    public ModelAndView login() {
       return new ModelAndView("login", "command", new Student());
    }

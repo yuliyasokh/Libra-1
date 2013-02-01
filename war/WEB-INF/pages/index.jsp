@@ -10,5 +10,7 @@
 	<a href="register.html">Зарегистироваться</a>
 	<br>
 	<a href="login.html">Войти</a>
+	<br>
+	<a href="signup.html">Test</a>
 </body>
 </html>
