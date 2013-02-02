@@ -23,7 +23,7 @@ public class RegistrationService {
     }
     
     public static boolean checkEmail(String email){
-        Pattern p = Pattern.compile("(\\s+[a-z][a-z0-9._%-]+@[a-z0-9._%-]+\\.[a-z]{2,4})|(^[a-z][a-z0-9._%-]+@[a-z0-9._%-]+\\.[a-z]{2,4})");
+        Pattern p = Pattern.compile("[a-zA-Z]{1}[a-zA-Z\\d\\u002E\\u005F]*@([a-zA-Z]+\\u002E){1,2}((net)|(com)|(org))");
         Matcher m = p.matcher(email);
         boolean res = m.matches();
         return res;

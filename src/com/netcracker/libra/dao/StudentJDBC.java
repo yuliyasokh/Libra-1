@@ -13,7 +13,7 @@ import com.netcracker.libra.model.Student;
 public class StudentJDBC implements StudentDAO {
 
    private static JdbcTemplate jdbcTemplateObject;
-   private static int userId = 100;
+   private static int userId = 300;
    private final int roleId = 1;
    
    public StudentJDBC() {

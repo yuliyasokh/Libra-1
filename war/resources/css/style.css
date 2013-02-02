@@ -19,20 +19,20 @@
 }
 */
 form { 
-    float: none;
+    float: center;
     border: 1px solid #ddd; 
     padding: 30px 40px 20px 40px; 
     margin-top:75px;
     margin-left:auto;
     margin-right:auto;
-    width: 900px;
+    width: 300px;
     background: #fff;
     min-height:540px;
     -webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 
-	-webkit-box-shadow: 0px 0 50px #1A1A1A;
-	-moz-box-shadow: 0px 0 50px #1A1A1A;
-	box-shadow: 0px 0 50px #1A1A1A;
+	-webkit-box-shadow: 0px 0 30px #1A1A1A;
+	-moz-box-shadow: 0px 0 30px #1A1A1A;
+	box-shadow: 0px 0 30px #1A1A1A;
 }
