@@ -9,8 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SignupForm {
-    //private Map<String, String> form = new HashMap<>();
-    private Map<String, String> form = new HashMap<String,String>();
+
+	private Map<String, String> form = new HashMap<>();
+
 	public String getName() {
 		return form.get("name");
 	}
