@@ -45,12 +45,12 @@
                 <td>${c.getName()}</td>
                 <td>${c.getTopicName()}</td>
                 <td>${c.getTypeName()}</td>
-                <c:if test="${(c.getRequired() == 0)}">
+                <c:if test="${c.getRequired() == 0}">
                     <td>
                     Добавил студент
                     </td>
                 </c:if>   
-                <c:if test="${(c.getRequired() != 0)}">
+                <c:if test="${c.getRequired() != 0}">
                     <td>
                     Добавил hr
                     </td>

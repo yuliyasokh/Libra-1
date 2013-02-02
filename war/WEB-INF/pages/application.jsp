@@ -26,61 +26,24 @@
 	src="<c:url value="resources/js/modernizr-2.6.2-respond-1.1.0.min.js"/>"></script>
 </head>
 <body>
-
-	<div class="wrapper">
-		<div class="formContainer">
+		<div class="span3">
 			<form:form method="POST" commandName="signupForm">
-			<table>
+
+					<form:input path="lastName" type="text" placeholder="Фамилия" class="span3" />
+					<form:input path="name" type="text" placeholder="Имя" class="span3"/>
+
+					<form:input path="email" type="email" placeholder="Электронная почта" class="span3" />
+					<form:input path="phoneNumber" type="tel" placeholder="Номер телефона" class="span3" />
+
+					<form:input path="university" type="text" placeholder="ВУЗ" class="span3" />
+					<form:input path="faculty" type="text" placeholder="Факультет" class="span3" />
+
+					<form:input path="univerTerm" type="text" placeholder="Курс" class="span3" />
+					<form:input path="graduated" type="text" placeholder="Год окончания" class="span3" />
 					
-				<tr>
-					<td>
-						<fieldset>
-							<form:input path="lastName" type="text" placeholder="Фамилия" class="input-medium" />
-							<form:input path="name" type="text" placeholder="Имя" class="input-medium"/>
-						</fieldset>
-					</td>	
-				</tr>
-
-				<tr>
-					<td>
-						<fieldset>
-							<form:input path="email" type="email" placeholder="Электронная почта" />
-							<form:input path="phoneNumber" type="tel" placeholder="Номер телефона" />
-						</fieldset>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<fieldset>
-							<form:input path="university" type="text" placeholder="ВУЗ" />
-							<form:input path="faculty" type="text" placeholder="Факультет" />
-						</fieldset>
-					</td>
-				</tr>
-				
-				<tr>
-					<td>
-						<fieldset>
-							<form:input path="univerTerm" type="text" placeholder="Курс" class="input-mini" />
-							<form:input path="graduated" type="text" placeholder="Год окончания" class="input-mini" />
-						</fieldset>
-					</td>
-				</tr>
-				
-
-				
-				<tr>
-					<td>
-						<div class="form-actions">
-							<button type="submit" class="btn btn-primary">Save changes</button>
-							<button type="button" class="btn">Cancel</button>
-						</div>
-					</td>
-				</tr>
-				</table>
-			</form:form>
+	    			<input type="submit" value="Sign up" class="btn btn-primary pull-right">
+    				<div class="clearfix"></div>
+				</form:form>
 		</div>
-	</div>
 </body>
 </html>

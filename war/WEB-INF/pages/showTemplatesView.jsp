@@ -32,12 +32,12 @@
        <select name="activeTemplate">
            ${activeTemplate.getName()}
             <c:forEach items="${templates}" var="t">
-                <c:if test="${(activeTemplate.getTemplateId() == t.getTemplateId())}">
+                <c:if test="${activeTemplate.getTemplateId() == t.getTemplateId()}">
                 <option selected value="${t.getTemplateId()}">
                        ${t.getName()}     
                 </option> 
                 </c:if>  
-                 <c:if test="${(activeTemplate.getTemplateId() != t.getTemplateId())}">
+                 <c:if test="${activeTemplate.getTemplateId() != t.getTemplateId()}">
                 <option  value="${t.getTemplateId()}">
                        ${t.getName()}     
                 </option> 
@@ -66,10 +66,10 @@
             <form action="showTemplates.html" method="POST">
         <tr>
             <td>
-                <c:if test="${(t.getActive() != 1)}">
+                <c:if test="${t.getActive() != 1}">
                 <a href="delTemplate.html?template=<c:out value='${t.getTemplateId()} '/>"><img src="del.jpg"  width="25" height="25" border="0" title="удалить"/></a>
                 </c:if>
-                <c:if test="${(t.getActive() == 1)}">
+                <c:if test="${t.getActive() == 1}">
                 <a href=""><img src="del2.png"  width="25" height="25" border="0" title="нельзя удалить активный шаблон"/></a>
                 </c:if>
             </td>
@@ -79,10 +79,10 @@
             </td>
             <td>${t.getName()} </td>
             <td>
-            <c:if test="${(t.getActive() == 1)}">
+            <c:if test="${t.getActive() == 1}">
                     <b>Активный</b>
                 </c:if>
-            <c:if test="${(t.getActive() == 0)}">
+            <c:if test="${t.getActive() == 0}">
                    <b>Не активный</b>
                 </c:if>
             </td>

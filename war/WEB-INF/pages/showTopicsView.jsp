@@ -72,21 +72,21 @@
                 <td>${t.getName()}</td>
                 <td>${t.getComments()}</td>
                 <td>${t.getTemplateName()}</td>
-                <c:if test="${(t.getParentTopic() == 0)}">
+                <c:if test="${t.getParentTopic() == 0}">
                     <td>
                     <b>Родителя нету</b>
                     </td>
                 </c:if>
-                <c:if test="${(t.getParentTopic() != 0)}">
+                <c:if test="${t.getParentTopic() != 0}">
                     <td>
                     <c:out value=' ${t.getParentTopicName()} '/>
                     </td>
                 </c:if>   
                     <td>
-                <c:if test="${(t.getRequierOther() == 1)}">
+                <c:if test="${t.getRequierOther() == 1}">
                     <b>Можно добавить свой ответ</b>
                 </c:if>
-                <c:if test="${(t.getRequierOther() == 0)}">
+                <c:if test="${t.getRequierOther() == 0}">
                     <b>Нельзя добавить свой ответ</b>
                 </c:if>
             </td>

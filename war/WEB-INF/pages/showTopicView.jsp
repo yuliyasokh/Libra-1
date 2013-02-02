@@ -16,11 +16,11 @@
             Введите имя темы <input type="text" name="name" value="${topic.getName()}"/></br>
             Введите комментарий <input type="text" name="comments" value="${topic.getComments()}"/></br>
             Разрешить добавлять свои ответы
-            <c:if test="${(topic.getRequierOther() == 1)}">
+            <c:if test="${topic.getRequierOther() == 1}">
                     <input type="radio" name="require" value="0"> Нет
             <input type="radio" name="require" value="1" checked>Да </br>
             </c:if>
-            <c:if test="${(topic.getRequierOther() == 0)}">
+            <c:if test="${topic.getRequierOther() == 0}">
                     <input type="radio" name="require" value="0" checked> Нет
             <input type="radio" name="require" value="1" >Да </br>
             </c:if>
@@ -30,10 +30,10 @@
             <select name="selTopics">
                 <option value="0">Нету родителя</option>             
                 <c:forEach items="${topics}" var="t">
-                    <c:if test="${(parentTopic == t.getTopicId())}">
+                    <c:if test="${parentTopic == t.getTopicId()}">
                         <option value="${t.getTopicId()}" selected><c:out value="${t.getName()}"/></option>
                     </c:if>
-                    <c:if test="${(parentTopic != t.getTopicId())}">
+                    <c:if test="${parentTopic != t.getTopicId()}">
                     <option value="${t.getTopicId()}"><c:out value="${t.getName()}" /></option>
                     </c:if>
                 </c:forEach>
