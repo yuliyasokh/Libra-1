@@ -29,15 +29,16 @@ public class HrJDBC implements HrDAO {
 
 	@Override
 	public void delete(Integer id) {
-		// TODO Auto-generated method stub
 		
 	}
+        
         @Override
         public void deleteFormById(Integer id){
            String SQL = "delete from AppForm where appid = ?)";
            jdbcTemplateObject.update(SQL, id);
            System.out.println("Deleted form with ID = " + id );
         }
+        
         @Override
         public void updateStudent(SignupForm form){
           
