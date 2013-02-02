@@ -26,7 +26,6 @@ public class HrJDBC implements HrDAO {
 		// TODO Auto-generated method stub
 		
 	}
-
 	@Override
 	public void delete(Integer id) {
 		

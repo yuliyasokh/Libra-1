@@ -9,7 +9,6 @@ public interface HrDAO extends CommonDAO {
  * @param id Id анкеты
  */
 public void deleteFormById(Integer id);
-
 /**
  * Изменение анкеты студента
  * @param form 
