@@ -67,7 +67,7 @@
         <tr>
             <td>
                 <c:if test="${(t.getActive() != 1)}">
-                <a href="delTemplate.html?template=<c:out value='${t.getTemplateId()} '/>"><img src="del.jpg"  width="25" height="25" border="0" title="удалить"/></a>
+                <a href="delTemplate.html?template=<c:out value='${t.getTemplateId()} '/>"><img src="/resources/images/del.jpg"  width="25" height="25" border="0" title="удалить"/></a>
                 </c:if>
                 <c:if test="${(t.getActive() == 1)}">
                 <a href=""><img src="del2.png"  width="25" height="25" border="0" title="нельзя удалить активный шаблон"/></a>

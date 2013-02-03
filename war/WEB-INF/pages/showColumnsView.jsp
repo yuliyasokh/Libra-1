@@ -45,19 +45,19 @@
                 <td>${c.getName()}</td>
                 <td>${c.getTopicName()}</td>
                 <td>${c.getTypeName()}</td>
-                <c:if test="${(c.getRequired() == 0)}">
+                <c:if test="${c.getRequired() == 0}">
                     <td>
                     Добавил студент
                     </td>
                 </c:if>   
-                <c:if test="${(c.getRequired() != 0)}">
+                <c:if test="${c.getRequired() != 0}">
                     <td>
                     Добавил hr
                     </td>
                 </c:if>   
                 
-            <td><a href="editColumn.html?column=<c:out value='${c.getColumnId()} '/>"><img src="edit.png" width="30" height="30"/></a></td>
-            <td><a href="delColumn.html?column=<c:out value='${c.getColumnId()} '/>"><img src="del.jpg" width="30" height="30"/></a></td>
+            <td><a href="editColumn.html?column=<c:out value='${c.getColumnId()} '/>"><img src="\Libra4\war\resources\images\edit.png" width="30" height="30"/></a></td>
+            <td><a href="delColumn.html?column=<c:out value='${c.getColumnId()} '/>"><img src="\Libra4\war\resources\images\del.jpg" width="30" height="30"/></a></td>
  
             </tr>
         </c:forEach>
