@@ -12,10 +12,7 @@ import com.netcracker.libra.model.Student;
 @Repository
 public class StudentJDBC implements StudentDAO {
 
-   private static JdbcTemplate jdbcTemplateObject;
-   private static int userId = 300;
-   private final int roleId = 1;
-   
+   private static JdbcTemplate jdbcTemplateObject;   
    public StudentJDBC() {
 	   
    }
@@ -26,12 +23,13 @@ public class StudentJDBC implements StudentDAO {
    }
 
    public void create(String name, String lastName, String email, String password) {
-      String SQL = "insert into Users (USERID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLEID) values (?,?,?,?,?,?)";
+     /* String SQL = "insert into Users (USERID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLEID) values (?,?,?,?,?,?)";
       
       jdbcTemplateObject.update(SQL, userId, name, lastName, email, password, roleId);
       System.out.println("Created Record Name = " + name + " Lastname = " + lastName + " Id = " +userId);
       userId++;
       return;
+      */
    }
 
    public Student getStudent(Integer id) {
@@ -42,7 +40,7 @@ public class StudentJDBC implements StudentDAO {
    }
 
    public List<Student> listStudents() {
-      String SQL = "select * from Users where roleid=1";
+      String SQL = "select * from Users";
       List <Student> students = jdbcTemplateObject.query(SQL, new StudentRowMapper());
       return students;
    }

@@ -18,5 +18,6 @@
         <a href="showTemplates.html">Шаблоны</a>
         <a href="showTypes.html">Типы</a>
         <a href="showColumns.html">Колонки</a>
+        <a href="showStudentbyIdView.html">Поиск1</a>
 </body>
 </html>
