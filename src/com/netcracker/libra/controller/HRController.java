@@ -28,7 +28,7 @@ public class HRController {
      /* 
      * Метод показывает всех студентов в БД
      */    
-    @RequestMapping("/showStudentbyIdView")
+    @RequestMapping("/hr/showStudentbyIdView")
     public ModelAndView showStudentbyId()
     {
         ModelAndView mav = new ModelAndView();
@@ -38,7 +38,7 @@ public class HRController {
         while(itr.hasNext()){
             s = (Student) itr.next();
            }
-        return new ModelAndView("showStudentbyIdView","Model",std);
+        return new ModelAndView("hr/showStudentbyIdView","Model",std);
       }
   
     
@@ -48,7 +48,7 @@ public class HRController {
      * @param filter - номер поля 
      * @return 
      */
-      @RequestMapping(value="showStudentbyIdView", method= RequestMethod.POST)
+      @RequestMapping(value="/hr/showStudentbyIdView", method= RequestMethod.POST)
       public ModelAndView showStudentByIdView(@RequestParam("textBox") String textBox, @RequestParam("filter") int filter){
       ModelAndView mav=new ModelAndView();
       if (filter==1){
@@ -58,7 +58,7 @@ public class HRController {
                 while(itr.hasNext()){
                     s = (Student) itr.next();
                 }
-                return new ModelAndView("showStudentbyIdView","Model",std);
+                return new ModelAndView("hr/showStudentbyIdView","Model",std);
             }
       if (filter==2){
           try{
@@ -68,7 +68,7 @@ public class HRController {
                 while(itr.hasNext()){
                     s = (Student) itr.next();
                 }
-                return new ModelAndView("showStudentbyIdView","Model",std);
+                return new ModelAndView("hr/showStudentbyIdView","Model",std);
                 }
           catch(Exception ex){
               
@@ -81,7 +81,7 @@ public class HRController {
                 while(itr.hasNext()){
                     s = (Student) itr.next();
                 }
-                return new ModelAndView("showStudentbyIdView","Model",std);
+                return new ModelAndView("hr/showStudentbyIdView","Model",std);
             }
           catch(Exception ex){  
           }
@@ -94,7 +94,7 @@ public class HRController {
                 while(itr.hasNext()){
                     s = (Student) itr.next();
                 }
-                return new ModelAndView("showStudentbyIdView","Model",std);
+                return new ModelAndView("hr/showStudentbyIdView","Model",std);
             }
           catch(Exception ex){
               
@@ -107,7 +107,7 @@ public class HRController {
                 while(itr.hasNext()){
                     s = (Student) itr.next();
                 }
-                return new ModelAndView("showStudentbyIdView","Model",std);
+                return new ModelAndView("hr/showStudentbyIdView","Model",std);
           }
           catch(Exception ex){
               
