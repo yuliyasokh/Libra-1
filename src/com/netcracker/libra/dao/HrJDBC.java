@@ -51,7 +51,7 @@ public class HrJDBC implements HrDAO {
         
         @Override
         public void updateStudent(SignupForm form){
-           String SQL = "update Appform set Patronymic = ?, PhoneNumber = ?, DepartmentId = ?, AdvertisingId = ?, AdvertisingComment = ?,"
+      /*     String SQL = "update Appform set Patronymic = ?, PhoneNumber = ?, DepartmentId = ?, AdvertisingId = ?, AdvertisingComment = ?,"
                    + " Course = ?, Graduated = ?, DataCreation = ?, ModifiedBy = ? "
                    + "where appid = ?";
            jdbcTemplateObject.update(SQL, form.getPatronymic(), form.getPhoneNumber(), form.getDepartment(),
@@ -73,7 +73,7 @@ public class HrJDBC implements HrDAO {
            String SQLemail2 = "update ColumnFields set Value=? where columnid=1 and appid=?";
            jdbcTemplateObject.update(SQLemail2,form.getEmail2(),form.getAppId());
          
-
+*/
         }
         
 	@Override
