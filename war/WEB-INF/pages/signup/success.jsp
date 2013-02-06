@@ -10,9 +10,9 @@
 </head>
 <body>
 Success
-<p>${signupForm.name} ${signupForm.patronymic} ${signupForm.lastName}</p><br>
-<p>${signupForm.email}</p><br>
-<p>${signupForm.university} ${signupForm.faculty} ${signupForm.univerTerm} курс</p><br>
+<p>${registerForm.name} ${registerForm.lastName}</p><br>
+<p>${registerForm.email}</p><br>
+<p>${registerForm.password} ${registerForm.confirmedPassword}</p><br>
 
 </body>
 </html>

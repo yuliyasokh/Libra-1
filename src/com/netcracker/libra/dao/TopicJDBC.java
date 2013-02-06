@@ -4,6 +4,7 @@
  */
 package com.netcracker.libra.dao;
 
+import com.netcracker.libra.model.Columns;
 import com.netcracker.libra.model.InfoForDelete;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,5 +115,18 @@ public class TopicJDBC implements TopicDAO
                                         " order by af.appId";
         List<InfoForDelete> listOfInfo=jdbcTopicObject.query(sql, new InfoForDeleteRowMapper());
         return listOfInfo;
+    }
+    
+    //Added 02.02.2013
+    public List<Columns> getTopicColumns(Integer id) 
+    {
+        String SQL = "select * from Columns where TopicId =?";
+        List<Columns> columns = jdbcTopicObject.query(SQL, new ColumnsRowMapper(), id);    
+        return columns;
+    }
+    
+    //added 03.02.2013
+    public String getTopicLabel(Integer id) {
+    	return jdbcTopicObject.queryForObject("select label from topic where topicid=?", String.class, id);
     }
 }

@@ -4,6 +4,8 @@
  */
 package com.netcracker.libra.model;
 
+import java.util.List;
+
 /**
  *
  * @author Sashenka
@@ -39,6 +41,12 @@ public class Template
     public void setActive(int active)
     {
         this.active=active;
+    }
+    
+    //added 02.02.2013
+    public List<Topic> getTopics() {
+    	com.netcracker.libra.dao.TopicJDBC db = new com.netcracker.libra.dao.TopicJDBC();
+    	return db.getAll(getTemplateId());
     }
 }
 

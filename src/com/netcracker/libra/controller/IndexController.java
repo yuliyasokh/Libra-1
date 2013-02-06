@@ -12,9 +12,8 @@ import com.netcracker.libra.model.SignupForm;
 @Controller
 public class IndexController {
  
-	@RequestMapping(value= "/signup", method = RequestMethod.GET)
+	/*@RequestMapping(value= "/signup", method = RequestMethod.GET)
     public ModelAndView signup() {
-		
         return new ModelAndView("signup", "signupForm", new SignupForm());
  
 	}

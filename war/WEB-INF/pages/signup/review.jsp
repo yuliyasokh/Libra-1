@@ -12,7 +12,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Libra :: Анкета кандидата</title>
+<title>Регистрация - шаг 2</title>
 <meta name="description" content="Libra">
 <link rel="stylesheet" href="<c:url value="resources/css/main.css"/>" />
 <link rel="stylesheet"
@@ -27,23 +27,16 @@
 </head>
 <body>
 		<div class="span3">
-			<form:form method="POST" commandName="signupForm">
-
-					<form:input path="lastName" type="text" placeholder="Фамилия" class="span3" />
-					<form:input path="name" type="text" placeholder="Имя" class="span3"/>
-
-					<form:input path="email" type="email" placeholder="Электронная почта" class="span3" />
-					<form:input path="phoneNumber" type="tel" placeholder="Номер телефона" class="span3" />
-
-					<form:input path="university" type="text" placeholder="ВУЗ" class="span3" />
-					<form:input path="faculty" type="text" placeholder="Факультет" class="span3" />
-
-					<form:input path="univerTerm" type="text" placeholder="Курс" class="span3" />
-					<form:input path="graduated" type="text" placeholder="Год окончания" class="span3" />
-					
-	    			<input type="submit" value="Sign up" class="btn btn-primary pull-right">
-    				<div class="clearfix"></div>
-				</form:form>
+			${appForm.getName()}<br>
+			${appForm.getLastName()}<br>
+			${appForm.getEmail()}<br>
+			${appForm.getPhoneNumber()}<br><br>
+			
+			${appForm.getUniversity()}<br>
+			${appForm.getUniverTerm()}<br>
+			${appForm.getFaculty()}<br>
+			${appForm.getGraduated()}<br>
+				
 		</div>
 </body>
 </html>

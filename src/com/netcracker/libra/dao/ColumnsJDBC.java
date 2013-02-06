@@ -96,4 +96,6 @@ public class ColumnsJDBC implements ColumnsDAO
         List<InfoForDelete> listOfInfo=jdbcColumnObject.query(sql, new InfoForDeleteRowMapper());
         return listOfInfo;
     }
+     
+
 }

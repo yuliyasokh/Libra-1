@@ -1,17 +1,80 @@
 /*
- * ������ �������� � �������� ��� �������������� �����
  * @author Kuyun
  */
 
 package com.netcracker.libra.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import com.netcracker.libra.dao.SignupFormJDBC;
+import com.netcracker.libra.dao.TemplateJDBC;
+import com.netcracker.libra.util.security.Security;
 
 public class SignupForm {
-
+	//TODO добавить коллекции для разделов Интересы, Достоинства
 	private Map<String, String> form = new HashMap<>();
+	
+	/*
+	privateTemplateJDBC db = new TemplateJDBC();
+	private SignupFormJDBC dbs = new SignupFormJDBC();
+	private Integer templateId = null;
+	private List<Topic> topics = getTemplate();
+	private Topic current = topics.iterator().next();
 
+	/*
+	 *  -----------------START OF TEMPLATED APPFORM SECTION
+	 */
+	/*public List<Topic> getTemplate() {
+		topics = dbs.getCurrentTemplate();
+		return topics;
+	}
+	
+	public Template getTemplateById() {
+		return db.getTemplate(templateId);
+	}
+	
+	public void setTemplateId(Integer templateId) {
+		this.templateId = templateId;
+	}
+	
+	public Integer getTemplateId() {
+		return templateId;
+	}
+	
+	public void setValue(String value) {
+		form.put(current.getLabel(), value);
+		if (topics.iterator().hasNext()) {
+				current = topics.iterator().next();
+		};
+	}
+	
+	public String getValue() {
+		return form.get(current.getName());
+	}
+	
+	public Topic getCurrentTopic() {
+		current = topics.listIterator().next();
+		return current;
+	}
+	
+	public List<Topic> getTopics() {
+		return topics;
+	}
+	
+
+	/*
+	 *  -----------------END OF TEMPLATED APPFORM SECTION
+	 */
+	
+	public Map<String, String> getAppForm() {
+		return new HashMap<String,String>();
+	}
+	
+	public void setAppForm(Map<String, String> form) {
+		this.form = form;
+	}
+	
 	public String getName() {
 		return form.get("name");
 	}
@@ -93,39 +156,54 @@ public class SignupForm {
 		form.put("phoneNumber", value);
 	}
 
-	public void setMiscContactType(String value) {
-		form.put("type", value);
+	public void setMiscContact(String value) {
+		form.put("miscContact", value);
 	}
 
-	public String getMiscContactType() {
-		return form.get("type");
+	public String getMiscContact() {
+		return form.get("miscContact");
 	}
 
-	public void setMiscContactValue(String value) {
-		form.put(getMiscContactType(), value);
+	public void setInternshipValue(String value) {
+		form.put("internshipValue", value);
 	}
 
-	public String getMiscContactValue() {
-		return form.get(getMiscContactType());
+	public String getInternshipValue() {
+		return form.get("internshipValue");
+	}
+	
+	public void setStudyCenterValue(String value) {
+		form.put("studyCenterValue", value);
 	}
 
-	public void setWhatsInterested(String value) {
-		form.put("whatsInterested", value);
+	public String getStudyCenterValue() {
+		return form.get("studyCenterValue");
+	}
+	
+	public void setWorkInCompanyValue(String value) {
+		form.put("workInCompanyValue", value);
 	}
 
-	public String getWhatsInterested() {
-		return form.get("whatsInterested");
+	public String getWorkInCompanyValue() {
+		return form.get("workInCompanyValue");
+	}
+	
+	public void setSoftwareDevelopmentValue(String value) {
+		form.put("softwareDevelopmentValue", value);
 	}
 
-	public void setScope(String value) {
-		form.put("scope", value);
+	public String getSoftwareDevelopmentValue() {
+		return form.get("softwareDevelopmentValue");
+	}
+	
+	public void setOtherOccupationValue(String value) {
+		form.put("otherOccupationValue", value);
 	}
 
-	public String getScope() {
-		return form.get("scope");
+	public String getOtherOccupationValue() {
+		return form.get("otherOccupationValue");
 	}
 
-	// TODO �������� ��� ����� ������� �������� ������ �� ������� "��� ������"
 	public void setDeepSpec(String value) {
 		form.put("deepSpec", value);
 	}
@@ -157,7 +235,7 @@ public class SignupForm {
 	public String getSales() {
 		return form.get("sales");
 	}
-	
+
 	public void setCustomWorkType(String value) {
 		form.put("customWorkType", value);
 	}
@@ -173,7 +251,7 @@ public class SignupForm {
 	public String getJavaKnowledge() {
 		return form.get("javaKnowledge");
 	}
-	
+
 	public void setCKnowledge(String value) {
 		form.put("cKnowledge", value);
 	}
@@ -181,7 +259,7 @@ public class SignupForm {
 	public String getCKnowledge() {
 		return form.get("cKnowledge");
 	}
-	
+
 	public void setAnotherLang(String value) {
 		form.put("anotherLang", value);
 	}
@@ -189,7 +267,7 @@ public class SignupForm {
 	public String getAnotherLang() {
 		return form.get("anotherLang");
 	}
-	
+
 	public void setAnotherLang2(String value) {
 		form.put("anotherLang2", value);
 	}
@@ -197,7 +275,7 @@ public class SignupForm {
 	public String getAnotherLang2() {
 		return form.get("anotherLang2");
 	}
-	
+
 	public void setAnotherLang3(String value) {
 		form.put("anotherLang3", value);
 	}
@@ -205,7 +283,7 @@ public class SignupForm {
 	public String getAnotherLang3() {
 		return form.get("anotherLang3");
 	}
-	
+
 	public void setNetworkTechSkill(String value) {
 		form.put("networkTech", value);
 	}
@@ -213,7 +291,7 @@ public class SignupForm {
 	public String getNetworkTechSkill() {
 		return form.get("networkTech");
 	}
-	
+
 	public void setEffAlgSkill(String value) {
 		form.put("effAlg", value);
 	}
@@ -221,7 +299,7 @@ public class SignupForm {
 	public String getEffAlgSkill() {
 		return form.get("effAlg");
 	}
-	
+
 	public void setOopSkill(String value) {
 		form.put("oop", value);
 	}
@@ -229,7 +307,7 @@ public class SignupForm {
 	public String getOopSkill() {
 		return form.get("oop");
 	}
-	
+
 	public void setDBKnowledge(String value) {
 		form.put("DBKnowledge", value);
 	}
@@ -237,7 +315,7 @@ public class SignupForm {
 	public String getDBKnowledge() {
 		return form.get("DBKnowledge");
 	}
-	
+
 	public void setWebSkill(String value) {
 		form.put("web", value);
 	}
@@ -245,7 +323,7 @@ public class SignupForm {
 	public String getWebSkill() {
 		return form.get("web");
 	}
-	
+
 	public void setGuiSkill(String value) {
 		form.put("gui", value);
 	}
@@ -253,7 +331,7 @@ public class SignupForm {
 	public String getGuiSkill() {
 		return form.get("gui");
 	}
-	
+
 	public void setNetworkDevelopmentSkill(String value) {
 		form.put("networkDevelopment", value);
 	}
@@ -261,7 +339,7 @@ public class SignupForm {
 	public String getNetworkDevelopmentSkill() {
 		return form.get("networkDevelopment");
 	}
-	
+
 	public void setAppDesignSkill(String value) {
 		form.put("appDesign", value);
 	}
@@ -269,7 +347,7 @@ public class SignupForm {
 	public String getAppDesignSkill() {
 		return form.get("appDesign");
 	}
-	
+
 	public void setAnotherSkills(String value) {
 		form.put("anotherSkills", value);
 	}
@@ -277,7 +355,7 @@ public class SignupForm {
 	public String getAnotherSkills() {
 		return form.get("anotherSkills");
 	}
-	
+
 	public void setWorkExperience(String value) {
 		form.put("workExp", value);
 	}
@@ -285,7 +363,7 @@ public class SignupForm {
 	public String getWorkExperience() {
 		return form.get("workExp");
 	}
-	
+
 	public void setEnglishSkill(String value) {
 		form.put("englishSkill", value);
 	}
@@ -293,7 +371,7 @@ public class SignupForm {
 	public String getEnglishSkill() {
 		return form.get("englishSkill");
 	}
-	
+
 	public void setAdvert(String value) {
 		form.put("advert", value);
 	}
@@ -301,7 +379,7 @@ public class SignupForm {
 	public String getAdvert() {
 		return form.get("advert");
 	}
-	
+
 	public void setWhyTake(String value) {
 		form.put("whyTake", value);
 	}
@@ -309,7 +387,7 @@ public class SignupForm {
 	public String getWhyTake() {
 		return form.get("whyTake");
 	}
-	
+
 	public void setAdditionalDetails(String value) {
 		form.put("additionalDetails", value);
 	}
@@ -318,11 +396,19 @@ public class SignupForm {
 		return form.get("additionalDetails");
 	}
 	
-	public Map<String, String> getAppForm() {
-		return new HashMap<String,String>();
+	public void setPassword(String value) {
+		form.put("password", Security.getMD5hash(value));
+	}
+
+	public String getPassword() {
+		return form.get("password");
 	}
 	
-	public void setAppForm(Map<String, String> form) {
-		this.form = form;
+	public void setConfirmPassword(String value) {
+		form.put("confirmPassword", Security.getMD5hash(value));
+	}
+
+	public String getConfirmPassword() {
+		return form.get("confirmPassword");
 	}
 }

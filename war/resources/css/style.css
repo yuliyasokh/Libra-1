@@ -19,13 +19,13 @@
 }
 */
 form { 
-    float: center;
+    float: none;
     border: 1px solid #ddd; 
     padding: 30px 40px 20px 40px; 
-    margin-top:75px;
+    margin-top:25px;
     margin-left:auto;
     margin-right:auto;
-    width: 300px;
+    width: 350px;
     background: #fff;
     min-height:540px;
     -webkit-border-radius: 10px;

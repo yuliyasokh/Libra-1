@@ -4,18 +4,23 @@
  */
 package com.netcracker.libra.model;
 
+import java.util.List;
+
 /**
  *
  * @author Sashenka
  */
 public class Topic 
 {
-    int topicId;
-    String name;
-    String comments;
-    int templateId;
-    int parentTopic;
-    int requierOther;
+    private int topicId;
+    private String name;
+    private String comments;
+    private int templateId;
+    private int parentTopic;
+    private int requierOther;
+    private com.netcracker.libra.dao.TopicJDBC tdbc = new com.netcracker.libra.dao.TopicJDBC();
+    
+
     
     public void setTopicId(int topicId) 
     {
@@ -64,5 +69,15 @@ public class Topic
     public int getRequierOther()
     {
         return this.requierOther;
+    }
+    
+    //Added 02.02.2013
+    public List<Columns> getColumns() {
+    	return tdbc.getTopicColumns(getTopicId());
+    }
+    
+    //Added 03.02.2013
+    public String getLabel() {
+    	return tdbc.getTopicLabel(getTopicId());
     }
 }
