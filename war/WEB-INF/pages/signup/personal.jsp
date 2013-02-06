@@ -26,51 +26,40 @@
 	src="<c:url value="resources/js/modernizr-2.6.2-respond-1.1.0.min.js"/>"></script>
 </head>
 <body>
-		<div class="container">
+	<div class="container">
 
-			<form:form method="POST" commandName="registerForm">
-							<h2>Регистрация</h2>
-				<table>
+		<form:form method="POST" commandName="registerForm">
+			<h2>Регистрация</h2>
+			<table>
 				<tr>
 					<td><label>Фамилия:</label></td>
-						<td>
-							<form:input path="lastName" type="text" class="span3" />
-							<form:errors path="lastName"/>
-						</td>
+					<td><form:input path="lastName" type="text" class="span3" /></td>
 				</tr>
 				<tr>
 					<td><label>Имя:</label></td>
-					<td>
-						<form:input path="name" type="text" class="span3"/>
-						<form:errors path="name"/>
-					</td>
+					<td><form:input path="name" type="text" class="span3" /></td>
 				</tr>
 				<tr>
-					<td><label>Электронный адрес:</label></td>
-					<td>
-						<form:input path="email" type="email" class="span3" />
-						<form:errors path="email"/>
-					</td>
+					<td><label>Email:</label></td>
+					<td><form:input path="email" type="email" class="span3" /></td>
 				</tr>
 				<tr>
 					<td><label>Пароль:</label></td>
-					<td>
-						<form:input path="password" type="password" class="span3" />
-						<form:errors path="password"/>
-					</td>
+					<td><form:input path="password" type="password" class="span3" />
 				</tr>
 				<tr>
-					<td><label>Подвердите пароль:</label></td>
-					<td>
-						<form:input path="confirmedPassword" type="password" class="span3" />
-						<form:errors path="confirmedPassword"/>
-					</td>
-				</tr>		
-	    		
-	    		</table>
-	    			<input type="submit" value="Подтвердить" class="btn btn-primary pull-right">
-			</form:form>
-				
-		</div>
+					<td><label>Подтвердите пароль:</label></td>
+					<td><form:input path="confirmedPassword" type="password"
+							class="span3" /></td>
+				</tr>
+
+			</table>
+				<div class="form-actions">
+					<button type="submit" class="btn pull-left">Вернуться</button>
+  					<button type="submit" class="btn btn-primary pull-right">Зарегистрироваться</button>
+				</div>
+		</form:form>
+
+	</div>
 </body>
 </html>

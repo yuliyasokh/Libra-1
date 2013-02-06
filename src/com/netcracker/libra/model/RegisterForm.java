@@ -1,27 +1,32 @@
 package com.netcracker.libra.model;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.AssertTrue;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Length;
 
 public class RegisterForm {
 	
-	@NotNull
-	@Size(min=1, max=50)
+	@NotEmpty
+	@Length(max=20)
 	private String name;
 	
-	@NotNull
-	@Size(min=1, max=50)
+	@NotEmpty
+	@Length(max=30)
 	private String lastName;
 	
-	@NotNull
-	@Size(min=6, max=40)
+
+	@Length(min=6, max=20)
 	private String password;
 	
-	@NotNull
-	@Size(min=6, max=40)
+
+	@Length(min=6, max=20)
 	private String confirmedPassword;
 	
-	@NotNull
-	@Size(max=40)
+	@NotEmpty
+	@Email
+	@Length(max=50)
 	private String email;
 	
 	public RegisterForm() {
@@ -63,7 +68,7 @@ public class RegisterForm {
 		this.email = email;
 	}
 	
-	@AssertTrue(message="Пароли не совпадают")
+	@AssertTrue
 	public boolean checkPassword() {
 		if (password == null) {
             return false;
