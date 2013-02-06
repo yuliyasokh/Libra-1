@@ -13,6 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.netcracker.libra.dao.StudentJDBC;
 import com.netcracker.libra.model.Student;
 import com.netcracker.libra.util.security.Security;
+import org.springframework.dao.EmptyResultDataAccessException;
+import com.netcracker.libra.dao.UserPreferences;
 
 @Controller
 public class LoginController {
@@ -29,14 +31,30 @@ public class LoginController {
       return new ModelAndView("login", "command", new Student());
    }
    
+    @Autowired
+    UserPreferences userPreferences;
    @RequestMapping(value = "/submit", method = RequestMethod.POST)
    public String verify(@ModelAttribute("Student") Student student) {
- 
-	   if (StudentJDBC.verifyLogin(student.getEmail(), Security.getMD5hash(student.getPassword())) == 1)
-		   return "loginSuccesful";
-	   else
-		   return "loginFailed";
-	   
+        try{
+              int id=StudentJDBC.verifyLogin(student.getEmail(), Security.getMD5hash(student.getPassword()));	                 
+              int acess=StudentJDBC.getAccess(id);
+              userPreferences.UserId=id;
+              userPreferences.accessLevel=acess;
+              return "loginSuccesful";
+        }
+        catch(EmptyResultDataAccessException e)
+        {
+             return "loginFailed";
+        }   
      }
+   @RequestMapping(value = "/logout")
+   public ModelAndView logout() 
+   {
+      ModelAndView mav=new ModelAndView();
+      mav.setViewName("index");
+      userPreferences.UserId=-1;
+      userPreferences.accessLevel=-1;
+      return mav;
+   }
 }
 

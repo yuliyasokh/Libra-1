@@ -30,8 +30,8 @@ public class TopicJDBC implements TopicDAO
     
     public Topic getTopic(int id) 
     {
-        String SQL = "select * from Topic where TopicId ="+id;
-        Topic topic = jdbcTopicObject.queryForObject(SQL, new TopicRowMapper());
+        String SQL = "select * from Topic where TopicId =?";
+        Topic topic = jdbcTopicObject.queryForObject(SQL, new TopicRowMapper(),id);
       return topic;
     }
 
@@ -43,8 +43,8 @@ public class TopicJDBC implements TopicDAO
     }
     public List<Topic> getAll(int templateId) 
     {
-        String SQL = "select * from Topic where templateId="+templateId+" order by TopicId";
-        List <Topic> topics = jdbcTopicObject.query(SQL, new TopicRowMapper());
+        String SQL = "select * from Topic where templateId=? order by TopicId";
+        List <Topic> topics = jdbcTopicObject.query(SQL, new TopicRowMapper(),templateId);
         return topics;
     }
     
@@ -60,17 +60,13 @@ public class TopicJDBC implements TopicDAO
         int i=getCurVal();
         if(parentTopic!=0)
         {
-        SQL ="INSERT INTO Topic VALUES("+i+","+
-		"'"+name+"',"+"'"+comments+"', "+tamplateId+", "+parentTopic+", "+requiredOther+
-		")";
+        SQL ="INSERT INTO Topic VALUES(?,?,?,?, "+parentTopic+",?)";
         }
         else
         {
-            SQL ="INSERT INTO Topic VALUES("+i+","+
-		"'"+name+"',"+"'"+comments+"', "+tamplateId+", NULL, "+requiredOther+
-		")";
+            SQL ="INSERT INTO Topic VALUES(?,?,?,?, NULL, ?)";
         }
-        jdbcTopicObject.update(SQL);
+        jdbcTopicObject.update(SQL,i,name,comments,tamplateId,requiredOther);
         return i;
     }
 
@@ -84,25 +80,25 @@ public class TopicJDBC implements TopicDAO
     @Override
     public void updateTopic(int id, String name, String comments, int templateId, int parentTopic, int require) 
     {
-        String SQL = "update Topic set name ='"+name+"', comments='"+comments+"', templateid="+templateId+", parentTopic="+parentTopic+", requireOther ="+require+" where TopicId ="+id;
-       jdbcTopicObject.update(SQL);
+        String SQL = "update Topic set name =?, comments=?, templateid=?, parentTopic=?, requireOther =? where TopicId =?";
+       jdbcTopicObject.update(SQL,name,comments,templateId,parentTopic,require,id);
     }
     
     public int getTemplateForTopic(int id)
     {
-        String SQL = "select TemplateId from Topic where TopicId ="+id;
-        return  jdbcTopicObject.queryForInt(SQL);
+        String SQL = "select TemplateId from Topic where TopicId =?";
+        return  jdbcTopicObject.queryForInt(SQL,id);
     }
     public List<TopicShow> getTopicsShow()
     {
-        String SQL = "select top.TopicId, top.ParentTopic, top.Comments, top.TemplateId, temp.Name as TemplateName, par.Name as ParentTopicName, top.Name, top.RequireOther from Topic top left join Template temp ON temp.TemplateId=top.TemplateId LEFT JOIN  Topic par ON par.TopicId=top.ParentTopic"+" order by TopicId";
+        String SQL = "select top.TopicId, top.ParentTopic, top.Comments, top.TemplateId, temp.Name as TemplateName, par.Name as ParentTopicName, top.Name, top.RequireOther from Topic top left join Template temp ON temp.TemplateId=top.TemplateId LEFT JOIN  Topic par ON par.TopicId=top.ParentTopic order by TopicId";
         List<TopicShow> topShow = jdbcTopicObject.query(SQL, new TopicShowRowMapper());
         return topShow;
     }
     public int existTopic(int id)
     {
-        String sql = "select Count(*) from topic where TopicId="+id;
-        return jdbcTopicObject.queryForInt(sql);
+        String sql = "select Count(*) from topic where TopicId=?";
+        return jdbcTopicObject.queryForInt(sql,id);
     }
     public List<InfoForDelete> getInfoForDelete(int topicId)
     {
@@ -111,9 +107,9 @@ public class TopicJDBC implements TopicDAO
 					"join columnFields cf on cf.columnId=c.columnId "+
 					"join appForm  af on af.appId=cf.appId "+
 					"join users u on u.userId=af.userId "+
-                                        "where top.topicId="+topicId+
+                                        "where top.topicId=?"+
                                         " order by af.appId";
-        List<InfoForDelete> listOfInfo=jdbcTopicObject.query(sql, new InfoForDeleteRowMapper());
+        List<InfoForDelete> listOfInfo=jdbcTopicObject.query(sql, new InfoForDeleteRowMapper(),topicId);
         return listOfInfo;
     }
     

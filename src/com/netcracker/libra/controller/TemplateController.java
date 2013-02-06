@@ -8,6 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.netcracker.libra.model.Template;
 import com.netcracker.libra.dao.TemplateJDBC;
 import com.netcracker.libra.dao.TopicJDBC;
+import com.netcracker.libra.dao.UserPreferences;
+//import com.netcracker.libra.model.UserPreferences;
 import com.netcracker.libra.model.Topic;
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.netcracker.libra.service.TemplateService;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.netcracker.libra.model.InfoForDelete;
+import org.springframework.beans.factory.annotation.Autowired;
 /**
  *
  * @author Sashenka
@@ -24,7 +27,10 @@ import com.netcracker.libra.model.InfoForDelete;
 public class TemplateController
 {    
     TemplateJDBC templateJDBC=new TemplateJDBC();
-
+    TopicJDBC topicJDBC = new TopicJDBC();
+    
+    @Autowired
+    UserPreferences userPreferences;
     /**
      * Метод обрабатывает запрос по добавлению нового шаблона.
      * @param name имя нового шаблона
@@ -33,25 +39,36 @@ public class TemplateController
     public ModelAndView addPost(@RequestParam("name") String name)
     {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("messageView");
-        String message=TemplateService.checkTemplate(name);
-         if(!message.equals(""))
-         {
-             mv.addObject("link","template.html");
-             mv.addObject("message",message);
-             mv.addObject("title","Ошибка");
-             return mv;
-         }
-        Template lastTemplate=templateJDBC.getTemplate(templateJDBC.add(name));
-        message="Тема с названием "+lastTemplate.getName()+" добавлена успешно";
-        String link="<a href='addTopic.html?template="+lastTemplate.getTemplateId()+"'>Добавить тему вопросов к шаблону</a></br>"+
-                "<a href='showTemplates.html'>Вернуться к шаблонам</a>";
-        mv.addObject("link",link);
-        mv.addObject("message",message);
-        mv.addObject("title","Успех!");
-        return mv;
+        if(userPreferences.accessLevel==1)
+        {
+            mv.setViewName("messageView");
+            String message=TemplateService.checkTemplate(name);
+             if(!message.equals(""))
+             {
+                 mv.addObject("link","template.html");
+                 mv.addObject("message",message);
+                 mv.addObject("title","Ошибка");
+                 return mv;
+             }
+            Template lastTemplate=templateJDBC.getTemplate(templateJDBC.add(name));
+            message="Тема с названием "+lastTemplate.getName()+" добавлена успешно";
+            String link="<a href='addTopic.html?template="+lastTemplate.getTemplateId()+"'>Добавить тему вопросов к шаблону</a></br>"+
+                    "<a href='showTemplates.html'>Вернуться к шаблонам</a>";
+            mv.addObject("link",link);
+            mv.addObject("message",message);
+            mv.addObject("title","Успех!");
+            return mv;
+        } 
+        else
+        {
+            mv.setViewName("messageView");
+            mv.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
+            mv.addObject("message","У Вас нету прав на эту страницу");
+            mv.addObject("title","Ошибка");
+            return mv;
+        }
     }
-    
+      
     /**
      * Устанавливает активный шаблон
      * @param activeTemplate номер шаблона, который мы хотим установить активным
@@ -59,12 +76,23 @@ public class TemplateController
     @RequestMapping(value="ActiveTemplate", method= RequestMethod.POST)
     public ModelAndView addActivePost(@RequestParam("activeTemplate") int activeTemplate)
     {
-        ModelAndView mv = new ModelAndView();
-       (new TemplateJDBC()).setActive(activeTemplate);
-        mv.setViewName("showTemplatesView");
-        mv.addObject("activeTemplate",(new TemplateJDBC()).getActive());
-        mv.addObject("templates", (new TemplateJDBC()).getAll());
-        return mv;
+        ModelAndView mav = new ModelAndView();
+        if(userPreferences.accessLevel==1)
+        {
+            templateJDBC.setActive(activeTemplate);
+            mav.setViewName("showTemplatesView");
+            mav.addObject("activeTemplate",templateJDBC.getActive());
+            mav.addObject("templates", templateJDBC.getAll());
+            return mav;
+        } 
+        else
+        {
+            mav.setViewName("messageView");
+            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
+            mav.addObject("message","У Вас нету прав на эту страницу");
+            mav.addObject("title","Ошибка");
+            return mav;
+        }
     }
     /**
      * Метод для отобпажения всех шаблонов. Он передает в вид список шаблонов.
@@ -74,10 +102,22 @@ public class TemplateController
     public ModelAndView editTemplate()
     {
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("showTemplatesView");
-        mav.addObject("activeTemplate",(new TemplateJDBC()).getActive());
-        mav.addObject("templates", (new TemplateJDBC()).getAll());
-        return mav;
+        if(userPreferences.accessLevel==1)
+        {
+            //userPreferences.setUserId(12);
+            mav.setViewName("showTemplatesView");
+            mav.addObject("activeTemplate",templateJDBC.getActive());
+            mav.addObject("templates", templateJDBC.getAll());
+            return mav;
+        } 
+        else
+        {
+            mav.setViewName("messageView");
+            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
+            mav.addObject("message","У Вас нету прав на эту страницу");
+            mav.addObject("title","Ошибка");
+            return mav;
+        }
     }
     
     /**
@@ -92,27 +132,38 @@ public class TemplateController
     {
         Template aldt=templateJDBC.getTemplate(selTemplate);
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("messageView");
-        String message=TemplateService.checkTemplate(name);
-        if(!message.equals(""))
+        if(userPreferences.accessLevel==1)
         {
-            mav.addObject("link","editTemplate.html");
-            mav.addObject("message",message);
+            mav.setViewName("messageView");
+            String message=TemplateService.checkTemplate(name);
+            if(!message.equals(""))
+            {
+                mav.addObject("link","editTemplate.html");
+                mav.addObject("message",message);
+                mav.addObject("title","Ошибка");
+                return mav;
+            }
+            if(templateJDBC.existTemplate(selTemplate)==0)
+            {
+                mav.addObject("link","<a href='showTemplates.html'>Посмотреть все типы</a>");
+                mav.addObject("message","Такого шаблона нету");
+                mav.addObject("title","Ошибка");
+                return mav; 
+            }
+            templateJDBC.update(selTemplate, name);
+            mav.setViewName("showTemplatesView");
+            List<Template> templates=templateJDBC.getAll();
+            mav.addObject("templates", templates);
+            return mav;
+        } 
+        else
+        {
+            mav.setViewName("messageView");
+            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
+            mav.addObject("message","У Вас нету прав на эту страницу");
             mav.addObject("title","Ошибка");
             return mav;
         }
-        if((new TemplateJDBC()).existTemplate(selTemplate)==0)
-        {
-            mav.addObject("link","<a href='showTemplates.html'>Посмотреть все типы</a>");
-            mav.addObject("message","Такого шаблона нету");
-            mav.addObject("title","Ошибка");
-            return mav; 
-        }
-        templateJDBC.update(selTemplate, name);
-        mav.setViewName("showTemplatesView");
-        List<Template> templates=templateJDBC.getAll();
-        mav.addObject("templates", templates);
-        return mav;
     }
     /**
      * Метод, который передает в вид информацию о шаблоне(для предварительного просмотра),
@@ -123,17 +174,28 @@ public class TemplateController
     public ModelAndView delTemplate(@RequestParam("template") int templateId)
     {
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("delTemplateView");
-        mav.addObject("template", templateId);
-        List<Topic> topics=(new TopicJDBC()).getAll(templateId);
-        int topicLength=topics.size();
-        //getInfoUsers
-        List<InfoForDelete> info=(new TemplateJDBC()).getInfoForDelete(templateId);
-        int infoSize=info.size();
-        mav.addObject("topics", topics);
-        mav.addObject("info", info);
-        mav.addObject("infoSize",infoSize);
-        return mav;
+        if(userPreferences.accessLevel==1)
+        {
+            mav.setViewName("delTemplateView");
+            mav.addObject("template", templateId);
+            List<Topic> topics=topicJDBC.getAll(templateId);
+            int topicLength=topics.size();
+            //getInfoUsers
+            List<InfoForDelete> info=templateJDBC.getInfoForDelete(templateId);
+            int infoSize=info.size();
+            mav.addObject("topics", topics);
+            mav.addObject("info", info);
+            mav.addObject("infoSize",infoSize);
+            return mav;
+          } 
+        else
+        {
+            mav.setViewName("messageView");
+            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
+            mav.addObject("message","У Вас нету прав на эту страницу");
+            mav.addObject("title","Ошибка");
+            return mav;
+        }
     }
     /**
      * Обрабатывает запрос по удалению шаблона
@@ -143,17 +205,28 @@ public class TemplateController
     public ModelAndView delSubmitTemplate(@RequestParam("template") int templateId)
     {
         ModelAndView mav = new ModelAndView();
-        if((new TemplateJDBC()).existTemplate(templateId)==0)
+        if(userPreferences.accessLevel==1)
         {
-            mav.addObject("link","<a href='showTemplates.html'>Посмотреть все типы</a>");
-            mav.addObject("message","Такого шаблона нету");
+            if(templateJDBC.existTemplate(templateId)==0)
+            {
+                mav.addObject("link","<a href='showTemplates.html'>Посмотреть все типы</a>");
+                mav.addObject("message","Такого шаблона нету");
+                mav.addObject("title","Ошибка");
+                return mav; 
+            }
+           templateJDBC.delete(templateId);
+            mav.setViewName("showTemplatesView");
+            mav.addObject("activeTemplate",templateJDBC.getActive());
+            mav.addObject("templates", templateJDBC.getAll());
+            return mav;
+        } 
+        else
+        {
+            mav.setViewName("messageView");
+            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
+            mav.addObject("message","У Вас нету прав на эту страницу");
             mav.addObject("title","Ошибка");
-            return mav; 
+            return mav;
         }
-       (new TemplateJDBC()).delete(templateId);
-        mav.setViewName("showTemplatesView");
-        mav.addObject("activeTemplate",(new TemplateJDBC()).getActive());
-        mav.addObject("templates", (new TemplateJDBC()).getAll());
-        return mav;
     }
 }

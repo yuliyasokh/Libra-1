@@ -37,9 +37,9 @@ public class TemplateJDBC implements TemplateDAO
      */
     public Template getTemplate(int id) 
     {
-      String SQL = "select * from Template where TemplateId ="+id;
+      String SQL = "select * from Template where TemplateId =?";
       //Template template = jdbcTemplateObject.queryForObject(SQL, new Object[]{id}, new TemplateRowMapper());
-      Template template = jdbcTemplateObject.queryForObject(SQL, new TemplateRowMapper());    
+      Template template = jdbcTemplateObject.queryForObject(SQL, new TemplateRowMapper(),id);    
       return template;
    }
     /**
@@ -66,10 +66,8 @@ public class TemplateJDBC implements TemplateDAO
     public int add(String name) 
     {
         int i=getCurVal();
-        String SQL ="INSERT INTO Template VALUES("+i+","+
-		"'"+name+"',"+
-		"0)";
-        jdbcTemplateObject.update(SQL);
+        String SQL ="INSERT INTO Template VALUES(?,?,0)";
+        jdbcTemplateObject.update(SQL,i,name);
         return i;
     }
     
@@ -109,14 +107,14 @@ public class TemplateJDBC implements TemplateDAO
     {
         String SQL1="update Template set active=0";
         jdbcTemplateObject.update(SQL1);
-        String SQL2="update Template set active=1 where TemplateId="+id;
-        jdbcTemplateObject.update(SQL2);   
+        String SQL2="update Template set active=1 where TemplateId=?";
+        jdbcTemplateObject.update(SQL2,id);   
     }
     
     public int existTemplate(int id)
     {
-        String sql = "select Count(*) from template where TemplateId="+id;
-        return jdbcTemplateObject.queryForInt(sql);
+        String sql = "select Count(*) from template where TemplateId=?";
+        return jdbcTemplateObject.queryForInt(sql,id);
     }
     
     public List<InfoForDelete> getInfoForDelete(int templateId)
@@ -127,9 +125,9 @@ public class TemplateJDBC implements TemplateDAO
 					"join columnFields cf on cf.columnId=c.columnId "+
 					"join appForm  af on af.appId=cf.appId "+
 					"join users u on u.userId=af.userId "+
-                                        "where temp.templateId="+templateId+
+                                        "where temp.templateId=?"+
                                         " order by af.appId";
-        List<InfoForDelete> listOfInfo=jdbcTemplateObject.query(sql, new InfoForDeleteRowMapper());
+        List<InfoForDelete> listOfInfo=jdbcTemplateObject.query(sql, new InfoForDeleteRowMapper(),templateId);
         return listOfInfo;
     }
 }
