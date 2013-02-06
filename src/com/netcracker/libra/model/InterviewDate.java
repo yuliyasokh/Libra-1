@@ -1,13 +1,14 @@
 package com.netcracker.libra.model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 
 public class InterviewDate {
     
     private int interviewDateId;
-    private Date dateStart;
-    private Date dateFinish;
+    private Timestamp dateStart;
+    private Timestamp dateFinish;
     private int interviewDuration;
 
     public int getInterviewDateId() {
@@ -22,7 +23,7 @@ public class InterviewDate {
         return dateStart;
     }
 
-    public void setDateStart(Date dateStart) {
+    public void setDateStart(Timestamp dateStart) {
         this.dateStart = dateStart;
     }
 
@@ -30,7 +31,7 @@ public class InterviewDate {
         return dateFinish;
     }
 
-    public void setDateFinish(Date dateFinish) {
+    public void setDateFinish(Timestamp dateFinish) {
         this.dateFinish = dateFinish;
     }
 

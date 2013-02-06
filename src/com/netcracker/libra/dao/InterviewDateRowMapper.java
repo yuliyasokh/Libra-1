@@ -9,8 +9,8 @@ public class InterviewDateRowMapper implements RowMapper <InterviewDate> {
     public InterviewDate mapRow(ResultSet rs, int rowNum) throws SQLException {
         InterviewDate interviewDate = new InterviewDate();
         interviewDate.setInterviewDateId(rs.getInt("InterviewDateId"));
-        interviewDate.setDateStart(rs.getDate("DateStart"));
-        interviewDate.setDateFinish(rs.getDate("DateFinish"));
+        interviewDate.setDateStart(rs.getTimestamp("DateStart"));
+        interviewDate.setDateFinish(rs.getTimestamp("DateFinish"));
         interviewDate.setInterviewDuration(rs.getInt("InterviewDuration"));
         return interviewDate;
     }

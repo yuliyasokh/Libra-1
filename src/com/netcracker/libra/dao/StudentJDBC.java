@@ -38,6 +38,7 @@ public class StudentJDBC implements StudentDAO {
       jdbcTemplateObject.update(SQL, userId, name, lastName, email, password, roleId);
       System.out.println("Created Record Name = " + name + " Lastname = " + lastName + " Id = " +userId);
       return;
+      */
    }
 
    public Student getStudent(Integer id) {
@@ -48,7 +49,7 @@ public class StudentJDBC implements StudentDAO {
    }
 
    public List<Student> listStudents() {
-      String SQL = "select * from Users where roleid=1";
+      String SQL = "select * from Users";
       List <Student> students = jdbcTemplateObject.query(SQL, new StudentRowMapper());
       return students;
    }
