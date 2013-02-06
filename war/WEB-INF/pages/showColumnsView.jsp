@@ -10,17 +10,20 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
-    <table border="1" cellspacing="0" cellpadding="4">
-        <caption>Добавление колонки</caption>
+ <table border="1" cellspacing="0" cellpadding="4">
+    <caption>Добавление колонки</caption>
         <form action="addColumn.html" method="GET">
          <tr>
              <td></td>
-            <td colspan=5>Добавить новую колонку к теме
-                <select name="topic">
+            <td colspan=5>Добавить новую колонку к теме 
+                ${topic.getName()}
+                <input name="topic" type="hidden" value="${topic.getTopicId()}"/>
+               <%-- <select name="topic">
                 <c:forEach items="${topics}" var="t">
                      <option value="${t.getTopicId()}"><c:out value="${t.getName()}" /></option>
                 </c:forEach>
                 </select>
+               --%>
             </td>
             <td>
                 <input type="submit" value="Добавить колонку"/>
@@ -56,8 +59,8 @@
                     </td>
                 </c:if>   
                 
-            <td><a href="editColumn.html?column=<c:out value='${c.getColumnId()} '/>"><img src="\Libra4\war\resources\images\edit.png" width="30" height="30"/></a></td>
-            <td><a href="delColumn.html?column=<c:out value='${c.getColumnId()} '/>"><img src="\Libra4\war\resources\images\del.jpg" width="30" height="30"/></a></td>
+            <td><a href="editColumn.html?column=<c:out value='${c.getColumnId()} '/>"><img src="resources\images\edit.png" width="30" height="30"/></a></td>
+            <td><a href="delColumn.html?column=<c:out value='${c.getColumnId()} '/>"><img src="resources\images\del.jpg" width="30" height="30"/></a></td>
  
             </tr>
         </c:forEach>

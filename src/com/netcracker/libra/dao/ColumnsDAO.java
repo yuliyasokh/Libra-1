@@ -20,7 +20,7 @@ public interface ColumnsDAO
     public List<Columns> getAll();
     public int add(int topicId, String name, int typeId,int required);
     public void delete(int columnId);
-    public List<ColumnsShow> getColumnsShow();
+    public List<ColumnsShow> getColumnsShow(int id);
     public void update(int id, int topicId,String name, int typeId, int require);
     public int existColumn(int id);
 }

@@ -10,8 +10,8 @@ import java.util.Map;
 
 public class SignupForm {
 
-	private Map<String, String> form = new HashMap<>();
-
+	//private Map<String, String> form = new HashMap<>();
+            private Map<String, String> form = new HashMap<String,String>();
 	public String getName() {
 		return form.get("name");
 	}

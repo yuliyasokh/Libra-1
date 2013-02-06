@@ -36,14 +36,14 @@ public class TypeJDBC implements TypeDAO
     
     public int existType(int id)
     {
-        String sql = "select Count(*) from types where TypeId="+id;
-        return jdbcTemplateObject.queryForInt(sql);
+        String sql = "select Count(*) from types where TypeId=?";
+        return jdbcTemplateObject.queryForInt(sql,id);
     }
     @Override
     public Type getType(int id) 
     {
-        String SQL = "select * from Types where TypeId ="+id;
-        Type type = jdbcTemplateObject.queryForObject(SQL, new TypeRowMapper());    
+        String SQL = "select * from Types where TypeId =?";
+        Type type = jdbcTemplateObject.queryForObject(SQL, new TypeRowMapper(),id);    
         return type; 
     }
 
@@ -58,9 +58,8 @@ public class TypeJDBC implements TypeDAO
     public int add(String name)
     {
         int i=getCurVal();
-        String SQL ="INSERT INTO Types VALUES("+i+","+
-		"'"+name+"')";
-        jdbcTemplateObject.update(SQL);
+        String SQL ="INSERT INTO Types VALUES(?,?)";
+        jdbcTemplateObject.update(SQL,i,name);
         return i;
     }
     @Override
@@ -84,9 +83,9 @@ public class TypeJDBC implements TypeDAO
 					"join appForm  af on af.appId=cf.appId "+
 					"join users u on u.userId=af.userId "+
                                         "join types on types.TypeId=c.TypeId "+
-                                        "where types.TypeId="+type+
+                                        "where types.TypeId=? "+
                                         " order by af.appId";
-        List<InfoForDelete> listOfInfo=jdbcTemplateObject.query(sql, new InfoForDeleteRowMapper());
+        List<InfoForDelete> listOfInfo=jdbcTemplateObject.query(sql, new InfoForDeleteRowMapper(),type);
         return listOfInfo;
     }
 }

@@ -37,7 +37,7 @@
             <form action="showTypes.html" method="POST">
         <tr>
             <td>
-                <a href="delType.html?type=<c:out value='${t.getTypeId()} '/>"><img src="del.jpg"  width="25" height="25" border="0" title="удалить"/></a>
+                <a href="delType.html?type=<c:out value='${t.getTypeId()} '/>"><img src="resources\images\del.jpg"  width="25" height="25" border="0" title="удалить"/></a>
             </td>
             <td>
                 ${t.getTypeId()} 
@@ -45,7 +45,7 @@
             </td>
             <td>${t.getTypeName()} </td>
             <td>
-                <input type="image"  src="edit.png" width="25" height="25" title="внести изменения" OnClick="Forma1.submit()"/>
+                <input type="image"  src="resources\images\edit.png" width="25" height="25" title="внести изменения" OnClick="Forma1.submit()"/>
             </td>
             <td>
                 <input type="text" name="name"/>

@@ -8,7 +8,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>JSP Page (${userid})</title>
     </head>
     <body>
         <table border="1" cellspacing="0" cellpadding="4">
@@ -23,7 +23,6 @@
             <th>Изменить</th>
             <th>Удалить</th>
         </tr>
-        
          <tr>
              <form action="addTopic.html" method="GET">
              <td colspan=2></td>
@@ -39,65 +38,38 @@
             </td>
              </form>
         </tr>
-       
-        <%--<c:forEach items="${maps}" var="contactMap">
-        <tr>
-            <td>${contactMap.value.getTopicId()}</td>
-            <td>${contactMap.value.getName()}</td>
-            <td>${contactMap.value.getComments()}</td>
-            <td>${contactMap.key}</td>
-            <td>
-                <c:if test="${(contactMap.value.getParentTopic() == 0)}">
-                    <b>Родителя нету</b>
-                </c:if>
-                <c:if test="${(contactMap.value.getParentTopic() != 0)}">
-                    <c:out value=' ${contactMap.value.getParentTopic()} '/>
-                </c:if>             
-            </td>
-            <td>
-                <c:if test="${(contactMap.value.getRequierOther() == 1)}">
-                    <b>Можно добавить свой ответ</b>
-                </c:if>
-                <c:if test="${(contactMap.value.getRequierOther() == 0)}">
-                    <b>Нельзя добавить свой ответ</b>
-                </c:if>
-            </td>
-            <td><a href="showTopic.html?topic=<c:out value='${contactMap.value.getTopicId()} '/>"><img src="edit.png" width="30" height="30"/></a></td>
-            <td><a href=""><img src="del.jpg" width="30" height="30"/></a></td>
-        </tr>
-        </c:forEach>--%>
         <c:forEach items="${topics}" var="t">
             <tr>
                 <td>${t.getTopicId()}</td>
                 <td>${t.getName()}</td>
                 <td>${t.getComments()}</td>
                 <td>${t.getTemplateName()}</td>
-                <c:if test="${(t.getParentTopic() == 0)}">
+                <c:if test="${t.getParentTopic() == 0}">
                     <td>
                     <b>Родителя нету</b>
                     </td>
                 </c:if>
-                <c:if test="${(t.getParentTopic() != 0)}">
+                <c:if test="${t.getParentTopic() != 0}">
                     <td>
                     <c:out value=' ${t.getParentTopicName()} '/>
                     </td>
                 </c:if>   
                     <td>
-                <c:if test="${(t.getRequierOther() == 1)}">
+                <c:if test="${t.getRequierOther() == 1}">
                     <b>Можно добавить свой ответ</b>
                 </c:if>
-                <c:if test="${(t.getRequierOther() == 0)}">
+                <c:if test="${t.getRequierOther() == 0}">
                     <b>Нельзя добавить свой ответ</b>
                 </c:if>
             </td>
+            <td><a href="showColumns.html?topic=<c:out value='${t.getTopicId()}' />">Просмотреть колонки</a></a>
+            </td>
             <form action="showSubmitTopic.html" method="post">
             <td>
-                   <input type="image"  src="edit.png" width="25" height="25" title="внести изменения" OnClick="Forma1.submit()"/>
+                   <input type="image"  src="resources\images\edit.png" width="25" height="25" title="внести изменения" OnClick="Forma1.submit()"/>
                     <input type="hidden" value="<c:out value='${t.getTopicId()}' />" name="selTopic"/>
             </td>
             </form>
-            <td><a href="delTopic.html?topic=<c:out value='${t.getTopicId()}' />"><img src="del.jpg" width="30" height="30"/></a></td>
- 
             </tr>
         </c:forEach>
         

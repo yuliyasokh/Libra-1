@@ -8,12 +8,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.netcracker.libra.model.Student;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 @Repository
 public class StudentJDBC implements StudentDAO {
 
    private static JdbcTemplate jdbcTemplateObject;
-   private static int userId = 300;
+   //private static int userId = 300;
    private final int roleId = 1;
    
    public StudentJDBC() {
@@ -24,13 +26,17 @@ public class StudentJDBC implements StudentDAO {
    public void setDataSource(DataSource dataSource) {
        jdbcTemplateObject = new JdbcTemplate(dataSource);
    }
-
+   
+   private int getCurrVal()
+   {
+       String SQL="select User_seq.NEXTVAL as Id from dual";
+       return jdbcTemplateObject.queryForInt(SQL);
+   }
    public void create(String name, String lastName, String email, String password) {
       String SQL = "insert into Users (USERID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLEID) values (?,?,?,?,?,?)";
-      
+      int userId=getCurrVal();
       jdbcTemplateObject.update(SQL, userId, name, lastName, email, password, roleId);
       System.out.println("Created Record Name = " + name + " Lastname = " + lastName + " Id = " +userId);
-      userId++;
       return;
    }
 
@@ -61,11 +67,13 @@ public class StudentJDBC implements StudentDAO {
       return;
    }
    
-   public static int verifyLogin(String email, String password)  {
-	   String SQL = "select count(*) from users where email=? and password=?";
-	   int result;
-	   result = jdbcTemplateObject.queryForInt(SQL, email, password);
-	   return result;
+   public static int verifyLogin(String email, String password) throws EmptyResultDataAccessException  {
+	   String SQL = "select userid from users where email=? and password=?";
+	   return  jdbcTemplateObject.queryForInt(SQL, email, password);
    }
-
+   public static int getAccess(int id)
+   {
+        String SQL = "select r.AccessLevel from users u join roles r on r.roleId=u.roleId where u.userId=?";
+	   return  jdbcTemplateObject.queryForInt(SQL, id);
+   }
 }

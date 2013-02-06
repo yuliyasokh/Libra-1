@@ -11,7 +11,7 @@
         <title>Добавление колонки</title>
     </head>
     <body>
-        <h1>Добавить колонку к ${topic.getName()} </h1>
+        <h1>Добавить колонку к</h1>
         <form method="POST" action="SubmitColumn.html">
             Введите имя колонки <input type="text" name="name" /></br>
             Выберите тип колонки<select name="selType">
