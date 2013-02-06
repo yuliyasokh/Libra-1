@@ -10,6 +10,14 @@ public class InterviewDate {
     private Timestamp dateStart;
     private Timestamp dateFinish;
     private int interviewDuration;
+    private String listInterviewers;
+    
+    public void setListInterviewers(String listInterviewers){
+        this.listInterviewers=listInterviewers;
+    }
+    public String getListInterviewers(){
+        return listInterviewers;
+    }
 
     public int getInterviewDateId() {
         return interviewDateId;

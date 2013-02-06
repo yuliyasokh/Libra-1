@@ -1,6 +1,5 @@
 package com.netcracker.libra.dao;
 
-import com.netcracker.libra.model.SignupForm;
 import com.netcracker.libra.model.Student;
 import java.util.List;
 import javax.sql.DataSource;
@@ -50,7 +49,7 @@ public class HrJDBC implements HrDAO {
         }
         
         @Override
-        public void updateStudent(SignupForm form){
+        public void updateStudent(Student student){
       /*     String SQL = "update Appform set Patronymic = ?, PhoneNumber = ?, DepartmentId = ?, AdvertisingId = ?, AdvertisingComment = ?,"
                    + " Course = ?, Graduated = ?, DataCreation = ?, ModifiedBy = ? "
                    + "where appid = ?";

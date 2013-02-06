@@ -42,8 +42,7 @@ public class InterviewDateController
         return mav;
     }
     
-    
- /**
+   /**
  *
  * @author Yuliya
  */
@@ -56,11 +55,7 @@ public class InterviewDateController
     {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("interviewDate");
-        List<InterviewDate> id=iDateJdbc.getAllInterviewDates();
-        Iterator itr = id.iterator();
-        while(itr.hasNext()){
-            iDate = (InterviewDate) itr.next();
-           }
+        List<InterviewDate> id=iDateJdbc.getAllInterviewDatesWithInterviewers();  
         return new ModelAndView("hr/interviewDate","Model",id);
       }
 }
