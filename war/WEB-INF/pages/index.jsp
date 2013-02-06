@@ -14,9 +14,6 @@
         <a href="logout.html">Выйти</a>
 	<a href="signup.html">Test</a>
         
-        <a href="hr/showStudentbyIdView.html">Поиск1</a>
-        <a href="hr/interviewDate.html">Расписание</a>
-        
         <h1>HR</h1>
         <p>hr@mail.ru</p>
         <p>12345</p>
@@ -24,7 +21,6 @@
         <a href="showTemplates.html">Шаблоны</a>
         <a href="showTopics.html">Темы вопросов</a>
         <a href="showTypes.html">Типы</a>
-        <a href="showColumns.html">Колонки</a>
         <a href="hr/showStudentbyIdView.html">Поиск1</a>
         <a href="hr/interviewDate.html">Расписание</a>
 
