@@ -1,6 +1,5 @@
 package com.netcracker.libra.dao;
 
-import com.netcracker.libra.model.SignupForm;
 import com.netcracker.libra.model.Student;
 import java.util.List;
 /**
@@ -19,7 +18,7 @@ public void deleteFormById(Integer id);
  * Изменение анкеты студента
  * @param form 
  */
-public void updateStudent(SignupForm form);
+public void updateStudent(Student student);
 
 /**
  * Получение студента

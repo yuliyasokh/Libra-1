@@ -69,7 +69,19 @@ public class InterviewDateJDBC implements InterviewDateDAO {
         interviewDates = jdbcTemplateObject.query(SQL, new InterviewDateRowMapper());
         return interviewDates;
     }
-    
+    /**
+     * Метод получает всю информацию о датах интервью + список интервьеров на каждом из интервью
+     */
+    public List <InterviewDate> getAllInterviewDatesWithInterviewers() {
+        String SQL = "select  d.interviewdateid, d.dateStart,d.dateFinish,d.InterviewDuration,"+
+        "rtrim(xmlagg(xmlelement(e, u.firstname||' '||u.lastname,', ').extract('//text()')),', ') listInterviewers "+
+        "from  interviewdate d join interviewerlist l on d.interviewdateid=l.interviewdateid "+
+		"join users u on u.userid=l.userid "+
+      "group by d.interviewdateid,d.datestart,d.datefinish,d.InterviewDuration";
+        List <InterviewDate> interviewDates;
+        interviewDates = jdbcTemplateObject.query(SQL, new WithInterviewersInterviewDateRowMapper());
+        return interviewDates;
+    }
     public List<InterviewDateInfo> getFreePlaces()
     {
         String SQL="select  intDate.interviewDateId, TO_CHAR(tAllPlaces.dateFinish,'dd.mm.yyyy') day,TO_CHAR(tAllPlaces.dateStart,'hh24:mi') hSatrt,TO_CHAR(tAllPlaces.dateFinish,'hh24:mi') hFinish, tAllPlaces.allPlaces-count(*) freePlaces "+
