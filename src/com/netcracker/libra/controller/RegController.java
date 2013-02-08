@@ -36,6 +36,6 @@ public class RegController {
 	        }   
 		 	
 		 model.put("registerForm", form);
-	        return "/signup/success";
+	        return "/signup/verify";
 	    }
 	}
