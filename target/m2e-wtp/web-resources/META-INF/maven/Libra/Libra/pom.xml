@@ -80,8 +80,13 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-		<version>4.3.1.Final</version>
-</dependency>
+			<version>4.3.1.Final</version>
+		</dependency>
+		<dependency>
+        	<groupId>com.oracle</groupId>
+        	<artifactId>ojdbc6</artifactId>
+        <version>11.2.0.3</version>
+    </dependency>
 	</dependencies>
 
 	<build>

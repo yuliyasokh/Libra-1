@@ -6,6 +6,8 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
+import com.netcracker.libra.util.security.ConfirmationCodeGenerator;
+
 public class RegisterForm {
 	
 	@NotEmpty
@@ -28,6 +30,8 @@ public class RegisterForm {
 	@Email
 	@Length(max=50)
 	private String email;
+	
+	private String enteredCode;
 	
 	public RegisterForm() {
 		
@@ -75,6 +79,25 @@ public class RegisterForm {
         } else {
             return password.equals(confirmedPassword);
        }
+	}
+
+	
+	public String generateConfirmationCode() {
+		return ConfirmationCodeGenerator.generateCode();
+	}
+
+	/**
+	 * @return the enteredCode
+	 */
+	public String getEnteredCode() {
+		return enteredCode;
+	}
+
+	/**
+	 * @param enteredCode the enteredCode to set
+	 */
+	public void setEnteredCode(String enteredCode) {
+		this.enteredCode = enteredCode;
 	}
 	
 }
