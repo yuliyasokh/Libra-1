@@ -24,6 +24,7 @@
         <a href="hr/showStudentbyIdView.html">Поиск1</a>
         <a href="hr/interviewDate.html">Расписание</a>
         <a href="admin/employees.html">Admin</a>
+        <a href="sendmail.html">SendMail</a>
 
 </body>
 </html>
