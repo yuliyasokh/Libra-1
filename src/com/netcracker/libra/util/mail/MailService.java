@@ -46,22 +46,51 @@ public class MailService implements IMailService {
     }
     
     
-    public static void sendMessage(final String adress, final String user, final String code){
-        MimeMessagePreparator preparator = new MimeMessagePreparator(){
-
-            @Override
-            public void prepare(MimeMessage mm) throws Exception {
-                MimeMessageHelper message = new MimeMessageHelper(mm);
-                message.setTo(adress);
-                Map model = new HashMap();
-                model.put("user", user);
-                model.put("code", code);
-                String text = VelocityEngineUtils.mergeTemplateIntoString(
-                            velocityEngine, "/template_1.vm", "UTF-8", model);
-                message.setText(text);
-                System.out.println(adress);
-            }            
-        };
+    public static void sendConfirmRegistrationMessage(String adress, String user, String code){
+        Map model = new HashMap();
+        model.put("index",0);
+        model.put("adress", adress);        
+        model.put("user", user);        
+        model.put("code", code);  
+        
+        MimeMessagePreparator preparator = new message(model);
         mailSender.send(preparator);        
+    }
+    
+    public static void sendSuccessRegistrationMessage(String adress, String user){
+        Map model = new HashMap();
+        model.put("index",1);
+        model.put("adress", adress);        
+        model.put("user", user);      
+        
+        MimeMessagePreparator preparator = new message(model);
+        mailSender.send(preparator); 
+    }
+    
+    private static String getTemplateText(int index, Map model){
+        switch (index) {
+            case 0: 
+                return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/template_1.vm", "UTF-8", model);
+            case 1:
+                return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/template_2.vm", "UTF-8", model);
+            default:
+                return null;
+        }        
+    }
+    
+    
+    private static class message implements  MimeMessagePreparator {
+        Map model = null;
+
+        public message(Map model) {
+            this.model = model;
+        }        
+
+        @Override
+        public void prepare(MimeMessage mm) throws Exception {
+            MimeMessageHelper message = new MimeMessageHelper(mm);
+                message.setTo((String) model.get("adress"));
+                message.setText(getTemplateText((int)model.get("index"),model), true);
+        }        
     }
 }
