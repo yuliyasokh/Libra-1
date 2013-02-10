@@ -12,7 +12,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Регистрация - шаг 2</title>
+<title>Контактная информация</title>
 <meta name="description" content="Libra">
 <link rel="stylesheet" href="<c:url value="resources/css/main.css"/>" />
 <link rel="stylesheet"
@@ -26,23 +26,40 @@
 	src="<c:url value="resources/js/modernizr-2.6.2-respond-1.1.0.min.js"/>"></script>
 </head>
 <body>
-		<div class="span3">
-			
-			<form:form method="PUT" commandName="appForm" action="interests.html">
-			
-					<label>Электронный адрес для входа в систему</label>
-					<form:input path="email" type="text" class="span3" />
-					<label>Дополнительный электронный адрес</label>
-					<form:input path="email2" type="text" class="span3" />
-					<label>Номер телефона</label>
-					<form:input path="phoneNumber" type="text" class="span3"/>
-					<label>Другое</label>
-					<form:input path="miscContact" type="text" class="span3" />
-					<br>
-					
-	    			<input type="submit" value="Далее" class="btn btn-primary">
-				</form:form>
-				
-		</div>
+	<div class="container">
+
+		<form:form method="POST" commandName="registerForm">
+			<h2>Регистрация</h2>
+			<table>
+				<tr>
+					<td><label>Фамилия:</label></td>
+					<td><form:input path="lastName" type="text" class="span3" /></td>
+				</tr>
+				<tr>
+					<td><label>Имя:</label></td>
+					<td><form:input path="name" type="text" class="span3" /></td>
+				</tr>
+				<tr>
+					<td><label>Email:</label></td>
+					<td><form:input path="email" type="email" class="span3" /></td>
+				</tr>
+				<tr>
+					<td><label>Пароль:</label></td>
+					<td><form:input path="password" type="password" class="span3" />
+				</tr>
+				<tr>
+					<td><label>Подтвердите пароль:</label></td>
+					<td><form:input path="confirmedPassword" type="password"
+							class="span3" /></td>
+				</tr>
+
+			</table>
+				<div class="form-actions">
+					<button type="submit" class="btn pull-left">Вернуться</button>
+  					<button type="submit" class="btn btn-primary pull-right">Зарегистрироваться</button>
+				</div>
+		</form:form>
+
+	</div>
 </body>
 </html>
