@@ -12,7 +12,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 @Repository
-public class StudentJDBC implements StudentDAO {
+public class StudentJDBC {
 
    private static JdbcTemplate jdbcTemplateObject;
    //private static int userId = 300;
