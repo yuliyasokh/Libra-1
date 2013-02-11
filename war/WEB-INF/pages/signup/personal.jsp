@@ -27,7 +27,7 @@
 </head>
 <body>
 	<div class="container">
-
+		<div class="appform">
 		<form:form method="PUT" commandName="registerForm">
 			<h2>Регистрация</h2>
 			<table>
@@ -59,7 +59,7 @@
   					<button type="submit" class="btn btn-primary pull-right" >Далее</button>
 				</div>
 		</form:form>
-
+		</div>
 	</div>
 </body>
 </html>

@@ -28,7 +28,7 @@
 <body>
 	<div class="container">
 
-		<form:form method="POST" commandName="registerForm" action="register/validate.html">
+		<form:form method="POST" commandName="registerForm" action="register/proceed.html">
 			<h2>Добро пожаловать</h2>
 			<h5>Вы ввели следующую информацию: </h5>
 			<table>

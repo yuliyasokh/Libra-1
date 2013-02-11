@@ -9,10 +9,8 @@
 <title>Регистрационные данные</title>
 </head>
 <body>
-Success
-<p>${registerForm.name} ${registerForm.lastName}</p><br>
-<p>${registerForm.email}</p><br>
-<p>${registerForm.password} ${registerForm.confirmedPassword}</p><br>
+<c:out value="${appForm.interests[1]}"></c:out>
+<c:out value="${appForm.workType[1]}"></c:out>
 
 </body>
 </html>
