@@ -1,8 +1,15 @@
 package com.netcracker.libra.util.mail;
 
+import java.io.File;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import javax.mail.BodyPart;
+import javax.mail.Multipart;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.servlet.ServletContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,15 +25,16 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 @Service("mailService")
 
 public class MailService implements IMailService {
-    private static  JavaMailSender mailSender;
+    private static JavaMailSender mailSender;
     private static VelocityEngine velocityEngine;
+    private static ServletContext servletContext;
 
-    public JavaMailSender getMailSender() {
-        return mailSender;
+    public  void setServletContext(ServletContext servletContext) {
+        this.servletContext = servletContext;
     }
 
-    public void setMailSender(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+    public  ServletContext getServletContext() {
+        return servletContext;
     }
 
     public VelocityEngine getVelocityEngine() {
@@ -67,12 +75,24 @@ public class MailService implements IMailService {
         mailSender.send(preparator); 
     }
     
+    public static void sendFormMessage(String adress, String user, int id){
+        Map model = new HashMap();
+        model.put("index",2);
+        model.put("adress", adress);        
+        model.put("user", user);
+        model.put("id", id);
+        MimeMessagePreparator preparator = new messageWithAttachment(model);
+        mailSender.send(preparator); 
+    }
+    
     private static String getTemplateText(int index, Map model){
         switch (index) {
             case 0: 
                 return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/template_1.vm", "UTF-8", model);
             case 1:
                 return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/template_2.vm", "UTF-8", model);
+            case 2:
+                return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/template_3.vm", "UTF-8", model);
             default:
                 return null;
         }        
@@ -88,9 +108,28 @@ public class MailService implements IMailService {
 
         @Override
         public void prepare(MimeMessage mm) throws Exception {
-            MimeMessageHelper message = new MimeMessageHelper(mm);
-                message.setTo((String) model.get("adress"));
+            
+            MimeMessageHelper message = new MimeMessageHelper(mm,"UTF-8");
+                message.setTo((String) model.get("adress"));                    
+                System.out.println(getTemplateText((int)model.get("index"),model));
                 message.setText(getTemplateText((int)model.get("index"),model), true);
+        }        
+    }
+    
+    private static class messageWithAttachment implements  MimeMessagePreparator {
+        Map model = null;
+
+        public messageWithAttachment(Map model) {
+            this.model = model;
+        }        
+
+        @Override
+        public void prepare(MimeMessage mm) throws Exception {
+            MimeMessageHelper message = new MimeMessageHelper(mm, true,"UTF-8");
+                message.setTo((String) model.get("adress"));                
+                message.setText(getTemplateText((int)model.get("index"),model), true);
+                File file = new  File(servletContext.getRealPath("WEB-INF/forms/form"+model.get("id")+".pdf"));
+                message.addAttachment("Your_completed_questionnaire",file) ;
         }        
     }
 }
