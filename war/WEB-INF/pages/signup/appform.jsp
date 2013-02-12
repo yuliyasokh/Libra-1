@@ -33,19 +33,19 @@
 							<span class="span2 uneditable-input">${registerForm.lastName}</span>
 							<span class="span2 uneditable-input">${registerForm.name}</span>
 						</div>
-							<input class="span4" name="patronymic" placeholder="Отчество" type="text"/>
-							<input class="span4" name="phoneNumber" placeholder="Номер телефона" type="text"/>
-							<input class="span4" name="otherContacts" placeholder="Другие контакты" type="text"/>
+							<input class="span4" name="personal['patronymic ${personal.value}']" placeholder="Отчество" type="text"/>
+							<input class="span4" name="personal['phoneNumber ${personal.value}']" placeholder="Номер телефона" type="text"/>
+							<input class="span4" name="personal['otherContact ${personal.value}']" placeholder="Другие контакты" type="text"/>
 					</div>
 					<div class="span1"></div>
 					<div class="span4">
 
 						<h5>Образование:</h5>
-							<input class="span4" name="university" placeholder="Название университета" type="text"/>
-  							<input class="span4" name="faculty" placeholder="Факультет" type="text"/>
+							<input class="span4" name="personal['university ${personal.value}']" placeholder="Название университета" type="text"/>
+  							<input class="span4" name="personal['faculty ${personal.value}']" placeholder="Факультет" type="text"/>
   						<div class="controls controls-row">
-							<input class="span2" name="term" placeholder="Курс" type="text"/>
-							<input class="span2" name="graduated" placeholder="Год выпуска" type="text">
+							<input class="span2" name="personal['term ${personal.value}']" placeholder="Курс" type="text"/>
+							<input class="span2" name="personal['graduated ${personal.value}']" placeholder="Год выпуска" type="text">
 						</div>
 					</div>
 				</div>
@@ -56,19 +56,24 @@
 						<c:forEach var="t" items="${appForm.whatsInterestedList}">
 							<label class="checkbox">${t.value} <form:checkbox path="interests" value="${t.key}"></form:checkbox></label>
 						</c:forEach>
-						<label class="checkbox"><form:checkbox path="interests" value="otherOccupation"></form:checkbox>
+						
+						<!--  <label class="checkbox"><form:checkbox path="interests" value="otherOccupation"></form:checkbox>
 						<form:input path="interests" placeholder="Другое"></form:input>
 						</label>
+						-->
+						
 					</div>
 					<div class="span1"></div>
 					<div class="span4">
 						<h5>Укажите предпочитаемый тип работы:</h5>
 						<c:forEach var="r" items="${appForm.workTypeList}">
-							<label class="checkbox">${r.value} <form:checkbox path="workType" value="${r.key}"></form:checkbox></label>
+							<label class="checkbox">${r.value} <form:checkbox path="workTypes" value="${r.key}"></form:checkbox></label>
 						</c:forEach>
-						<label class="checkbox"><form:checkbox path="interests" value="otherOccupation"></form:checkbox>
-						<form:input path="workType" placeholder="Другое"></form:input>
+						
+						<!--  <label class="checkbox"><form:checkbox path="workTypes" value="otherOccupation"></form:checkbox>
+						<form:input path="workTypes" placeholder="Другое"></form:input>
 						</label>
+						-->
 					</div>
 				</div>
 					<div class="span9">

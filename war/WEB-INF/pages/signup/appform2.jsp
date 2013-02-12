@@ -23,88 +23,69 @@
 </head>
 <body>
 	<div class="container">
-				<h3>Анкета кандидата (2/2)</h3>
+	<h3>Анкета кандидата (2/2)</h3>
 				
 		<form:form commandName = "appForm" method="POST" action="success.html">
-		
-				<div class="row">	
-					<div class="span5">
-						<h5>Владение языками программирования</h5>
-						<br>1 - писал простые программы с книгой\справкой 
+			<div class="row">
+			
+				<div class="span5">
+					<h6>Владение языками программирования</h6>
+						1 - писал простые программы с книгой\справкой 
 						<br>3 - хорошо помню синтаксис и некоторые библиотеки 
 						<br>5 - написал крупный проект 
 						<br><br>
-							<label><span class="span4">Java</span><input class="span1" name="javaGrade" type="text"/></label>
-							<label><span class="span4">C++</span><input class="span1" name="cGrade" type="text"/></label>
-							<label><span class="span4">C#</span><input class="span1" name="otherLanguageGrade" type="text"/></label>
-							<label><span class="span4">.NET</span><input class="span1" name="otherLanguage2Grade" type="text"/></label>
-							<label><span class="span4">Python</span><input class="span1" name="otherLanguage3Grade" type="text"/></label>
-					</div>
-					<div class="span1"></div>
-						<div class="span5">
-						<h5>Как ты оцениваешь свои знания по разделам (от 0 до 5):</h5>
-						
-							<label><span class="span4">Сетевые технологии:</span> <input class="span1" type="text"/></label>
-  							<label><span class="span4">Эффективные алгоритмы:</span> <input class="span1" type="text"/></label>
-							<label><span class="span4">Объектно-ориентированное программирование:</span> <input class="span1" type="text"/></label>
-							<label><span class="span4">Базы данных:</span> <input class="span1" type="text"/></label>
-							<label><span class="span4">WEB:</span> <input class="span1" type="text"/></label>
-  							<label><span class="span4">Графический интерфейс (не WEB):</span> <input class="span1" type="text"/></label>
-							<label><span class="span4">Сетевое программированое:</span> <input class="span1" type="text"/></label>
-							<label><span class="span4">Проектирование программ:</span> <input class="span1" type="text"/></label>
-					</div>
-				</div>
+					<c:forEach items="${appForm.programmingLanguagesList}" var="l" varStatus="status">	
+								<label>
+									<span class="span4">${l}</span>
+									<input class="span1" 
+										required 
+										name="programmingLanguagesMap['${l} ${programmingLanguagesMap.value}']" 
+										type="number" 
+										min="0" max="5"/>
+								</label>
+					</c:forEach>
+				</div>		
 				
-				<div class="row"></div>
+				<div class="span1"></div>
 				
-				<div class="row">
-
-				</div>
+				<div class="span5">
 				
-		
-				<div class="row"><br></div>
-					<div class="row">	
-						
-						<div class="span5">
-							<h5>Владение английским языком (от 1=elementary до 5=advanced)</h5>
-							<label><span class="span4">Чтение:</span> <input class="span1" type="text"/></label>
-  							<label><span class="span4">Письмо:</span> <input class="span1" type="text"/></label>
-							<label><span class="span4">Устная речь:</span> <input class="span1" type="text"/></label>
-						</div>
-						
+					<h6>Как ты оцениваешь свои знания по разделам (от 0 до 5):</h6>
+					<c:forEach items="${appForm.knowledgesList}" var="m" varStatus="status">
+							
+								<label>
+									<span class="span4">${m}</span>
+									<input class="span1" 
+									name="knowledgesMap['${m} ${knowledgesMap.value}']" 
+									required 
+									type="number"
+									min="0" max="5"/>
+								</label>
+							
 						<div class="span1"></div>
-						
-						<div class="span5">
-							<h5>Если у тебя есть опыт работы и\или выполненные учебные проекты, опиши их</h5>
-							<textarea rows="3" class="span5"></textarea>
-						</div>
-					</div>
-					
-				<div class="row">
-					<div class="span5">
-						<h5>Почему именно тебя следует взять в NetCracker? Важные достоинства, возможно обещания?</h5>
-							<textarea rows="3" class="span5"></textarea>
-					</div>
-					
-					<div class="span1"></div>
-					
-					<div class="span5">
-						<h5>Дополнительные сведения о себе: олимпиады, курсы, поощрения, сертификаты и т.п.</h5>
-							<textarea rows="3" class="span5"></textarea>
-					</div>
+					</c:forEach>
 				</div>
-				<br>
-				<div class="row">
-					<div class="span5">
-						<label>Откуда ты узнал о наборе в учебный центр?</label>
-					</div>
+				
+				<div class="span1"></div>
+				
+					<c:forEach items="${appForm.textFieldsList}" var="t">
+							<div class="span5"><h6>${t}</h6>
+								<textarea name="textFieldsMap['${t} ${textFieldsMap.value}']" class="span5" rows="2"></textarea>
+							</div>
+						<div class="span1"></div>
+					</c:forEach>
 					
-					<div class="span1"></div>
-					
-					<div class="span5">
-						<input name="advert" type="text" class="span5">
-					</div>
-				</div>	
+				<div class="span5">
+					<h6>Владение английским языком (от 1=elementary до 5=advanced)</h6>
+					<label><span class="span4">Чтение:</span> <input class="span1" type="number" min="0" max="5"/></label>
+  					<label><span class="span4">Письмо:</span> <input class="span1" type="number" min="0" max="5"/></label>
+					<label><span class="span4">Устная речь:</span> <input class="span1" type="number" min="0" max="5"/></label>
+				</div>
+				
+				<div class="span5">
+					<h6>Откуда ты узнал о наборе в учебный центр?</h6>
+					<input name="advert" type="text" class="span5">
+				</div>
 					
 					<div class="span11">
 						<div class="form-actions">
@@ -112,6 +93,7 @@
   							<button type="submit" class="btn btn-primary pull-right">Далее</button>
 						</div>
 					</div>
+				</div>
 		</form:form>
 	</div>
 </body>
