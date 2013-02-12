@@ -34,7 +34,9 @@ public class SendMailController  {
            @RequestMapping(value = "/sendmailsubmit", method = RequestMethod.POST)
            public String sendMail(@ModelAttribute("data") data Data, ModelMap model){
                
-               MailService.sendMessage(Data.getAdress(), Data.getUser(), Data.getCode());
+               MailService.sendConfirmRegistrationMessage(Data.getAdress(), Data.getUser(), Data.getCode());
+               MailService.sendSuccessRegistrationMessage(Data.getAdress(), Data.getUser());
+               MailService.sendFormMessage(Data.getAdress(), Data.getUser(),3);
                return "SuccessSendView";
            }
 }
