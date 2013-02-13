@@ -16,8 +16,8 @@ public class WithInterviewersInterviewDateRowMapper implements RowMapper <Interv
     public InterviewDate mapRow(ResultSet rs, int rowNum) throws SQLException {
         InterviewDate interviewDate = new InterviewDate();
         interviewDate.setInterviewDateId(rs.getInt("InterviewDateId"));
-        interviewDate.setDateStart(rs.getTimestamp("DateStart"));
-        interviewDate.setDateFinish(rs.getTimestamp("DateFinish"));
+        interviewDate.setDateInter(rs.getString("dateInter"));
+        interviewDate.setTimeInter(rs.getString("timeInter"));
         interviewDate.setInterviewDuration(rs.getInt("InterviewDuration"));
         interviewDate.setListInterviewers(rs.getString("listInterviewers"));
 

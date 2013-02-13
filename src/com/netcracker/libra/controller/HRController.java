@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.netcracker.libra.controller;
 
 import com.netcracker.libra.dao.HrJDBC;
@@ -25,9 +22,7 @@ public class HRController {
            
      HrJDBC hr=new HrJDBC();
      Student s=new Student();
-     /* 
-     * Метод показывает всех студентов в БД
-     */    
+   
     @RequestMapping("/hr/showStudentbyIdView")
     public ModelAndView showStudentbyId()
     {
@@ -41,13 +36,7 @@ public class HRController {
         return new ModelAndView("hr/showStudentbyIdView","Model",std);
       }
   
-    
-    /**
-     * Метод для осуществления поиска студентов по различным полям
-     * @param textBox - строка поиска
-     * @param filter - номер поля 
-     * @return 
-     */
+  
       @RequestMapping(value="/hr/showStudentbyIdView", method= RequestMethod.POST)
       public ModelAndView showStudentByIdView(@RequestParam("textBox") String textBox, @RequestParam("filter") int filter){
       ModelAndView mav=new ModelAndView();

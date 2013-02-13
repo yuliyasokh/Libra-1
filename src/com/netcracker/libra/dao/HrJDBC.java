@@ -48,7 +48,6 @@ public class HrJDBC implements HrDAO {
            jdbcTemplateObject.update(SQL, id);
         }
         
-        @Override
         public void updateStudent(Student student){
       /*     String SQL = "update Appform set Patronymic = ?, PhoneNumber = ?, DepartmentId = ?, AdvertisingId = ?, AdvertisingComment = ?,"
                    + " Course = ?, Graduated = ?, DataCreation = ?, ModifiedBy = ? "
@@ -82,7 +81,6 @@ public class HrJDBC implements HrDAO {
 	
 	}
 
-    @Override
     public List<Student> getStudent(Integer id) {
     String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u join appform a on u.userid=a.userid and a.appid=?";
     List <Student> students = jdbcTemplateObject.query(SQL, 
