@@ -28,7 +28,7 @@ public class LoginController {
 	
    @RequestMapping(value = "/login", method = RequestMethod.GET)
    public ModelAndView login() {
-      return new ModelAndView("login", "command", new Student());
+      return new ModelAndView("login/login", "command", new Student());
    }
    
     @Autowired
@@ -40,11 +40,11 @@ public class LoginController {
               int acess=StudentJDBC.getAccess(id);
               userPreferences.UserId=id;
               userPreferences.accessLevel=acess;
-              return "loginSuccesful";
+              return "login/loginSuccesful";
         }
         catch(EmptyResultDataAccessException e)
         {
-             return "loginFailed";
+             return "login/loginFailed";
         }   
      }
    @RequestMapping(value = "/logout")

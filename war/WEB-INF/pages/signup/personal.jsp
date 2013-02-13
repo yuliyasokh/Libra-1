@@ -27,8 +27,8 @@
 </head>
 <body>
 	<div class="container">
-
-		<form:form method="POST" commandName="registerForm">
+		<div class="appform">
+		<form:form method="PUT" commandName="registerForm">
 			<h2>Регистрация</h2>
 			<table>
 				<tr>
@@ -56,10 +56,10 @@
 			</table>
 				<div class="form-actions">
 					<button type="submit" class="btn pull-left">Вернуться</button>
-  					<button type="submit" class="btn btn-primary pull-right">Зарегистрироваться</button>
+  					<button type="submit" class="btn btn-primary pull-right" >Далее</button>
 				</div>
 		</form:form>
-
+		</div>
 	</div>
 </body>
 </html>

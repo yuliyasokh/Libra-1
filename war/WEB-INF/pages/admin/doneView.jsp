@@ -10,8 +10,8 @@
         <title>${title}</title>
     </head>
     <body>
+        <!-- Отчет о произошедшем действии -->
         <h1>${message}</h1>
-        done view
-        ${link} 
+            ${link} 
     </body>
 </html>
