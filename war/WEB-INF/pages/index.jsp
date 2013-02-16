@@ -25,6 +25,6 @@
         <a href="hr/interviewDate.html">Расписание</a>
         <a href="admin/employees.html">Admin</a>
         <a href="sendmail.html">SendMail</a>
-
+        <a href="showInterviewDate.html">Записаться на собеседование</a>
 </body>
 </html>

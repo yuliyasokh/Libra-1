@@ -10,9 +10,17 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Записаться на собеседование</title>
     </head>
     <body>
+        
+        <c:out value="${requestDate}"></c:out>
+        <c:if test="${interviewDate==-1}">
+            <form method="post" action="chooseDate.html">
+        </c:if>
+        <c:if test="${interviewDate!=-1}">
+            <form method="post" action="changeDate.html">
+        </c:if>
         <table border="1" cellspacing="0" cellpadding="4">
             <tr>
                 <th>Выбрать</th>
@@ -22,16 +30,34 @@
             </tr>            
             <c:forEach items="${interviewDates}" var="idate">  
                 <tr>
-                <td><input name="selDate" type="radio" value=""/></td>
+                    <c:if test="${idate.getId()==interviewDate}">
+                        <td><input checked name="selDate" type="radio" value="<c:out value='${idate.getId()}'/>"/></td>
+                    </c:if> 
+                   <c:if test="${idate.getId()!=interviewDate}">
+                       <c:if test="${(idate.getFreePlaces()<=0)||(idate.getCorrect()==-1)}">
+                       <td>
+                           <input disabled name="selDate" type="radio" value="<c:out value='${idate.getId()}'/>"/></td>
+                       </c:if>
+                       <c:if test="${(idate.getFreePlaces()>0)&&(idate.getCorrect()==1)}">
+                       <td><input  name="selDate" type="radio" value="<c:out value='${idate.getId()}'/>"/></td>
+                       </c:if>
+                   </c:if>
                 <td>
                     ${idate.getDay()}
                 </td>
                 <td>
-                    ${idate.gethStart()}-${idate.gethFinish()}
+                    ${idate.gethTime()}
                 </td>
                 <td>${idate.getFreePlaces()}</td>
                 </tr>
             </c:forEach>            
         </table>
+        <c:if test="${interviewDate==-1}">
+                    <input type="submit" value="Записаться на собеседование"/>
+        </c:if>
+        <c:if test="${interviewDate!=-1}">
+                    <input type="submit" value="Перезаписаться на собеседование"/>
+        </c:if>
+        </form>
     </body>
 </html>

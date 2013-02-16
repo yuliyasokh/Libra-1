@@ -23,6 +23,7 @@
 	<properties>
 		<spring.version>3.2.0.RELEASE</spring.version>
 		<netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
+	 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
@@ -132,6 +133,7 @@
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
+				 <encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -142,6 +144,14 @@
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
+		 <plugin>
+		  <groupId>org.apache.maven.plugins</groupId>
+		  <artifactId>maven-resources-plugin</artifactId>
+		  <version>2.4.3</version>
+		  <configuration>
+		   <encoding>${project.build.sourceEncoding}</encoding>
+		  </configuration>
+		 </plugin>
 		</plugins>
 	</build>
 </project>

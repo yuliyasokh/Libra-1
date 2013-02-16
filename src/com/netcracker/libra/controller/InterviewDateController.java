@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import com.netcracker.libra.dao.InterviewDateJDBC;
 import com.netcracker.libra.model.InterviewDate;
-import com.netcracker.libra.model.InterviewDateInfo;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,34 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
- * @author Sashenka
+ * @author Yuliya
  */
 @Controller
 public class InterviewDateController 
-{
-    InterviewDateJDBC interviewDateJDBC=new InterviewDateJDBC();
-    
-    @RequestMapping("showInterviewDate")
-    public ModelAndView showTopics()
-    {
-        ModelAndView mav = new ModelAndView();
-        List<InterviewDateInfo> ilist=interviewDateJDBC.getFreePlaces();
-//        Format dateFormat;
-  //      dateFormat = new SimpleDateFormat("dd MMM yyyy HH mm ss Z");
-//Date date = new Date();
-//String newDateString = dateFormat.format(date);
-        //String ds=ilist.get(1).getDatestart().getMonth();
-   //     int i= ilist.get(1).getDateStart().getMonth();
-        mav.addObject("interviewDates", ilist);
-        mav.setViewName("showInterviewDateView");       
-        return mav;
-    }
-    
-   /**
- *
- * @author Yuliya
- */
-    
+{    
+   
     InterviewDate iDate=new InterviewDate();
     InterviewDateJDBC iDateJdbc = new InterviewDateJDBC();
     
@@ -134,13 +111,8 @@ public class InterviewDateController
          }
          catch(Exception e){}
         return mav;
-    }
+    }    
 
-    
-         /**
-          * Удаляет выбранную дату
-          * @param dateId - номер даты
-          */
     @RequestMapping(value="hr/delInterviewDate", method= RequestMethod.GET)
     public ModelAndView delDate(@RequestParam("interviewDateId") int interviewDateId){
         ModelAndView mav = new ModelAndView();

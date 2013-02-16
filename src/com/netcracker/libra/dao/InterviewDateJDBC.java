@@ -59,9 +59,7 @@ public class InterviewDateJDBC implements InterviewDateDAO {
                 "WHERE InterviewDateId = ?";
         jdbcTemplateObject.update(SQL, interviewDateId);
     }
-       /**
-     * Метод получает всю информацию о датах интервью + список интервьеров на каждом из интервью
-     */
+
     public List <InterviewDate> getAllInterviewDatesWithInterviewers() {
         String query = "select  d.interviewdateid, to_char(d.dateStart,'dd.mm.yyyy') dateInter, to_char(d.dateStart,'hh24:mi')||' - '||  to_char(d.dateFinish,'hh24:mi') timeInter, d.InterviewDuration,"+
         "rtrim(xmlagg(xmlelement(e, u.firstname||' '||u.lastname,', ').extract('//text()')),', ') listInterviewers "+ 
@@ -110,29 +108,37 @@ public class InterviewDateJDBC implements InterviewDateDAO {
         return interviewers;
     }
     /*
-     * Метод получает всех интервьеров из БД
+     * пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ
      */
     public List<Map<String, Object>> getInterviewers(){
         String query="select userid, lastname||' '||firstname||"
-                + "(case when roleid=2 then '(HR)' else '(Тех)' end) inters "
+                + "(case when roleid=2 then '(HR)' else '(пїЅпїЅпїЅ)' end) inters "
                 + "from users where roleid=2 or roleid=3";
         List<Map<String, Object>> interviewers = jdbcTemplateObject.queryForList(query) ;
         return interviewers;
     }
     public List<InterviewDateInfo> getFreePlaces()
     {
-        String SQL="select  intDate.interviewDateId, TO_CHAR(tAllPlaces.dateFinish,'dd.mm.yyyy') day,TO_CHAR(tAllPlaces.dateStart,'hh24:mi') hSatrt,TO_CHAR(tAllPlaces.dateFinish,'hh24:mi') hFinish, tAllPlaces.allPlaces-count(*) freePlaces "+
-        "from interviewDate intDate join Interview i on i.interviewDateId=intDate.interviewDateId "+
-        "join "+
-								"(select ilist.interviewDateId, idate.datefinish dateFinish,idate.datestart dateStart,Count(*)*(idate.datefinish-idate.datestart)*24*60/idate.InterviewDuration as allPlaces "+
+        String SQL="select ilist.interviewDateId, "+
+                "TO_CHAR(idate.datefinish,'dd.mm.yyyy') day, "+
+                "TO_CHAR(idate.datestart,'hh24:mi')||'-'||TO_CHAR(idate.datefinish,'hh24:mi') hTime, "+
+                "Count(*)*(idate.datefinish-idate.datestart)*24*60/idate.InterviewDuration -NVL(i.c,0) freePlaces, "+
+                "sign(idate.datefinish-(SYSDATE+(select TIMEZONEDIFFERENCE from libraconfigs)/24)) correct "+
 								 "from InterviewerList ilist join InterviewDate idate "+
-										"on  idate.interviewDateId=ilist.interviewdateId "+
-										"GROUP by ilist.interviewDateId,idate.datestart,idate.datefinish,idate.InterviewDuration) tAllPlaces "+
-										"on tAllPlaces.interviewDateId=intDate.interviewDateId "+
-										"group by intDate.interviewDateId,tAllPlaces.allPlaces,tAllPlaces.dateStart,tAllPlaces.dateFinish "+
-                                                                                "order by intDate.interviewDateId";
-
+										"on  idate.interviewDateId=ilist.interviewdateId "+	
+								"left join "+ 
+                "(select interviewDateId, Count(*) c "+
+                "from interview "+
+                "where status=1 "+ 
+                "group by interviewDateId ) i on i.interviewDateId=idate.interviewDateId "+
+                                        "GROUP by i.c,ilist.interviewDateId,idate.datestart,idate.datefinish,idate.InterviewDuration "+
+					"order by idate.datestart ";
         return jdbcTemplateObject.query(SQL, new InterviewDateInfoRowMapper());
     }
     
+    public int exists(int interviewId)
+    {
+        String sql = "select Count(*) from InterviewDate where InterviewDateId=? ";
+        return jdbcTemplateObject.queryForInt(sql,interviewId);
+    }
 }
