@@ -113,6 +113,10 @@ public class InterviewDateController
         return mav;
     }    
 
+    /**
+    * Удаляет выбранную дату
+    * @param dateId - номер даты
+    */
     @RequestMapping(value="hr/delInterviewDate", method= RequestMethod.GET)
     public ModelAndView delDate(@RequestParam("interviewDateId") int interviewDateId){
         ModelAndView mav = new ModelAndView();

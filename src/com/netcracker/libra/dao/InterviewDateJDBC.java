@@ -108,11 +108,11 @@ public class InterviewDateJDBC implements InterviewDateDAO {
         return interviewers;
     }
     /*
-     * ����� �������� ���� ����������� �� ��
+     * Метод получает всех интервьеров из БД
      */
     public List<Map<String, Object>> getInterviewers(){
         String query="select userid, lastname||' '||firstname||"
-                + "(case when roleid=2 then '(HR)' else '(���)' end) inters "
+                + "(case when roleid=2 then '(HR)' else '(Тех)' end) inters "
                 + "from users where roleid=2 or roleid=3";
         List<Map<String, Object>> interviewers = jdbcTemplateObject.queryForList(query) ;
         return interviewers;
