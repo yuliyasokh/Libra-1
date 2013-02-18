@@ -4,8 +4,6 @@
  */
 package com.netcracker.libra.model;
 
-import java.util.Date;
-
 /**
  *
  * @author Sashenka
@@ -13,11 +11,22 @@ import java.util.Date;
 public class InterviewDateInfo 
 {
     String day;
-    String hStart;
-    String hFinish;
+    String hTime;
     int id;
     int freePlaces;
+    int correct;
 
+    public int getCorrect() 
+    {
+        return correct;
+    }
+
+    public void setCorrect(int correct) 
+    {
+        this.correct = correct;
+    }
+    
+    
     public String getDay() 
     {
         return day;
@@ -33,14 +42,14 @@ public class InterviewDateInfo
         return id;
     }
 
-    public String gethFinish() 
+    public String gethTime() 
     {
-        return hFinish;
+        return hTime;
     }
 
-    public String gethStart() 
+    public void sethTime(String hTime) 
     {
-        return hStart;
+        this.hTime = hTime;
     }
 
     public void setDay(String day) 
@@ -57,15 +66,4 @@ public class InterviewDateInfo
     {
         this.id = id;
     }
-
-    public void sethFinish(String hFinish) 
-    {
-        this.hFinish = hFinish;
-    }
-
-    public void sethStart(String hStart) 
-    {
-        this.hStart = hStart;
-    } 
-    
 }

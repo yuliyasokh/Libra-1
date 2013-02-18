@@ -1,16 +1,16 @@
 package com.netcracker.libra.model;
-
-import java.sql.Timestamp;
 import java.util.Date;
-
 
 public class InterviewDate {
     
     private int interviewDateId;
-    private Timestamp dateStart;
-    private Timestamp dateFinish;
+    private Date dateStart;
+    private Date dateFinish;
     private int interviewDuration;
     private String listInterviewers;
+    private String timeInter;
+    private String dateInter;
+
     
     public void setListInterviewers(String listInterviewers){
         this.listInterviewers=listInterviewers;
@@ -18,6 +18,19 @@ public class InterviewDate {
     public String getListInterviewers(){
         return listInterviewers;
     }
+    public void setTimeInter(String timeInter){
+        this.timeInter=timeInter;
+    }
+    public String getTimeInter(){
+        return timeInter;
+    }
+    public void setDateInter(String dateInter){
+        this.dateInter=dateInter;
+    }
+    public String getDateInter(){
+        return dateInter;
+    }
+
 
     public int getInterviewDateId() {
         return interviewDateId;
@@ -31,7 +44,7 @@ public class InterviewDate {
         return dateStart;
     }
 
-    public void setDateStart(Timestamp dateStart) {
+    public void setDateStart(Date dateStart) {
         this.dateStart = dateStart;
     }
 
@@ -39,7 +52,7 @@ public class InterviewDate {
         return dateFinish;
     }
 
-    public void setDateFinish(Timestamp dateFinish) {
+    public void setDateFinish(Date dateFinish) {
         this.dateFinish = dateFinish;
     }
 

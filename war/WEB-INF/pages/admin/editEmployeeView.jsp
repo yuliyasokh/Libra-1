@@ -8,11 +8,11 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Edit</title>
+        <title>Редактировать</title>
     </head>
     <body>
         <table border="1" cellspacing="0" cellpadding="4">
-        <caption>Edit employee</caption>
+        <caption>Измените данные, чтобы редактировать информацию о служащем</caption>
         <tr>
             <th>Выберите должность</th>
             <th>ID</th>
@@ -20,9 +20,9 @@
             <th>Фамилия</th>
             <th>Email</th>
             <th>Пароль</th>
-            <th>Кнопка ОК</th>
+            <th></th>
         </tr>
-        <form action="done.html" method="POST">
+        <form action="doneEdit.html" method="POST">
         <td>
             <select name="roleId">
                 <option selected value="${emp.getRoleId()}">
@@ -35,7 +35,7 @@
                 <option value="4">Admin</option>
             </select>
         </td>
-        <td><label for="employeeId">${emp.getUserId()}</label></td>
+        <td><input type="hidden" name="employeeId" value="<c:out value='${emp.getUserId()}'/>"/>${emp.getUserId()}</td>
         <td><input type="text" name="firstName" value="<c:out value='${emp.getFirstName()}'/>"/></td>
         <td><input type="text" name="lastName" value="<c:out value='${emp.getLastName()}'/>"/></td>
         <td><input type="text" name="email" value="<c:out value='${emp.getEmail()}'/>"/></td>

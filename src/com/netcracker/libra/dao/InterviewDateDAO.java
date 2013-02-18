@@ -8,12 +8,13 @@ public interface InterviewDateDAO {
     
     void setDataSource(DataSource dataSource);
     void createInterviewDate(String startDateAndTime, String finishDateAndTime, Integer duration);
-    void updateInterviewDateByAppId(Integer appId, String startDateAndTime, 
+    void updateInterviewDateByDateId(Integer appId, String startDateAndTime, 
                                                    String finishDateAndTime, Integer duration);
     void deleteInterviewDateByAppId(Integer appId);
     void addExtraTimeByAppId(Integer appId, Integer minutes);
-    InterviewDate getInterviewDateByAppId(Integer appId);
+    InterviewDate getInterviewDateById(Integer Id);
     List <InterviewDate> getAllInterviewDates();
+    void insertInterviewers(Integer userId);
     
     
 }

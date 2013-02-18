@@ -34,12 +34,18 @@
             <th>Имя</th>
             <th>Фамилия</th>
             <th>Email</th>
+            <th></th>
+            <th></th>
+            
     <c:forEach items="${Model}" var="s">
     <tr>
       <td><c:out value="${s.appId}"/></td>
       <td><c:out value="${s.name}"/></td>
       <td><c:out value="${s.lastName}"/></td>
       <td><c:out value="${s.email}"/></td>
+      <td> <input type="submit" value="Анкета"><td>
+      <td> <input type="submit" value="Интервью"><td>
+
   </tr>
     </c:forEach>
     </TABLE>

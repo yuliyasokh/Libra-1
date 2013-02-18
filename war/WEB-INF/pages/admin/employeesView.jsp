@@ -8,11 +8,11 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Employees</title>
+        <title>Служащие</title>
     </head>
     <body>
         <table border="1" cellspacing="0" cellpadding="4">
-        <caption>Employees</caption>
+        <caption>Список служащих</caption>
         <tr>
             <th>Должность</th>
             <th>ID</th>
@@ -36,12 +36,13 @@
                     <td>${emp.getLastName()}</td>
                     <td>${emp.getEmail()}</td>
                     <td>${emp.getPassword()}</td>
-                    <td><a href="editEmployee.html?employee=<c:out value='${emp.getUserId()}'/>">редактировать</a></td>
-                    <td><a href="deleteEmployee.html?employee=<c:out value='${emp.getUserId()}'/>">удалить</a></td>
+                    <td><a href="editEmployee.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img src="resources\images\edit.png"  width="25" height="25" border="0" title="Редактировать"/></a></td>
+                    <td><a href="deleteSure.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img src="resources\images\del.jpg"  width="25" height="25" border="0" title="Удалить"/></a></td>
                 </tr>
             </form>
-            </c:forEach>
-        
+            </c:forEach>      
         </table>
+        
+        <br><a href="addEmloyee.html">Добавить служащего</a>
     </body>
 </html>
