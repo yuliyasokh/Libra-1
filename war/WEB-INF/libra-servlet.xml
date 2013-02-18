@@ -18,6 +18,11 @@
     
     <bean id="servletcontext" class="org.springframework.web.context.support.ServletContextFactoryBean"/>
     
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- one of the properties available; the maximum file size in bytes -->
+        <property name="maxUploadSize" value="300000"/>
+    </bean>
+    
     <bean id="viewResolver"
         class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/pages/" />

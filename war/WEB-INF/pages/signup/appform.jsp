@@ -41,8 +41,11 @@
 					<div class="span4">
 
 						<h5>Образование:</h5>
-							<input class="span4" name="personal['university ${personal.value}']" placeholder="Название университета" type="text"/>
+							<select class="span4" name="personal['university ${personal.value}']">
+		
+							</select>
   							<input class="span4" name="personal['faculty ${personal.value}']" placeholder="Факультет" type="text"/>
+  							<input class="span4" name="personal['department ${personal.value}']" placeholder="Кафедра" type="text"/>
   						<div class="controls controls-row">
 							<input class="span2" name="personal['term ${personal.value}']" placeholder="Курс" type="text"/>
 							<input class="span2" name="personal['graduated ${personal.value}']" placeholder="Год выпуска" type="text">
