@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.netcracker.libra.service.TemplateGenerator;
 
 public class AppForm {
@@ -16,6 +18,7 @@ public class AppForm {
 	 * Набор постоянных значений анкеты
 	 */	
 	private Map<String, String> personal = new HashMap<>();
+	private MultipartFile photo;
 	
 	/*
 	 * Коллекции, содержащие значения ярлыков для форм 
@@ -74,17 +77,17 @@ public class AppForm {
 		
 		whatsInterestedList.put("studyCenter", "Учебный центр");
 		whatsInterestedList.put("internShip", "Cтажировка");
-		whatsInterestedList.put("softwareDevelopment", "Разработка ПО");
 		whatsInterestedList.put("workInCompany", "Работа в компании");
 		
+		workTypeList.put("softwareDevelopment", "Разработка ПО");
 		workTypeList.put("deepSpec", "Глубокая специализация");
 		workTypeList.put("variousWork", "Разнообразная работа");
 		workTypeList.put("management", "Управление специалистами");
 		workTypeList.put("sales", "Продажи");
 		
-		universityList.put("universities", gen.getUniversityList());
-		universityList.put("faculties", gen.getFacultyList());
-		universityList.put("departments", gen.getDepartmentList());
+	//	universityList.put("universities", gen.getUniversityList());
+	//	universityList.put("faculties", gen.getFacultyList());
+	//	universityList.put("departments", gen.getDepartmentList());
 	}
 	
 	
@@ -279,6 +282,16 @@ public class AppForm {
 	 */
 	public void setReferenceData(Map<String, String> referenceData) {
 		this.referenceData = referenceData;
+	}
+
+
+	public MultipartFile getPhoto() {
+		return photo;
+	}
+
+
+	public void setPhoto(MultipartFile photo) {
+		this.photo = photo;
 	}
 	
 	
