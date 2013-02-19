@@ -26,5 +26,7 @@
         <a href="admin/employees.html">Admin</a>
         <a href="sendmail.html">SendMail</a>
         <a href="showInterviewDate.html">Записаться на собеседование</a>
+        <a href="hr/showStudentByEducation.html">Поиск2</a>
+
 </body>
 </html>

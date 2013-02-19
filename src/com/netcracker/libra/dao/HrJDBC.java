@@ -1,7 +1,11 @@
 package com.netcracker.libra.dao;
 
+import com.netcracker.libra.model.Department;
+import com.netcracker.libra.model.Faculty;
 import com.netcracker.libra.model.Student;
+import com.netcracker.libra.model.University;
 import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +18,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class HrJDBC implements HrDAO {
 
-      private static JdbcTemplate jdbcTemplateObject;
-      
-
+        private static JdbcTemplate jdbcTemplateObject;
        
-      public List<Student> listStudents() {
-      String SQL = "select a.appid, u.firstname,u.lastname,u.email from Users u join appform a on u.userid=a.appid and roleid=1";
-      List <Student> students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
-      return students;
-    }
+        public List<Student> listStudents() {
+        String SQL = "select a.appid, u.firstname,u.lastname,u.email from Users u join AppForm a on u.userId=a.userId and u.roleid=1";
+        List <Student> students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
+        return students;
+            }
 
 	@Override
 	public void create(String name, String lastName, String email,
@@ -47,7 +49,7 @@ public class HrJDBC implements HrDAO {
            String SQL = "delete from AppForm where appid = ?)";
            jdbcTemplateObject.update(SQL, id);
         }
-        
+
         public void updateStudent(Student student){
       /*     String SQL = "update Appform set Patronymic = ?, PhoneNumber = ?, DepartmentId = ?, AdvertisingId = ?, AdvertisingComment = ?,"
                    + " Course = ?, Graduated = ?, DataCreation = ?, ModifiedBy = ? "
@@ -76,38 +78,93 @@ public class HrJDBC implements HrDAO {
         
 	@Override
 	@Autowired
-	public void setDataSource(DataSource dataSource) {
+        public void setDataSource(DataSource dataSource) {
             jdbcTemplateObject = new JdbcTemplate(dataSource);
-	
-	}
+        }
 
     public List<Student> getStudent(Integer id) {
-    String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u join appform a on u.userid=a.userid and a.appid=?";
-    List <Student> students = jdbcTemplateObject.query(SQL, 
-                        new Object[]{id}, new ShortStudentRowMapper());
-      return students;
-   }
+        String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u join appform a on u.userid=a.userid and a.appid=?";
+        List <Student> students = jdbcTemplateObject.query(SQL, new Object[]{id}, new ShortStudentRowMapper());
+        return students;
+     }
 
-    @Override
-    public List<Student> getStudentsByLastName(String lname) {
-    String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u join appform a on u.userid=a.userid and u.lastname like '"+lname+"%'";
-    List <Student> students;
+        @Override
+     public List<Student> getStudentsByLastName(String lname) {
+        String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u join appform a on u.userid=a.userid and u.lastname like '"+lname+"%'";
+        List <Student> students;
         students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
-    return students;
-    }
+        return students;
+     }
 
-    @Override
-    public List<Student> getStudentsByFirstName(String fname) {
-    String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u join appform a on u.userid=a.userid and u.firstname like '"+fname+"%'";
-    List <Student> students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
-    return students;    
-    }
+        @Override
+     public List<Student> getStudentsByFirstName(String fname) {
+         String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u join appform a on u.userid=a.userid and u.firstname like '"+fname+"%'";
+         List <Student> students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
+         return students;    
+     }
 
-    @Override
-    public List<Student> getStudentsByEmail(String mail) {
-    String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u join appform a on u.userid=a.userid and u.email like '"+mail+"%'";
-    List <Student> students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
-    return students;
+        @Override
+     public List<Student> getStudentsByEmail(String mail) {
+        String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u join appform a on u.userid=a.userid and u.email like '"+mail+"%'";
+        List <Student> students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
+        return students;
+     }
+        
+     public List<University> getAllUniversity() {
+        String query="select universityId, universityName from university";
+        List<University> universities = jdbcTemplateObject.query(query, new UniversityRowMapper());
+        return universities;
+     }
+     
+     public List<Faculty> getAllFaculties() {
+        String query = "select facultyId, facultyName from faculty";
+        List<Faculty> faculties = jdbcTemplateObject.query(query, new FacultyRowMapper() );
+        return faculties;
+     }
+     
+     public List<Faculty> getAllFaculties(int univerId) {
+        String query="select facultyId, facultyName from faculty where universityId=?";
+        List<Faculty> faculties;
+        faculties = jdbcTemplateObject.query(query, new FacultyRowMapper(), univerId);
+        return faculties;
+     }
+    
+     public List<Department> gelAllDepartemtns() {
+        String query="select DEPARTMENTID, departmentName from department";
+        List<Department> departments = jdbcTemplateObject.query(query, new departmentRowMapper());
+        return departments;
+     }
+     
+     public List<Department> getAllDepartments(int facultyId) {
+        String query="select departmentName, departmentId from department where facultyid=?";
+        List<Department> departments = jdbcTemplateObject.query(query,new departmentRowMapper(),facultyId);
+        return departments;
+    }
+     
+    public List<Student> getStudentByUniversity(int universityId){
+        String query="select a.appid, u.firstname,u.lastname,u.email, d.departmentName from users u "+
+	"join appform a on u.userid=a.userid "+
+		"join department d on d.departmentId=a.DepartmentId "+ 
+			"join faculty f on f.facultyid=d.facultyId "+
+				"join university un on un.universityId=f.universityId and un.universityId=?";
+        List <Student> students = jdbcTemplateObject.query(query, new ShortStudentRowMapper(), universityId);
+        return students;
+    }
+    
+    public List<Student> getStudentByFaculty(int facultyId){
+        String query="select a.appid, u.firstname,u.lastname,u.email from users u "+
+            "join appform a on u.userid=a.userid "+
+		"join department d on d.departmentId=a.DepartmentId  "+
+			"join faculty f on f.facultyid=d.facultyId and f.facultyId=?";
+        List <Student> students = jdbcTemplateObject.query(query, new ShortStudentRowMapper(), facultyId);
+        return students;
+    }
+    
+    public List<Student> getStudentByDepartment(int departmentId){
+        String query="select a.appid, u.firstname,u.lastname,u.email from users u "+ 
+            "join appform a on u.userid=a.userid and a.departmentId=?";
+        List <Student> students = jdbcTemplateObject.query(query, new ShortStudentRowMapper(), departmentId);
+        return students;
     }
 
 }
