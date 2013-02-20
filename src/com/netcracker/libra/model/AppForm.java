@@ -2,28 +2,26 @@ package com.netcracker.libra.model;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.netcracker.libra.service.TemplateGenerator;
+
 public class AppForm {
 	
+	private TemplateGenerator gen = new TemplateGenerator();
 	
 	/*
 	 * Набор постоянных значений анкеты
-	 */
-	private String patronymic;
-	private String telephoneNumber;
-	private String otherContacts;
-	private String university;
-	private String term;
-	private String faculty;
-	private String graduated;
-	private String advert;
-	
+	 */	
 	private Map<String, String> personal = new HashMap<>();
+	private MultipartFile photo;
 	
 	/*
-	 * Коллекции, содержащие значения ярлыков для чекбоксов 
+	 * Коллекции, содержащие значения ярлыков для форм 
 	 * (должны содержать значения, могут содержать динамически создаваемые данные)
 	 */
 	private Map<String, String> whatsInterestedList = new HashMap<>();
@@ -31,9 +29,10 @@ public class AppForm {
 	private Set<String> knowledgesList  = new HashSet<>();
 	private Set<String> programmingLanguagesList = new HashSet<>();
 	private Set<String> textFieldsList = new HashSet<>();
+	private Map<String, List> universityList = new HashMap<>();
 	
 	/*
-	 * Содержат отмеченные пользователем значения
+	 * Содержат отмеченные пользователем значения чекбоксов
 	 */
 	
 	private String[] interests;
@@ -47,6 +46,10 @@ public class AppForm {
 	private Map<String, String> knowledgesMap = new HashMap<>();
 	private Map<String, String> textFieldsMap = new HashMap<>();
 	
+	/*
+	 * Сюда будет помещаться изменяемый список вопросов анкеты
+	 */
+	private Map<String, String> referenceData = new HashMap<>();
 	
 	/*
 	 * Блок инициализации, в будущем удалить. Переделать под шаблоны из БД.
@@ -74,13 +77,17 @@ public class AppForm {
 		
 		whatsInterestedList.put("studyCenter", "Учебный центр");
 		whatsInterestedList.put("internShip", "Cтажировка");
-		whatsInterestedList.put("softwareDevelopment", "Разработка ПО");
 		whatsInterestedList.put("workInCompany", "Работа в компании");
 		
+		workTypeList.put("softwareDevelopment", "Разработка ПО");
 		workTypeList.put("deepSpec", "Глубокая специализация");
 		workTypeList.put("variousWork", "Разнообразная работа");
 		workTypeList.put("management", "Управление специалистами");
 		workTypeList.put("sales", "Продажи");
+		
+	//	universityList.put("universities", gen.getUniversityList());
+	//	universityList.put("faculties", gen.getFacultyList());
+	//	universityList.put("departments", gen.getDepartmentList());
 	}
 	
 	
@@ -140,102 +147,6 @@ public class AppForm {
 	 */
 	public void setWorkTypes(String[] workTypes) {
 		this.workTypes = workTypes;
-	}
-	/**
-	 * @return the patronymic
-	 */
-	public String getPatronymic() {
-		return patronymic;
-	}
-	/**
-	 * @param patronymic the patronymic to set
-	 */
-	public void setPatronymic(String patronymic) {
-		this.patronymic = patronymic;
-	}
-
-	/**
-	 * @return the telephoneNumber
-	 */
-	public String getTelephoneNumber() {
-		return telephoneNumber;
-	}
-
-	/**
-	 * @param telephoneNumber the telephoneNumber to set
-	 */
-	public void setTelephoneNumber(String telephoneNumber) {
-		this.telephoneNumber = telephoneNumber;
-	}
-
-	/**
-	 * @return the otherContacts
-	 */
-	public String getOtherContacts() {
-		return otherContacts;
-	}
-
-	/**
-	 * @param otherContacts the otherContacts to set
-	 */
-	public void setOtherContacts(String otherContacts) {
-		this.otherContacts = otherContacts;
-	}
-
-	/**
-	 * @return the university
-	 */
-	public String getUniversity() {
-		return university;
-	}
-
-	/**
-	 * @param university the university to set
-	 */
-	public void setUniversity(String university) {
-		this.university = university;
-	}
-
-	/**
-	 * @return the term
-	 */
-	public String getTerm() {
-		return term;
-	}
-
-	/**
-	 * @param term the term to set
-	 */
-	public void setTerm(String term) {
-		this.term = term;
-	}
-
-	/**
-	 * @return the faculty
-	 */
-	public String getFaculty() {
-		return faculty;
-	}
-
-	/**
-	 * @param faculty the faculty to set
-	 */
-	public void setFaculty(String faculty) {
-		this.faculty = faculty;
-	}
-
-	/**
-	 * @return the graduated
-	 */
-	public String getGraduated() {
-		return graduated;
-	}
-
-	/**
-	 * @param graduated the graduated to set
-	 */
-	public void setGraduated(String graduated) {
-		this.graduated = graduated;
 	}
 
 
@@ -355,6 +266,32 @@ public class AppForm {
 	 */
 	public void setPersonal(Map<String, String> personal) {
 		this.personal = personal;
+	}
+
+
+	/**
+	 * @return the referenceData
+	 */
+	public Map<String, String> getReferenceData() {
+		return referenceData;
+	}
+
+
+	/**
+	 * @param referenceData the referenceData to set
+	 */
+	public void setReferenceData(Map<String, String> referenceData) {
+		this.referenceData = referenceData;
+	}
+
+
+	public MultipartFile getPhoto() {
+		return photo;
+	}
+
+
+	public void setPhoto(MultipartFile photo) {
+		this.photo = photo;
 	}
 	
 	

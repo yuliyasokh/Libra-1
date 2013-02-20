@@ -1,6 +1,7 @@
 package com.netcracker.libra.dao;
 
 import com.netcracker.libra.model.User;
+import java.sql.Types;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +59,124 @@ public class AdminJDBC implements AdminDAO {
          * Возвращает список всех служащих
          */
         public List <User> getAllEmployees() {
-            String SQL = "SELECT * FROM Users WHERE RoleId > 1";
-            List <User> customers = jdbcTemplateObject.query(SQL, new UserRowMapper());
-            return customers;
+            String SQL = "SELECT * FROM Users WHERE RoleId > 1 ORDER BY RoleId";
+            List <User> employees = jdbcTemplateObject.query(SQL, new UserRowMapper());
+            return employees;
+        }
+        
+        /**
+         * @param role - должность (2 - HR, 3 - Tech, 4 - Admin)
+         * @return список служащих, у которых должность совпадает со значением role
+         */
+        public List <User> getAllEmployeesByRole(Integer role) {
+            
+            String SQL = "SELECT * FROM Users WHERE RoleId = ?";
+            List <User> employees = jdbcTemplateObject.query(SQL, new Object[] {role}, new int[] {Types.NUMERIC}, new UserRowMapper());
+            return employees;
+        }
+        
+        /**
+         * @param fullName - полное имя, например "Вася Пупкин"
+         * @return список служащих, у которых имя и фамилия совпадает со значениями firstName и lastName
+         */
+        public List <User> getAllEmployeesByFullName(String fullName) {
+            
+            String [] names = fullName.split(" ");
+            String firstName = names[0];
+            String lastName = names[1];
+            
+            String SQL = "SELECT * FROM Users WHERE RoleId > 1 AND firstName = ? AND lastName = ?";
+            Object [] params = new Object[] {firstName, lastName};
+            List <User> employees = jdbcTemplateObject.query(SQL, params, new UserRowMapper());
+            return employees;
+        }
+        
+        /**
+         * @param fullName - полное имя, например "Вася Пупкин"
+         * @param role - должность (2 - HR, 3 - Tech, 4 - Admin)
+         * @return список служащих, у которых имя, фамилия, должность 
+         * совпадает со значениями firstName, lastName и role
+         */
+        public List <User> getAllEmployeesByFullNameAndRole(String fullName, Integer role) {
+            // разбиение слов, разделенных пробелом, на имя и фамилию
+            String [] names = fullName.split(" ");
+            String firstName = names[0];
+            String lastName = names[1];
+            
+            String SQL = "SELECT * FROM Users WHERE firstName = ? AND lastName = ? AND RoleId = ?";
+            Object [] params = new Object[] {firstName, lastName, role};
+            //int [] types = new int[] {Types.NVARCHAR, Types.NVARCHAR, Types.NUMERIC};
+            List <User> employees = jdbcTemplateObject.query(SQL, params, new UserRowMapper());
+            return employees;
+        }
+
+        /**
+         * @param firstName - имя
+         * @return список служащих, у которых имя совпадает со значением firstName
+         */
+        public List <User> getAllEmployeesByFirstName(String firstName) {
+            String SQL = "SELECT * FROM Users WHERE RoleId > 1 AND firstName = ?";
+            List <User> employees = jdbcTemplateObject.query(SQL, new Object[] {firstName}, new UserRowMapper());
+            return employees;
+        }
+        
+        /**
+         * @param firstName - имя
+         * @param role - должность (2 - HR, 3 - Tech, 4 - Admin)
+         * @return список служащих, у которых имя и должность совпадает со значениями firstName и role
+         */
+        public List <User> getAllEmployeesByFirstNameAndRole(String firstName, Integer role) {
+            String SQL = "SELECT * FROM Users WHERE firstName = ? AND RoleId = ?";
+            Object [] params = new Object[] {firstName, role};
+            //int [] types = new int[] {Types.NVARCHAR, Types.NUMERIC};
+            List <User> employees = jdbcTemplateObject.query(SQL, params, new UserRowMapper());
+            return employees;
+        }
+        
+        /**
+         * @param lastName - фамилия
+         * @return список служащих, у которых фамилия совпадает со значением lastName
+         */
+        public List <User> getAllEmployeesByLastName(String lastName) {
+            String SQL = "SELECT * FROM Users WHERE RoleId > 1 AND lastName = ?";
+            List <User> employees = jdbcTemplateObject.query(SQL, new Object[] {lastName}, new UserRowMapper());
+            return employees;
+        }
+        
+        /**
+         * @param lastName - фамилия
+         * @param role - должность (2 - HR, 3 - Tech, 4 - Admin)
+         * @return список служащих, у которых фамилия и должность 
+         * совпадает со значением lastName и role
+         */
+        public List <User> getAllEmployeesByLastNameAndRole(String lastName, Integer role) {
+            String SQL = "SELECT * FROM Users WHERE lastName = ? AND RoleId = ?";
+            Object [] params = new Object[] {lastName, role};
+            List <User> employees = jdbcTemplateObject.query(SQL, params, new UserRowMapper());
+            return employees;
+        }
+        
+        /**
+         * @param email - электронная почта
+         * @return список служащих, у которых эл. почта совпадает со значением email
+         */
+        public List <User> getAllEmployeesByEmail(String email) {
+            String SQL = "SELECT * FROM Users WHERE RoleId > 1 AND email = ?";
+            List <User> employees = jdbcTemplateObject.query(SQL, new Object[] {email}, new UserRowMapper());
+            return employees;
+        }
+        
+        /**
+         * @param email - электронная почта
+         * @param role - должность (2 - HR, 3 - Tech, 4 - Admin)
+         * @return список служащих, у которых эл. почта и должность 
+         * совпадает со значением email и role
+         */
+        public List <User> getAllEmployeesByEmailAndRole(String email, Integer role) {
+            String SQL = "SELECT * FROM Users WHERE email = ? AND RoleId = ?";
+            Object [] params = new Object[] {email, role};
+            List <User> employees = jdbcTemplateObject.query(SQL, params, new UserRowMapper());
+            return employees;
         }
         
         /**

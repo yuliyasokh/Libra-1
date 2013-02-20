@@ -1,5 +1,7 @@
 package com.netcracker.libra.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -12,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.netcracker.libra.model.AppForm;
 import com.netcracker.libra.model.RegisterForm;
 import com.netcracker.libra.service.RegisterService;
 import com.netcracker.libra.util.mail.MailService;
 import com.netcracker.libra.util.security.ConfirmationCodeGenerator;
+import com.netcracker.libra.util.security.Security;
 
 @Controller
 @RequestMapping("register")
@@ -61,10 +65,10 @@ public class RegController {
 		System.out.println("Comparing "+code+" and "+ form.getEnteredCode());
 		if (code.equals(form.getEnteredCode())) {
 			//RegisterService.registerUser(form);
-				return "/signup/appform";
+				return "redirect:appform.html";
 		}
 		else
-			return "redirect:/signup/verify";
+			return "redirect:verify.html";
 	}
 	
 	@RequestMapping(value = "appform", method = RequestMethod.GET)
@@ -74,14 +78,28 @@ public class RegController {
 	}
 	
 	@RequestMapping(value = "appform2", method = RequestMethod.POST)
-	public String showNextForm(@ModelAttribute("appForm") AppForm form, Map model) {
+	public String showNextForm(@ModelAttribute("appForm") AppForm form, MultipartFile photo, BindingResult result, Map model) {
+		
+		String orgName = photo.getOriginalFilename();
+		String filePath = (Security.getMD5hash(((RegisterForm) model.get("registerForm")).getEmail())+".png");
+        File dest = new File(filePath);
+        try {
+            photo.transferTo(dest);
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            return "File uploaded failed:" + orgName;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "File uploaded failed:" + orgName;
+        }
+        System.out.println(dest.getAbsolutePath());
 		model.put("appForm", form);
 		return "/signup/appform2";
 	}
 	
 	@RequestMapping(value = "success", method = RequestMethod.POST)
-	public String saveData(@ModelAttribute("appForm") AppForm form, Map model, BindingResult result) {
-		model.put("appForm", form);
+	public String saveData(@ModelAttribute("appForm") AppForm form, BindingResult result, Map model) {
+		RegisterService.fillAppForm(form, 73);
 		return "/signup/success";
 	}
 	
