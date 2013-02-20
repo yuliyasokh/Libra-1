@@ -37,7 +37,9 @@
             </table>
         </c:if>
         <form action="delSubmitType.html" method="POST">
-            <input type="hidden" name="type" value="${type}"/>
+            <c:forEach items="${types}" var="t">
+            <input type="hidden" name="types[]" value="<c:out value='${t}'/>"/>
+            </c:forEach>
         <input type="submit" value="удалить"/>    
         <input value="НЕТ" onclick="location.href='showTypes.html'" type="button"/>
         </form>

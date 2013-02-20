@@ -82,15 +82,20 @@ public class ColumnsJDBC implements ColumnsDAO
         String sql = "select Count(*) from Columns where columnId=?";
         return jdbcColumnObject.queryForInt(sql,id);
     }
-     public List<InfoForDelete> getInfoForDelete(int columnId)
+     public List<InfoForDelete> getInfoForDelete(int[] columns)
     {
         String sql = "select distinct u.userId, u.firstname, u. lastname, af.patronymic, af.appId "+
                       "from columnFields cf join columns c on cf.columnId=c.columnId "+
 					"join appForm  af on af.appId=cf.appId "+
 					"join users u on u.userId=af.userId "+
-                                        "where c.columnId=?"+
-                                        " order by af.appId";
-        List<InfoForDelete> listOfInfo=jdbcColumnObject.query(sql, new InfoForDeleteRowMapper(),columnId);
+                                        "where ";
+         for(int i=0;i<columns.length-1;i++)
+                {
+                                       sql+= " c.columnId="+columns[i]+" or";
+                }
+                 sql+= " c.columnId="+columns[columns.length-1];
+                                       sql+= " order by af.appId";
+        List<InfoForDelete> listOfInfo=jdbcColumnObject.query(sql, new InfoForDeleteRowMapper());
         return listOfInfo;
     }
      

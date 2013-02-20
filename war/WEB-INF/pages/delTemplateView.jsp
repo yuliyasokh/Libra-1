@@ -37,7 +37,9 @@
             </table>
         </c:if>
         <form action="delSubmitTemplate.html" method="POST">
-            <input type="hidden" name="template" value="${template}"/>
+            <c:forEach items="${templates}" var="t">
+            <input type="hidden" name="templates[]" value="<c:out value='${t}'/>"/>
+            </c:forEach>
         <input type="submit" value="удалить"/>    
         <input value="НЕТ" onclick="location.href='showTemplates.html'" type="button"/>
         </form>

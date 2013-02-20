@@ -20,13 +20,16 @@
             <th>Изменить</th>
             <th>Удалить</th>
         </tr>
+        <% int i=1; %>
         <c:forEach items="${templates}" var="t">
         <tr>
-            <td>${t.getTemplateId()} </td>
+            <td><%=i%></td>
+            <%--<td>${t.getTemplateId()} </td>--%>
             <td>${t.getName()} </td>
             <td><a href="editTemplate.html?tamplate=${t.getTemplateId()}"></a></td>
             <td><a href="editTemplate.html?tamplate=${t.getTemplateId()}"></a></td>
         </tr>
+        <% i++;%>
         </c:forEach>
         </TABLE>
     </body>

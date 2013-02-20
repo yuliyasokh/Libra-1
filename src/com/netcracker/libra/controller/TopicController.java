@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Controller
 public class TopicController
 {
-    int id;
+    //int id;
     TopicJDBC topicJDBC = new TopicJDBC();
     TemplateJDBC templateJDBC=new TemplateJDBC();
     
@@ -44,18 +44,13 @@ public class TopicController
         if(userPreferences.accessLevel==1)
         {
             mav.setViewName("addTopicView");
-            id=templateId;
-            mav.addObject("id",id);
+            mav.addObject("id",templateId);
             mav.addObject("topics", topicJDBC.getAll(templateId));
             return mav;
         }
         else
         {
-            mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
     
@@ -70,7 +65,8 @@ public class TopicController
     public ModelAndView addPost(@RequestParam("name") String name,
     @RequestParam("comments") String comments,
     @RequestParam("selTopics") int selTopics,
-    @RequestParam("require") int require)//selectRequire
+    @RequestParam("require") int require,
+    @RequestParam("templateId") int templateId)//selectRequire
     {
         ModelAndView mav = new ModelAndView();
         if(userPreferences.accessLevel==1)
@@ -80,25 +76,14 @@ public class TopicController
              message+=TemplateService.checkComment(comments);
              if(!message.equals(""))
              {
-                 mav.addObject("link","showTopics.html");
-                 mav.addObject("message",message);
-                 mav.addObject("title","Ошибка");
-                 return mav;
+                 return message("showTopics.html", message, "Ошибка");
              }
-             int t=topicJDBC.addTopic(name, comments, id, selTopics, require);
-            Topic tt=topicJDBC.getTopic(t);
-            mav.addObject("link","<a href='showTopics.html'>Просмотреть топики</a>");
-            mav.addObject("message","Тема с именем "+tt.getName()+" успешно добавлена");
-            mav.addObject("title","Успех!");
-            return mav;
+             int t=topicJDBC.addTopic(name, comments, templateId, selTopics, require);
+            return showTopics();
         }
         else
         {
-            mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
      
@@ -107,31 +92,25 @@ public class TopicController
      * @param selTopic
      * @return 
      */
-    @RequestMapping(value="showSubmitTopic", method= RequestMethod.POST)
+    @RequestMapping(value="showSubmitTopic", method= RequestMethod.GET)
     public ModelAndView editPost(
     @RequestParam("selTopic") int selTopic)
     {
-        Topic topic=topicJDBC.getTopic(selTopic);
         ModelAndView mav = new ModelAndView();
         if(userPreferences.accessLevel==1)
-        {
+        {        
+            Topic topic=topicJDBC.getTopic(selTopic);
             mav.addObject("topic",topic);//выбранный топик, который хотим отредактировать
             mav.addObject("parentTopic",topic.getParentTopic());
-
             List<Topic> topics=topicJDBC.getAll(topic.getTemplate());
             mav.addObject("topics",topics);
-            int t=topic.getTemplate();
-            mav.addObject("teplateId",t);
+            mav.addObject("teplateId",topic.getTemplate());
             mav.setViewName("showTopicView");
             return mav;
         }
-         else
+        else
         {
-            mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
     /**
@@ -140,11 +119,10 @@ public class TopicController
      */
     @RequestMapping("showTopics")
     public ModelAndView showTopics()
-    {
-        
-        ModelAndView mav = new ModelAndView();
+    {       
         if(userPreferences.accessLevel==1)
         {
+            ModelAndView mav = new ModelAndView();
             List<TopicShow> topicList=(new TopicJDBC()).getTopicsShow();
             mav.addObject("templates",templateJDBC.getAll());
             mav.addObject("topics",topicList);
@@ -154,40 +132,8 @@ public class TopicController
         }
         else
         {
-            mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
-    }
-    /**
-     * Передает информацию о теме
-     * @param topicId номер темы
-     */
-    @RequestMapping(value="showTopic", method= RequestMethod.GET)
-    public ModelAndView showGet(@RequestParam("topic") int topicId)
-    {
-        ModelAndView mav = new ModelAndView();
-        if(userPreferences.accessLevel==1)
-        {
-            mav.setViewName("showTopicView");
-            Topic t=topicJDBC.getTopic(topicId);
-            mav.addObject("topics",topicJDBC.getAll(t.getTemplate()));
-            mav.addObject("parentTopic",t.getParentTopic());
-            mav.addObject("template",t.getTemplate());
-            mav.addObject("topic", topicJDBC.getTopic(topicId));
-            return mav;
-        }
-         else
-        {
-            mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
-        }
-        
     }
     /**
      * Обрабатывает запрос по редактированию темы
@@ -214,39 +160,29 @@ public class TopicController
              message+=TemplateService.checkComment(comments);
              if(!message.equals(""))
              {
-                 mav.addObject("link","showTopics.html");
-                 mav.addObject("message",message);
-                 mav.addObject("title","Ошибка");
-                 return mav;
+                 return message("<a href='showTopics.html'>Вернуться к топикам</a>", message, "Ошибка");
              }
             topicJDBC.updateTopic(topic, name, comments, template, selTopics, require);
-            mav.addObject("message","Топик успешно изменен");
-            mav.addObject("link","<a href='showTopics.html'>Просмотреть топики</a>");
-            return mav;
+            return showTopics();
         }
-         else
+        else
         {
-            mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
     /**
      * Передает информацию для простомра темы перед удалением
      * @param topicId
      */
-    @RequestMapping(value="delTopic", method= RequestMethod.GET)
-    public ModelAndView delTopic(@RequestParam("topic") int topicId)
-    {
-        ModelAndView mav = new ModelAndView();
+    @RequestMapping(value="delTopic", method= RequestMethod.POST)
+    public ModelAndView delTopic(@RequestParam("topics[]") int[] topics)
+    {  
         if(userPreferences.accessLevel==1)
         {
+            ModelAndView mav = new ModelAndView();
             mav.setViewName("delTopicView");
-            mav.addObject("topic", topicId);
-            //getInfoUsers
-            List<InfoForDelete> info=(new TopicJDBC()).getInfoForDelete(topicId);
+            mav.addObject("topics", topics);
+            List<InfoForDelete> info=(new TopicJDBC()).getInfoForDelete(topics);
             int infoSize=info.size();
             mav.addObject("info", info);
             mav.addObject("infoSize",infoSize);
@@ -254,11 +190,7 @@ public class TopicController
         }
         else
         {
-            mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
     /**
@@ -266,25 +198,29 @@ public class TopicController
      * @param topicId номер удаляемой темы. передается POST запросом
      */
      @RequestMapping(value="delSubmitTopic", method= RequestMethod.POST)
-    public ModelAndView delSubmitTemplate(@RequestParam("topic") int topicId)
+    public ModelAndView delSubmitTemplate(@RequestParam("topics[]") int[] topics)
     {
-        ModelAndView mav = new ModelAndView();
         if(userPreferences.accessLevel==1)
         {
-            topicJDBC.deleteTopic(topicId);
-            List<TopicShow> topicList=topicJDBC.getTopicsShow();
-            mav.addObject("templates",templateJDBC.getAll());
-            mav.addObject("topics",topicList);
-            mav.setViewName("showTopicsView");
-            return mav;
+            for(int i=0;i<topics.length;i++)
+            {
+                topicJDBC.deleteTopic(topics[i]);
+            }
+            return showTopics();
         } 
         else
         {
-            mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
+     
+     public ModelAndView message(String link,String message,String title)
+     {
+         ModelAndView mav=new ModelAndView();
+         mav.setViewName("messageView");
+         mav.addObject("link",link);
+         mav.addObject("message",message);
+         mav.addObject("title",title);
+         return mav;
+     }
 }

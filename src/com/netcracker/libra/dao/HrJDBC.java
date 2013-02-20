@@ -19,7 +19,7 @@ public class HrJDBC implements HrDAO {
 
        
       public List<Student> listStudents() {
-      String SQL = "select a.appid, u.firstname,u.lastname,u.email from Users u join appform a on u.userid=a.appid and roleid=1";
+      String SQL = "select a.appid, u.firstname,u.lastname,u.email from Users u join appform a on u.userid=a.userid and roleid=1";
       List <Student> students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
       return students;
     }

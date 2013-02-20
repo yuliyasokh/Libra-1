@@ -37,7 +37,10 @@
             </table>
         </c:if>
         <form action="delSubmitTopic.html" method="POST">
-            <input type="hidden" name="topic" value="${topic}"/>
+            <c:forEach items="${topics}" var="t">
+            <input type="hidden" name="topics[]" value="<c:out value='${t}'/>"/>
+            </c:forEach>
+            
         <input type="submit" value="удалить"/>    
         <input value="НЕТ" onclick="location.href='showTopics.html'" type="button"/>
         </form>

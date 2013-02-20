@@ -28,12 +28,14 @@ public class TypeController
     
     @Autowired
     UserPreferences userPreferences;
+    
     /**
      * Обрабатывает запрос по добавлению нового типа.
      * @param name имя типа, который мы хотим добавить. Передается в POST запросе.
      */
     @RequestMapping(value="SubmitType", method= RequestMethod.POST)
-    public ModelAndView processPost(@RequestParam("name") String name)
+    public ModelAndView processPost(@RequestParam("name") String name,
+            @RequestParam("description") String description)
     {
         ModelAndView mav = new ModelAndView();
         if(userPreferences.accessLevel==1)
@@ -41,25 +43,28 @@ public class TypeController
                 mav.setViewName("messageView");
                     String message=TemplateService.checkType(name);
                 if(!message.equals(""))
-                     {
-                         mav.addObject("link","<a href='addType.html'>Вернуться назад</a>");
-                         mav.addObject("message",message);         
-                         mav.addObject("title","Ошибка");
-                         return mav;
-                    }
-                mav.setViewName("showTypeView");    
-                    Type t=typeJDBC.getType(typeJDBC.add(name));
-                    List<Type> types=typeJDBC.getAll();
-                    mav.addObject("types", types);
-                    return mav;
+                {
+                    return message("<a href='addType.html'>Вернуться назад</a>", message, "Ошибка");
+                }
+                mav.setViewName("showTypeView");  
+        
+                if(name.equals("string"))
+                {
+                    Type t=typeJDBC.getType(typeJDBC.add("string",description));
+                }
+                if(name.equals("integer"))
+                {
+                    Type t=typeJDBC.getType(typeJDBC.add("integer",description));
+                }
+                if(name.equals("enum"))
+                {
+                    Type t=typeJDBC.getType(typeJDBC.add("enum",description));
+                }            
+                    return showTypes();
         } 
         else
         {
-            mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
     /**
@@ -73,17 +78,13 @@ public class TypeController
         if(userPreferences.accessLevel==1)
         {
             mav.setViewName("showTypeView");
-            List<Type> types=typeJDBC.getAll();
+            List<Type> types=typeJDBC.getAllInfo();
             mav.addObject("types", types);
             return mav;
          } 
         else
         {
-            mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
     /**
@@ -100,69 +101,57 @@ public class TypeController
         {
             if(typeJDBC.existType(selType)==0)
                  {
-                     mav.addObject("link","<a href='showTypes.html'>Посмотреть типы</a>");
-                     mav.addObject("message","Такого типа нету");
-                     mav.addObject("title","Ошибка");
-                     return mav;
+                   return message("<a href='showTypes.html'>Посмотреть типы</a>","Такого типа нету","Ошибка");
                  }
                 Type t=(new TypeJDBC()).getType(selType);       
                 mav.setViewName("messageView");
                 String message=TemplateService.checkType(name);
-                 if(!message.equals(""))
-                 {
-                     mav.addObject("link","<a href='showTypes.html'>Посмотреть типы</a>");
-                     mav.addObject("message",message);
-                     mav.addObject("title","Ошибка");
-                     return mav;
-                 }
-                 typeJDBC.update(selType, name);
-                 mav.setViewName("showTypeView");
-                 mav.addObject("types", typeJDBC.getAll());
-                 return mav;
+                if(!message.equals(""))
+                {
+                    return message("<a href='showTypes.html'>Посмотреть типы</a>",message,"Ошибка");
+                }              
+                typeJDBC.update(selType, name);
+                return showTypes();
         } 
         else
         {
-            mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
     /**
-     * Перредается информацию на страницу для
+     * Передается информацию на страницу для
      * предварительного просмотра типа перед удалением.
-     * @param typeId номер типа
+     * @param type номер типа
      */
-    @RequestMapping(value="delType", method= RequestMethod.GET)
-    public ModelAndView delType(@RequestParam("type") int typeId)
+    @RequestMapping(value="delType", method= RequestMethod.POST)
+    public ModelAndView delType(@RequestParam("types[]") int[] types)
     {
         ModelAndView mav = new ModelAndView();
         if(userPreferences.accessLevel==1)
         {
-            if(typeJDBC.existType(typeId)==0)
-                {
-                    mav.addObject("link","<a href='showTypes.html'>Посмотреть все типы</a>");
-                    mav.addObject("message","Нету такого типа");
-                    mav.addObject("title","Ошибка");
-                    return mav; 
-                }
+           // List<InfoForDelete> info=new LinkedList<InfoForDelete>();
+            for(int i=0;i<types.length;i++)
+            {
+                if(typeJDBC.existType(types[i])==0)
+                {                
+                    return message("<a href='showTypes.html'>Посмотреть все типы</a>", "Нету такого типа", "Ошибка"); 
+                }                                    
+            }
+               // info=typeJDBC.getInfoForDelete(types); 
+                mav.addObject("types", types);
                 mav.setViewName("delTypeView");
-                mav.addObject("type", typeId);
+                
                 //getInfoUsers
-                List<InfoForDelete> info=typeJDBC.getInfoForDelete(typeId);
-            int infoSize=info.size();
-            mav.addObject("info", info);
-            mav.addObject("infoSize",infoSize);
+                List<InfoForDelete> info=typeJDBC.getInfoForDelete(types);
+
+                mav.addObject("info", info);
+                    
+                mav.addObject("infoSize",info.size());
                 return mav;
         } 
         else
         {
-            mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
     /**
@@ -170,31 +159,34 @@ public class TypeController
      * @param typeId номер типа, который удаляем. Он передается POST запросм
      */
      @RequestMapping(value="delSubmitType", method= RequestMethod.POST)
-    public ModelAndView delSubmitType(@RequestParam("type") int typeId)
+    public ModelAndView delSubmitType(@RequestParam("types[]") int[] types)
     {
         ModelAndView mav = new ModelAndView();
         if(userPreferences.accessLevel==1)
         {
-            if(typeJDBC.existType(typeId)==0)
+            for(int i=0;i<types.length;i++)
+            {
+            if(typeJDBC.existType(types[i])==0)
                 {
-                    mav.addObject("link","<a href='showTypes.html'>Посмотреть все типы</a>");
-                    mav.addObject("message","Нету такого типа");
-                    mav.addObject("title","Ошибка");
-                    return mav; 
+                    return message("<a href='showTypes.html'>Посмотреть все типы</a>", "Нету такого типа", "Ошибка"); 
                 }        
-                typeJDBC.delete(typeId);
-                mav.setViewName("showTypeView");
-                List<Type> types=typeJDBC.getAll();
-                mav.addObject("types", types);
-                return mav;
+                typeJDBC.delete(types[i]);
+            }
+            return showTypes();
         } 
         else
         {
-            mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
+     
+     public ModelAndView message(String link,String mes,String title)
+     {
+         ModelAndView mav=new ModelAndView();
+         mav.setViewName("messageView");
+         mav.addObject("link",link);
+         mav.addObject("message",mes);
+         mav.addObject("title",title);
+         return mav;
+     }
 }

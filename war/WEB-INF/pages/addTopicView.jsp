@@ -25,20 +25,7 @@
             <input type="radio" name="require" value="0"> Нет
             <input type="radio" name="require" value="1" checked>Да </br>
             <input type="submit" value="OK"/>
-            <input type="hidden" value=""/>
-        </form>
-        
-        <%--<form:form method="POST" action="submitTopic">
-            <form:input path="name" />
-            <form:input path="comments" />
-            <select name="selTopics">
-                <option value="0">Нету родителя</option>
-                <c:forEach items="${topics}" var="t">
-                    <option value="${t.getTopicId()}"><c:out value="${t.getName()}" /></option>
-                </c:forEach>
-            </select>
-            <input type="submit" value="OK"/>
-           </form:form>--%>
-                
+            <input type="hidden" name="templateId" value="<c:out value='${id}'/>"/>
+        </form>                
     </body>
 </html>

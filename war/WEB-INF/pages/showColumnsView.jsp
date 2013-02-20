@@ -10,27 +10,16 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
- <table border="1" cellspacing="0" cellpadding="4">
-    <caption>Добавление колонки</caption>
-        <form action="addColumn.html" method="GET">
-         <tr>
-             <td></td>
-            <td colspan=5>Добавить новую колонку к теме 
-                ${topic.getName()}
-                <input name="topic" type="hidden" value="${topic.getTopicId()}"/>
-               <%-- <select name="topic">
-                <c:forEach items="${topics}" var="t">
-                     <option value="${t.getTopicId()}"><c:out value="${t.getName()}" /></option>
+ <form method="POST" action="SubmitColumn.html">
+            Введите имя колонки <input type="text" name="name" /></br>
+            Выберите тип колонки<select name="selType">
+                <c:forEach items="${types}" var="t">
+                    <option value="${t.getTypeId()}"><c:out value="${t.getDescription()}" /></option>
                 </c:forEach>
-                </select>
-               --%>
-            </td>
-            <td>
-                <input type="submit" value="Добавить колонку"/>
-            </td>
-        </tr>
+            </select></br>
+            <input type="hidden" name="column" value="${topic.getTemplate()}"/>
+            <input type="submit" value="OK"/>
         </form>
-    </table>
     <table border="1" cellspacing="0" cellpadding="4">
         <caption>Информация о колонках к вопросам</caption>
         <tr>

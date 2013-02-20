@@ -60,7 +60,7 @@ public class TopicJDBC implements TopicDAO
         int i=getCurVal();
         if(parentTopic!=0)
         {
-        SQL ="INSERT INTO Topic VALUES(?,?,?,?, "+parentTopic+",?)";
+            SQL ="INSERT INTO Topic VALUES(?,?,?,?, "+parentTopic+",?)";
         }
         else
         {
@@ -100,16 +100,21 @@ public class TopicJDBC implements TopicDAO
         String sql = "select Count(*) from topic where TopicId=?";
         return jdbcTopicObject.queryForInt(sql,id);
     }
-    public List<InfoForDelete> getInfoForDelete(int topicId)
+    public List<InfoForDelete> getInfoForDelete(int[] topics)
     {
         String sql = "select distinct u.userId, u.firstname, u. lastname, af.patronymic, af.appId "+
                       "from topic top join columns c on c.topicId=top.topicId "+
 					"join columnFields cf on cf.columnId=c.columnId "+
 					"join appForm  af on af.appId=cf.appId "+
 					"join users u on u.userId=af.userId "+
-                                        "where top.topicId=?"+
-                                        " order by af.appId";
-        List<InfoForDelete> listOfInfo=jdbcTopicObject.query(sql, new InfoForDeleteRowMapper(),topicId);
+                                        "where";
+         for(int i=0;i<topics.length-1;i++)
+                {
+                                       sql+= " top.topicId="+topics[i]+" or";
+                }
+                 sql+= " top.topicId="+topics[topics.length-1];
+                                       sql+= " order by af.appId";
+        List<InfoForDelete> listOfInfo=jdbcTopicObject.query(sql, new InfoForDeleteRowMapper());
         return listOfInfo;
     }
     

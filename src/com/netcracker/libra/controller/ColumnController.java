@@ -112,7 +112,9 @@ public class ColumnController
         List<ColumnsShow> columns=columnsJDBC.getColumnsShow(topicId);
         mav.addObject("columns",columns);
         mav.addObject("topic", topicJDBC.getTopic(topic));
-       // mav.addObject("topics",topicJDBC.getAllTopics());
+        
+        List<Type> types=typeJDBC.getAll();
+        mav.addObject("types",types);
         mav.setViewName("showColumnsView");       
         return mav;
     }
@@ -209,10 +211,10 @@ public class ColumnController
         mav.setViewName("delColumnView");          
         mav.addObject("column", columnId);
         //getInfoUsers
-                    List<InfoForDelete> info=columnsJDBC.getInfoForDelete(columnId);
-        int infoSize=info.size();
-        mav.addObject("info", info);
-        mav.addObject("infoSize",infoSize);
+        //            List<InfoForDelete> info=columnsJDBC.getInfoForDelete(columnId);
+        //int infoSize=info.size();
+        //mav.addObject("info", info);
+        //mav.addObject("infoSize",infoSize);
         return mav;
     }
     /**
@@ -221,15 +223,12 @@ public class ColumnController
      */
     @RequestMapping(value="delSubmitColumn", method= RequestMethod.POST)
     public ModelAndView delSubmitType(@RequestParam("column") int column)
-    {
+    {     
         ModelAndView mav = new ModelAndView();
         if(columnsJDBC.existColumn(column)==0)
         {
             mav.setViewName("messageView");
-            mav.addObject("link","<a href='showColumns.html?topic="+topicId+"'>Посмотреть все типы</a>");
-            mav.addObject("message","Такой темы нету");
-            mav.addObject("title","Ошибка");
-            return mav; 
+            return message("<a href='showColumns.html?topic="+topicId+"'>Посмотреть все типы</a>","Такой темы нету","Ошибка"); 
         }
         columnsJDBC.delete(column);
         List<ColumnsShow> columns=columnsJDBC.getColumnsShow(topicId);
@@ -238,4 +237,14 @@ public class ColumnController
         mav.setViewName("showColumnsView");
         return mav;
     }
+    
+     public ModelAndView message(String link,String message,String title)
+     {
+         ModelAndView mav=new ModelAndView();
+         mav.setViewName("messageView");
+         mav.addObject("link",link);
+         mav.addObject("message",message);
+         mav.addObject("title",title);
+         return mav;
+     }
 }

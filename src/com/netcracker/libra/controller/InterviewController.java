@@ -57,11 +57,7 @@ public class InterviewController
         }
         else
         {
-             mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
+          return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");        
         }
     }
     
@@ -97,20 +93,12 @@ public class InterviewController
             }
             else
             {
-                 mav.setViewName("messageView");
-                mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-                mav.addObject("message","У Вас нету прав на эту страницу");
-                mav.addObject("title","Ошибка");
-                return mav;
+                return message("<a href='/Libra/'>Вернуться назад</a>","Такой даты не существует","Ошибка");      
             }
         } 
         else
         {
-             mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");       
         }
     }
     
@@ -179,11 +167,17 @@ public class InterviewController
         } 
         else
         {
-             mav.setViewName("messageView");
-            mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
-            mav.addObject("message","У Вас нету прав на эту страницу");
-            mav.addObject("title","Ошибка");
-            return mav;
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");     
         }
     }
+    
+    public ModelAndView message(String link,String message,String title)
+     {
+         ModelAndView mav=new ModelAndView();
+         mav.setViewName("messageView");
+         mav.addObject("link",link);
+         mav.addObject("message",message);
+         mav.addObject("title",title);
+         return mav;
+     }
 }
