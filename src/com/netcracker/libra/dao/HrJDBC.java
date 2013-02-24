@@ -116,31 +116,79 @@ public class HrJDBC implements HrDAO {
         return universities;
      }
      
+     public List<University> getUniversityByName(String name){
+         String query="select universityId, universityName from university where universityName like '%"+name+"%'";
+         List<University> universities = jdbcTemplateObject.query(query, new UniversityRowMapper());
+         return universities;
+     }
+     
+     public List<University> getUniversityById(int universityId){
+         String query="select universityId, universityName from university where universityId=?";
+         List<University> universities = jdbcTemplateObject.query(query, new UniversityRowMapper(), universityId);
+         return universities;
+     }
+     
      public List<Faculty> getAllFaculties() {
-        String query = "select facultyId, facultyName from faculty";
+        String query = "select f.facultyId, f.facultyName, u.universityId, u.universityName from faculty f "
+                + "join university u on f.universityId=u.universityId order by f.facultyId";
         List<Faculty> faculties = jdbcTemplateObject.query(query, new FacultyRowMapper() );
         return faculties;
      }
      
      public List<Faculty> getAllFaculties(int univerId) {
-        String query="select facultyId, facultyName from faculty where universityId=?";
+        String query="select f.facultyId, f.facultyName, u.universityId, u.universityName from faculty f "
+                + "join university u on f.universityId=u.universityId  where f.universityId=?";
         List<Faculty> faculties;
         faculties = jdbcTemplateObject.query(query, new FacultyRowMapper(), univerId);
         return faculties;
      }
+     public List<Faculty> getAllFacultiesById(int facultyId) {
+        String query="select f.facultyId, f.facultyName, u.universityId, u.universityName from faculty f "
+                + "join university u on f.universityId=u.universityId  where f.facultyId=?";
+        List<Faculty> faculties;
+        faculties = jdbcTemplateObject.query(query, new FacultyRowMapper(), facultyId);
+        return faculties;
+     
+     }
+     public List<Faculty> getUnselectedFaculties(int facultyId, int universityId) {
+        String query="select f.facultyId, f.facultyName, u.universityId, u.universityName from faculty f "
+                + "join university u on f.universityId=u.universityId  where u.universityId=? and f.facultyId not like '"+facultyId+"'";
+        List<Faculty> faculties;
+        faculties = jdbcTemplateObject.query(query, new FacultyRowMapper(), universityId);
+        return faculties;
+     }
+     
+     public List<Faculty> getAllFaculties(String param, String name) {
+        String query="select f.facultyId, f.facultyName, u.universityId, u.universityName from faculty f "
+                + "join university u on f.universityId=u.universityId  where "+param+" like '%"+name+"%'";
+        List<Faculty> faculties;
+        faculties = jdbcTemplateObject.query(query, new FacultyRowMapper());
+        return faculties;
+     }
     
      public List<Department> gelAllDepartemtns() {
-        String query="select DEPARTMENTID, departmentName from department";
+        String query="select d.departmentId, d.departmentName, f.facultyId, f.facultyName, u.universityId, u.universityName from department d "
+                + "join faculty f on d.facultyId=f.facultyId "
+                + "join university u on f.universityId=u.universityId";
         List<Department> departments = jdbcTemplateObject.query(query, new departmentRowMapper());
         return departments;
      }
      
-     public List<Department> getAllDepartments(int facultyId) {
-        String query="select departmentName, departmentId from department where facultyid=?";
+     public List<Department> getAllDepartments(String param, int facultyId) {
+        String query="select d.departmentId, d.departmentName, f.facultyId, f.facultyName, u.universityId, u.universityName from department d "
+                + "join faculty f on d.facultyId=f.facultyId "
+                + "join university u on f.universityId=u.universityId where "+param+"=?";
         List<Department> departments = jdbcTemplateObject.query(query,new departmentRowMapper(),facultyId);
         return departments;
     }
-     
+     public List<Department> getAllDepartments(String param, String name) {
+        String query="select d.departmentId, d.departmentName, f.facultyId, f.facultyName, u.universityId, u.universityName from department d "
+                + "join faculty f on d.facultyId=f.facultyId "
+                + "join university u on f.universityId=u.universityId where "+param+" like '%"+name+"%'";
+        List<Department> departments = jdbcTemplateObject.query(query,new departmentRowMapper());
+        return departments;
+    }
+          
     public List<Student> getStudentByUniversity(int universityId){
         String query="select a.appid, u.firstname,u.lastname,u.email, d.departmentName from users u "+
 	"join appform a on u.userid=a.userid "+
@@ -166,5 +214,66 @@ public class HrJDBC implements HrDAO {
         List <Student> students = jdbcTemplateObject.query(query, new ShortStudentRowMapper(), departmentId);
         return students;
     }
+    
+    public void addUniversity(String universityName){
+        String query="insert into university values(University_seq.NEXTVAL,?)";
+        jdbcTemplateObject.update(query,universityName);
+    }
+    
+    public void addFaculty(String facultyName, int univerId) {
+        String query="insert into faculty values(Faculty_seq.NEXTVAL,?,?)";
+        jdbcTemplateObject.update(query,facultyName,univerId);
+    }
+    public void addDepartment(String departmentName, int facultyId){
+        String query="insert into department values(Department_seq.NEXTVAL,?,?)";
+        jdbcTemplateObject.update(query,departmentName,facultyId);
+    }
+    public void deleteUniversity(int universityID) {
+        String query="delete from university where universityId=?";
+        jdbcTemplateObject.update(query,universityID);   
+    }
+    public void deleteFaculty(int facultyId) {
+        String query="delete faculty where facultyId=?";
+        jdbcTemplateObject.update(query,facultyId);
+    }
+    public void deleteDepartment(int departemtnId) {
+        String query="delete from department where departmentID=?";
+        jdbcTemplateObject.update(query,departemtnId);
+    }
+    public void updateUniversity(int universityID, String universityName) {
+        String query="update university set universityName=? where universityId=?";
+        jdbcTemplateObject.update(query,universityName,universityID);
+    }
+    public List<Faculty> selectedUniversity(int facultyId) {
+        String query="select f.facultyId, f.facultyName, u.universityId, u.universityName from faculty f "
+                + "join university u on f.universityId=u.universityId  where f.facultyId = ?";
+        List<Faculty> faculties;
+        faculties = jdbcTemplateObject.query(query, new FacultyRowMapper(),facultyId);
+        return faculties;
+     }
+    public List<University> unselectedUniversity(int university){
+        String query="select universityId, universityName from university where universityId not like ?";
+        List<University> univers = jdbcTemplateObject.query(query, new UniversityRowMapper(), university);
+        return univers;
+    }
+    public List<University> selectedUniversit(int university){
+        String query="select universityId, universityName from university where universityId = ?";
+        List<University> univers = jdbcTemplateObject.query(query, new UniversityRowMapper(), university);
+        return univers;
+    }
+    public void updateFaculty(int facultyId, String facultyName, int univerId) {
+        String query="update faculty set facultyName=?, universityId=? where facultyId=?";
+        jdbcTemplateObject.update(query, facultyName,univerId, facultyId);
+    }
+    public int getUniversityIdByName(String name){
+        String query="select universityId  from university where universityName = ?";
+        return jdbcTemplateObject.queryForInt(query, name);
+    }
+    public void updateDepartment(int departmentId, String departmentName, int facId) {
+        String query="update department set departmentName=?, facultyId=? where departmentId=?";
+        jdbcTemplateObject.update(query, departmentName, facId,departmentId);
+    }
+    
+    
 
 }

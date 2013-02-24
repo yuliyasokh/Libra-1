@@ -32,7 +32,7 @@ public class HRController {
      
     @RequestMapping(value="hr/department", method= RequestMethod.POST)
      public ModelAndView myDept(@RequestParam("facultyId") int facultyId){
-            List<Department> departments=hr.getAllDepartments(facultyId);
+            List<Department> departments=hr.getAllDepartments("f.facultyId", facultyId);
             return new ModelAndView("hr/department","dept",departments);
         }
     
@@ -141,6 +141,8 @@ public class HRController {
       return null;
         
     }
+     
+    
 
 }
 

@@ -20,6 +20,8 @@ public class FacultyRowMapper implements RowMapper<Faculty> {
         Faculty faculty=new Faculty();
         faculty.setFacultyId(rs.getInt("facultyId"));
         faculty.setFacultyName(rs.getString("facultyName"));
+        faculty.setUniverId(rs.getInt("universityId"));
+        faculty.setUniversityName(rs.getString("universityName"));
         return faculty;
     }
     
