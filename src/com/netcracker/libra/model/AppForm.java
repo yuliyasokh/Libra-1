@@ -7,12 +7,10 @@ import java.util.Set;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.netcracker.libra.service.TemplateGenerator;
+import com.netcracker.libra.service.BlockService;
 
 public class AppForm {
-	
-	private TemplateGenerator gen = new TemplateGenerator();
-	
+
 	/*
 	 * Набор постоянных значений анкеты
 	 */	
@@ -254,17 +252,17 @@ public class AppForm {
 
 
 	public Map<Integer, String> getUniversityList() {
-		return gen.getUniversityList();
+		return BlockService.getUniversityList();
 	}
 
 
 	public Map<Integer, String> getFacultyList() {
-		return gen.getFacultyList();
+		return BlockService.getFacultyList();
 	}
 
 
 	public Map<Integer, String> getDepartmentList() {
-		return gen.getDepartmentList();
+		return BlockService.getDepartmentList();
 	}
 
 }

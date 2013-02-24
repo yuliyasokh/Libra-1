@@ -34,11 +34,12 @@
                         <td><input checked name="selDate" type="radio" value="<c:out value='${idate.getId()}'/>"/></td>
                     </c:if> 
                    <c:if test="${idate.getId()!=interviewDate}">
-                       <c:if test="${(idate.getFreePlaces()<=0)||(idate.getCorrect()==-1)}">
+                   	<!-- убрал лишние скобки в следующем условиях -->
+                       <c:if test="${idate.getFreePlaces()<=0||idate.getCorrect()==-1}">
                        <td>
                            <input disabled name="selDate" type="radio" value="<c:out value='${idate.getId()}'/>"/></td>
                        </c:if>
-                       <c:if test="${(idate.getFreePlaces()>0)&&(idate.getCorrect()==1)}">
+                       <c:if test="${idate.getFreePlaces()>0&&idate.getCorrect()==1}">
                        <td><input  name="selDate" type="radio" value="<c:out value='${idate.getId()}'/>"/></td>
                        </c:if>
                    </c:if>

@@ -32,6 +32,7 @@ public class StudentJDBC {
        String SQL="select User_seq.NEXTVAL as Id from dual";
        return jdbcTemplateObject.queryForInt(SQL);
    }
+   
    public void create(String name, String lastName, String email, String password) {
       String SQL = "insert into Users (USERID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLEID) values (?,?,?,?,?,?)";
       int userId=getCurrVal();

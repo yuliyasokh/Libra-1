@@ -9,33 +9,9 @@
 <title>Регистрационные данные</title>
 </head>
 <body>
-
-<c:forEach items="${appForm.personal}" var="p">
-<c:out value="${p.key}"></c:out> 
-<c:out value="${p.value}"></c:out>
-<br> 
+<c:forEach items="${appForm.personal}" var="t">
+key ${t.key} value ${t.value}<br>
 </c:forEach>
-
-<c:forEach items="${appForm.programmingLanguagesMap}" var="m">
-<c:out value="${m.key}"></c:out> 
-<c:out value="${m.value}"></c:out>
-<br>
-</c:forEach>
-<br>
-<br>
-
-<c:forEach items="${appForm.knowledgesMap}" var="m">
-<c:out value="${m.key}"></c:out> 
-<c:out value="${m.value}"></c:out>
-<br> 
-</c:forEach>
-<br><br>
-<c:forEach items="${appForm.textFieldsMap}" var="t">
-<c:out value="${t.key}"></c:out> 
-<c:out value="${t.value}"></c:out>
-<br> 
-</c:forEach>
-<br><br>
 
 </body>
 </html>

@@ -3,6 +3,10 @@
 	min-height:900px;
 }
 
+form .line {
+    margin-bottom: 2px;
+}
+
 /*.formContainer{
 	padding:10px;
 	min-height:800px;
