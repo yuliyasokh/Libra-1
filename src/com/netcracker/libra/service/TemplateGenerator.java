@@ -1,6 +1,5 @@
 package com.netcracker.libra.service;
-
-import java.util.List;
+import java.util.Map;
 
 import com.netcracker.libra.dao.TemplateGeneratorJDBC;
 
@@ -8,16 +7,16 @@ public class TemplateGenerator {
 	
 	TemplateGeneratorJDBC jdbc = new TemplateGeneratorJDBC();
 	
-	public List getUniversityList() {
-		return jdbc.getUniversities();
+	public Map<Integer, String> getUniversityList() {
+		return jdbc.getAllUniversities();
 	}
 	
-	public List getFacultyList() {
-		return jdbc.getFaculties();
+	public Map<Integer, String> getFacultyList() {
+		return jdbc.getAllFaculties();
 	}
 	
-	public List getDepartmentList() {
-		return jdbc.getDepartments();
+	public Map<Integer, String> getDepartmentList() {
+		return jdbc.getAllDepartments();
 	}
 	
 }

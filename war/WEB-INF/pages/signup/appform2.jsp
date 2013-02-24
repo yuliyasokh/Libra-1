@@ -39,7 +39,7 @@
 									<span class="span3">${l}</span>
 									<input class="span1" 
 										required 
-										name="programmingLanguagesMap['${l} ${programmingLanguagesMap.value}']" 
+										name="programmingLanguagesMap['${l}${programmingLanguagesMap.value}']" 
 										type="number" 
 										min="0" max="5"/>
 								</label>
@@ -56,7 +56,7 @@
 								<label>
 									<span class="span3">${m}</span>
 									<input class="span1" 
-									name="knowledgesMap['${m} ${knowledgesMap.value}']" 
+									name="knowledgesMap['${m}${knowledgesMap.value}']" 
 									required 
 									type="number"
 									min="0" max="5"/>
@@ -70,7 +70,7 @@
 				
 					<c:forEach items="${appForm.textFieldsList}" var="t">
 							<div class="span4"><h6>${t}</h6>
-								<textarea name="textFieldsMap['${t} ${textFieldsMap.value}']" class="span4" rows="2"></textarea>
+								<textarea name="textFieldsMap['${t}${textFieldsMap.value}']" class="span4" rows="2"></textarea>
 							</div>
 						<div class="span1"></div>
 					</c:forEach>
@@ -83,9 +83,9 @@
 						<span class="span2"><label>Устная речь:</label></span>
 					</div>
 					<div class="row">
-						<span class="span1"><input class="span1" type="number" min="0" max="5"/></span>
-  						<span class="span1"><input class="span1" type="number" min="0" max="5"/></span>
-						<span class="span1"><input class="span1" type="number" min="0" max="5"/></span>
+						<c:forEach items="${appForm.englishGradesMap}" var="el">
+						<span class="span1"><input name="englishGradesMap['${m}${knowledgesMap.value}']" class="span1" type="number" min="0" max="5"/></span>
+						</c:forEach>
 					</div>
 				</div>
 				

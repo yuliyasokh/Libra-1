@@ -1,13 +1,17 @@
 package com.netcracker.libra.dao;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
+import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+@Repository
 public class TemplateGeneratorJDBC {
 
 	private static JdbcTemplate jdbcTemplateObject;
@@ -16,113 +20,49 @@ public class TemplateGeneratorJDBC {
 		return new TemplateGeneratorJDBC();
 	}
 	
+	@Autowired
+	public void setDataSource(DataSource dataSource) {
+		jdbcTemplateObject = new JdbcTemplate(dataSource);
+	   }
+	
 	public TemplateGeneratorJDBC() {
 		
 	}
 	
-	public List<University> getUniversities() {
+	public Map<Integer, String> getAllUniversities() {
 		
-		List<University> list = new ArrayList<>();
-		String sql = "select * from university where universityid=1";
-		list.add((University) jdbcTemplateObject.queryForObject(sql, new BeanPropertyRowMapper<University>()));
-		return list;
+		Map<Integer, String> map = new HashMap<>();
+		String sql = "select * from university";
+		
+		for (Map<String, Object> x: jdbcTemplateObject.queryForList(sql)) {
+			map.put(((BigDecimal) x.get("universityid")).intValueExact(),(String)x.get("universityname"));
+		}
+		return map;
 		
 	}
 	
-	public List<Faculty> getFaculties() {
+	public Map<Integer, String> getAllFaculties() {
 		
+		Map<Integer, String> map = new HashMap<>();
 		String sql = "select * from faculty";
-		List<Faculty> list  = jdbcTemplateObject.query(sql,
-				new BeanPropertyRowMapper<Faculty>());
-		return list;
+		
+		for (Map<String, Object> x: jdbcTemplateObject.queryForList(sql)) {
+			map.put(((BigDecimal) x.get("facultyid")).intValueExact(),(String)x.get("facultyname"));
+		}
+		return map;
+		
 	}
 	
-	public List<Department> getDepartments() {
+	public Map<Integer, String> getAllDepartments() {
 		
+		Map<Integer, String> map = new HashMap<>();
 		String sql = "select * from department";
-		List<Department> list  = jdbcTemplateObject.query(sql,
-				new BeanPropertyRowMapper<Department>());
-		return list;
+		
+		for (Map<String, Object> x: jdbcTemplateObject.queryForList(sql)) {
+			map.put(((BigDecimal) x.get("departmentid")).intValueExact(),(String)x.get("departmentname"));
+		}
+		return map;
+		
 	}
 	
-	public class University {
-		
-		private int universityId;
-		private String universityName;
-		
-		public University getUniversity() {
-			return new University();
-		}
-		
-		public int getUniversityId() {
-			return universityId;
-		}
-		
-		public void setUniversityId(int id) {
-			this.universityId = id;
-		}
-
-		public String getUniversityName() {
-			return universityName;
-		}
-
-		public void setUniversityName(String name) {
-			this.universityName = name;
-		}
-	}
-	
-	
-	
-	class Faculty {
-		
-		private int universityId;
-		private int facultyId;
-		private String facultyName;
-
-		public int getUniversityId() {
-			return universityId;
-		}
-		
-		public void setFacultyId(int id) {
-			this.facultyId = id;
-		}
-		
-		public int getFacultyId() {
-			return facultyId;
-		}
-		
-		public void setUniversityId(int id) {
-			this.universityId = id;
-		}
-
-		public String getFacultyName() {
-			return facultyName;
-		}
-
-		public void setFacultyName(String name) {
-			this.facultyName = name;
-		}
-	}
-	
-	class Department {
-		
-		private int id;
-		private String name;
-
-		public int getId() {
-			return id;
-		}
-		
-		public void setId(int id) {
-			this.id = id;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-	}
 }

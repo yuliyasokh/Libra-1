@@ -14,7 +14,7 @@ public class RegisterService {
 		db.create(form.getName(), form.getLastName(), form.getEmail(), Security.getMD5hash(form.getPassword()));
 	}
 	
-	public static void fillAppForm(AppForm form, Integer userid) {
-		appdb.createEntry(form, userid);
+	public static void fillAppForm(AppForm form) {
+		appdb.createEntry(form);
 	}
 }

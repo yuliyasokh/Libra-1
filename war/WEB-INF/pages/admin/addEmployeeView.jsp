@@ -11,6 +11,33 @@
         <title>Служащие</title>
     </head>
     <body>
+        
+        <table border="1" cellspacing="0" cellpadding="4">
+        <caption>Внесите данные, чтобы добавить нового служащего</caption>
+        <tr>
+            <th>Выберите должность</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Email</th>
+            <th>Пароль</th>
+            <th>Подтвердить</th>
+        </tr>
+        <form action="doneAdd.html" method="POST">
+        <td>
+            <select name="roleId">
+                <option value="2">HR</option>
+                <option selected value="3">Tech</option>
+                <option value="4">Admin</option>
+            </select>
+        </td>
+        <td><input type="text" name="firstName"/></td>
+        <td><input type="text" name="lastName"/></td>
+        <td><input type="text" name="email"/></td>
+        <td><input type="text" name="password"/></td>
+        <td><input type="submit" value="OK"></td>
+        </form>
+        </table>
+        
         <table border="1" cellspacing="0" cellpadding="4">
         <caption>Список служащих</caption>
         <tr>
@@ -43,32 +70,6 @@
                 </tr>
             </form>
             </c:forEach>
-        </table>
-        
-        <table border="1" cellspacing="0" cellpadding="4">
-        <caption>Внесите данные, чтобы добавить нового служащего</caption>
-        <tr>
-            <th>Выберите должность</th>
-            <th>Имя</th>
-            <th>Фамилия</th>
-            <th>Email</th>
-            <th>Пароль</th>
-            <th>Подтвердить</th>
-        </tr>
-        <form action="doneAdd.html" method="POST">
-        <td>
-            <select name="roleId">
-                <option value="2">HR</option>
-                <option selected value="3">Tech</option>
-                <option value="4">Admin</option>
-            </select>
-        </td>
-        <td><input type="text" name="firstName"/></td>
-        <td><input type="text" name="lastName"/></td>
-        <td><input type="text" name="email"/></td>
-        <td><input type="text" name="password"/></td>
-        <td><input type="submit" value="OK"></td>
-        </form>
         </table>
     </body>
 </html>

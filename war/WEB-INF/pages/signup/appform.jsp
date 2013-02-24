@@ -67,12 +67,32 @@
 						<div class="span4">
 
 							<h5>Образование:</h5>
-								<input class="span4" name="personal['university${personal.value}']" placeholder="Университет" type="text"/>
-  								<input class="span4" name="personal['faculty${personal.value}']" placeholder="Факультет" type="text"/>
-  								<input class="span4" name="personal['department${personal.value}']" placeholder="Кафедра" type="text"/>
+								<!-- <input class="span4" name="personal['university${personal.value}']" placeholder="Университет" type="text"/> -->
+								<!-- <input class="span4" name="personal['faculty${personal.value}']" placeholder="Факультет" type="text"/>  -->
+								<!-- <input class="span4" name="personal['department${personal.value}']" placeholder="Кафедра" type="text"/> -->
+								
+								<form:select required="1" class="span4" path="personal['university${personal.value}']">
+									<option value="" disabled selected>Университет</option>
+    								<form:options items="${appForm.getUniversityList()}" />
+								</form:select>
+								
+								<form:select required="1" class="span4" path="personal['faculty${personal.value}']">
+									<option value="" disabled selected>Факультет</option>
+    								<form:options items="${appForm.getFacultyList()}" />
+								</form:select>
+								
+								<form:select required="1" class="span4" path="personal['department${personal.value}']">
+									<option value="" disabled selected>Кафедра</option>
+    								<form:options items="${appForm.getDepartmentList()}" />
+								</form:select>
+								
+
+								
+  								
+  								
   							<div class="controls controls-row">
-								<input class="span2" name="personal['term${personal.value}']" placeholder="Курс" type="text"/>
-								<input class="span2" name="personal['graduated${personal.value}']" placeholder="Год выпуска" type="text">
+								<input class="span2" name="personal['term${personal.value}']" placeholder="Курс" type="number" min="0" max="5"/>
+								<input class="span2" name="personal['graduated${personal.value}']" placeholder="Год выпуска" type="number" min="2000" max="2020">
 							</div>
 						</div>
 					</div>

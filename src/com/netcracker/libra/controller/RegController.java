@@ -99,7 +99,7 @@ public class RegController {
 	
 	@RequestMapping(value = "success", method = RequestMethod.POST)
 	public String saveData(@ModelAttribute("appForm") AppForm form, BindingResult result, Map model) {
-		RegisterService.fillAppForm(form, 73);
+		//RegisterService.fillAppForm(form);
 		return "/signup/success";
 	}
 	
