@@ -58,6 +58,9 @@
         <property name="resourceLoaderPath" value="WEB-INF/templates/" />        
     </bean>
     
+     <bean id="PDFCreator" class="com.netcracker.libra.util.pdf.PDFCreator">
+         <property name="servletContext" ref="servletcontext"/>
+     </bean>
     
     
 </beans>

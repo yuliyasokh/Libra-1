@@ -1,15 +1,5 @@
 package com.netcracker.libra.util.pdf;
 
-import com.itextpdf.text.DocumentException;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.ServletContext;
-import org.xhtmlrenderer.pdf.ITextRenderer;
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,48 +23,20 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
-
-
-/**
- *
- * @author MorrDeck
- */
-public class PDFCreator {
-    private static ServletContext servletContext;
-
-    public  ServletContext getServletContext() {
-        return servletContext;
-    }
-
-    public  void setServletContext(ServletContext servletContext) {
-        PDFCreator.servletContext = servletContext;
-    }
-
-//    public  void createFormPDF(int id, String url) {
-//        try {
-//            String outputFile = servletContext.getRealPath("WEB-INF/forms/form"+id+".pdf"); 
-//            OutputStream os = new FileOutputStream(outputFile);
-//            ITextRenderer renderer = new ITextRenderer();
-//            renderer.setDocument(url);
-//            renderer.layout();
-//            renderer.createPDF(new FileOutputStream(outputFile));
-//        } catch (DocumentException ex) {
-//        } catch (IOException ex) {
-//        }
-//    }
-    
-    
-    
-    public static void createFormPDF(int id, String url) {
+ 
+public class PDFCreatorTest {
+ 
+    public void createPDF(String pdfFilename, String url) {
         PdfWriter pdfWriter = null;
         Document document = new Document();
-        System.out.println(servletContext.getRealPath("WEB-INF/forms/form"+id+".pdf"));
+ 
         try {
-            pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(servletContext.getRealPath("WEB-INF/forms/form"+id+".pdf")));
+            pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(pdfFilename));
             document.addCreationDate();
-            document.setPageSize(PageSize.A4);
+            document.setPageSize(PageSize.LETTER);
             document.open();
             String html = cleanProps(url);
+            System.out.println(html);
             Reader sr = new StringReader(html);
             XMLWorkerHelper worker = XMLWorkerHelper.getInstance();
             worker.parseXHtml(pdfWriter, document, sr);
@@ -90,9 +52,10 @@ public class PDFCreator {
  
     }
  
-    private static String cleanHtml(final String url) throws MalformedURLException, IOException {
+    public String cleanHtml(final String url) throws MalformedURLException, IOException {
         HtmlCleaner cleaner = new HtmlCleaner();
         TagNode node = cleaner.clean(new URL(url));
+        // traverse whole DOM and update images to absolute URLs
         node.traverse(new TagNodeVisitor() {
             public boolean visit(TagNode tagNode, HtmlNode htmlNode) {
                 if (htmlNode instanceof TagNode) {
@@ -115,7 +78,7 @@ public class PDFCreator {
         return sw.toString();
     }
  
-    private static String cleanProps(final String url) {
+    public String cleanProps(final String url) {
         CleanerProperties props = new CleanerProperties();
         props.setTranslateSpecialEntities(true);
         props.setTransResCharsToNCR(true);
@@ -134,4 +97,13 @@ public class PDFCreator {
         }
         return sw.toString();
     }
+ 
+//    static class Test {
+//        public static void main(String[] args) throws FileNotFoundException, DocumentException {
+//            String url = "http://localhost:8091/Libra/showAdvertise.html";
+//            String pdfFile = "tst.pdf";
+//            PDFCreatorTest pdf = new PDFCreatorTest();
+//            pdf.createPDF(pdfFile, url);
+//        }
+//    }
 }

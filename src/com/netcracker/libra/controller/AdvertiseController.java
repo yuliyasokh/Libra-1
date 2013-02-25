@@ -1,6 +1,8 @@
 package com.netcracker.libra.controller;
 
 import com.netcracker.libra.util.mail.data;
+import com.netcracker.libra.util.pdf.PDFCreator;
+import com.netcracker.libra.util.pdf.PDFCreatorTest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,8 +29,11 @@ public class AdvertiseController {
                     data += "['"+lab[i]+"',"+val[i]+"],";
                 }
                 data = data.substring(1, data.length()-1);
-                System.out.println(data);
                 mav.addObject("data", data);
+                
 	      return mav;
 	   }
+
+        
+        
 }
