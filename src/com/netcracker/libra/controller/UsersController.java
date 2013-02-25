@@ -28,6 +28,8 @@ public class UsersController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/employeesView");
         mv.addObject("employees", new AdminJDBC().getAllEmployees());
+        mv.addObject("selectedAll", "selected");
+        mv.addObject("checkedAll", "checked");
         return mv;
     }
     
@@ -49,87 +51,106 @@ public class UsersController {
                 @RequestParam("role") int role,
                 @RequestParam("textValue") String textValue,
                 @RequestParam("byWhat") String byWhat) {
+
+        String checked = null;
+        String title = null;
+        
+        switch(role) {
+            case 0: checked = "checkedAll";
+                    break;
+            case 2: checked = "checkedHR";
+                    title = "HR-менеджер";
+                    break;
+            case 3: checked = "checkedTech";
+                    title = "Тех.интервьюер";
+                    break;
+            case 4: checked = "checkedAdmin";
+                    title = "Администратор";
+                    break;
+        }
         
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/employeesView");
+        //сохраняет выбранное значение в фильтре по должности служащего
+        mv.addObject(checked, "checked");
+        //сохраняет введенное значение в текстовом поле
+        mv.addObject("text", textValue);
+   
         AdminJDBC jdbc = new AdminJDBC();
-        
-        // сообщения в случае нулевого результата
-        String allMessage = "Служащие не найдены <br/>";
-        String roleMessage = "Служащие с данной должностью не найдены <br/>";
-        String nameMessage = "Служащий (или служащие) с именем "+ textValue +" не найден (не найдены) <br/>";
-        String nameAndRoleMessage = "Служащий (или служащие) с именем "+ textValue +" и данной должностью не найден (не найдены) <br/>";
-        String lastNameMessage = "Служащий (или служащие) с фамилией "+ textValue +" не найден (не найдены) <br/>";
-        String lastNameAndRoleMessage = "Служащий (или служащие) с фамилией "+ textValue +" и данной должностью не найден (не найдены) <br/>";
-        String emailMessage = "Служащий (или служащие) с эл.почтой "+ textValue +" не найден (не найдены) <br/>";
-        String emailAndRoleMessage = "Служащий (или служащие) с эл.почтой "+ textValue +" и данной должностью не найден (не найдены) <br/>";
         
         switch(byWhat) {
             case "ALL":
                 if(role == 0) {
                         mv.addObject("employees", jdbc.getAllEmployees());
-                        mv.addObject("noResults", allMessage);
-                        return mv;
+                        mv.addObject("noResults", "Служащие не найдены <br/>");
+                        //сохраняет выбранное значение сортировки по имени/фамилии и т.д.
+                        mv.addObject("selectedAll", "selected");
+                        break;
                     }
                 else {
                         mv.addObject("employees", jdbc.getAllEmployeesByRole(role));
-                        mv.addObject("noResults", roleMessage);
-                        return mv;
+                        mv.addObject("noResults", title+"ы не найдены <br/>");
+                        mv.addObject("selectedAll", "selected");
+                        break;
                     }
                 
             case "FULL_NAME":
                 if(role == 0) {
                         mv.addObject("employees", jdbc.getAllEmployeesByFullName(textValue));
-                        mv.addObject("noResults", nameMessage);
-                        return mv;
+                        mv.addObject("noResults", "Служащий(-ие) с именем "+ textValue +" не найден(-ы)");
+                        mv.addObject("selectedFull", "selected");
+                        break;
                     }
                 else {
                         mv.addObject("employees", jdbc.getAllEmployeesByFullNameAndRole(textValue, role));
-                        mv.addObject("noResults", nameAndRoleMessage);
-                        return mv;
+                        mv.addObject("noResults", title+"(-ы) с именем "+ textValue +" не найден(-ы)");
+                        mv.addObject("selectedFull", "selected");
+                        break;
                     }
                 
             case "FIRST_NAME":
                 if(role == 0) {
                         mv.addObject("employees", jdbc.getAllEmployeesByFirstName(textValue));
-                        mv.addObject("noResults", nameMessage);
-                        return mv;
+                        mv.addObject("noResults", "Служащий(-ие) с именем "+ textValue +" не найден(-ы)");
+                        mv.addObject("selectedFirst", "selected");
+                        break;
                     }
                 else {
                         mv.addObject("employees", jdbc.getAllEmployeesByFirstNameAndRole(textValue, role));
-                        mv.addObject("noResults", nameAndRoleMessage);
-                        return mv;
+                        mv.addObject("noResults", title+"(-ы) с именем "+ textValue +" не найден(-ы)");
+                        mv.addObject("selectedFirst", "selected");
+                        break;
                     }
                 
             case "LAST_NAME":
                 if(role == 0) {
                         mv.addObject("employees", jdbc.getAllEmployeesByLastName(textValue));
-                        mv.addObject("noResults", lastNameMessage);
-                        return mv;
+                        mv.addObject("noResults", "Служащий(-ие) с фамилией "+ textValue +" не найден(-ы)");
+                        mv.addObject("selectedLast", "selected");
+                        break;
                     }
                 else {
                         mv.addObject("employees", jdbc.getAllEmployeesByLastNameAndRole(textValue, role));
-                        mv.addObject("noResults", lastNameAndRoleMessage);
-                        return mv;
+                        mv.addObject("noResults", title+"(-ы) с фамилией "+ textValue +" не найден(-ы)");
+                        mv.addObject("selectedLast", "selected");
+                        break;
                     }
                 
             case "EMAIL":
                 if(role == 0) {
                         mv.addObject("employees", jdbc.getAllEmployeesByEmail(textValue));
-                        mv.addObject("noResults", emailMessage);
-                        return mv;
+                        mv.addObject("noResults", "Служащий(-ие) с эл.почтой "+ textValue +" не найден(-ы)");
+                        mv.addObject("selectedEmail", "selected");
+                        break;
                     }
                 else {
                         mv.addObject("employees", jdbc.getAllEmployeesByEmailAndRole(textValue, role));
-                        mv.addObject("noResults", emailAndRoleMessage);
-                        return mv;
+                        mv.addObject("noResults", title+"(-ы) с эл.почтой "+ textValue +" не найден(-ы)");
+                        mv.addObject("selectedEmail", "selected");
+                        break;
                     }
-                
-            default:  
-                mv.addObject("employees", jdbc.getAllEmployees());
-                mv.addObject("noResults", allMessage);
-                return mv;
         }
+        return mv;
     }
     
     /**

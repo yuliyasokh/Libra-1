@@ -84,6 +84,24 @@ public class MailService implements IMailService {
         mailSender.send(preparator); 
     }
     
+    public static void sendNotificationMessageForInterviewers(int id[]){
+        Map model = new HashMap();
+        String adress[]= null;
+        
+        
+        model.put("index",3);
+        model.put("adress", adress); 
+        model.put("date", adress);
+        model.put("startTime", adress);
+        model.put("finishTime", adress);
+        MimeMessagePreparator preparator = new messageForInterviewers(model);
+        mailSender.send(preparator); 
+    }
+    
+    public static void sendNoticeMessage(int[] id){
+        
+    }
+    
     private static String getTemplateText(int index, Map model){
         switch (index) {
             case 0: 
@@ -92,6 +110,8 @@ public class MailService implements IMailService {
                 return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/template_2.vm", "UTF-8", model);
             case 2:
                 return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/template_3.vm", "UTF-8", model);
+            case 3:
+                return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/template_4.vm", "UTF-8", model);
             default:
                 return null;
         }        
@@ -109,8 +129,7 @@ public class MailService implements IMailService {
         public void prepare(MimeMessage mm) throws Exception {
             
             MimeMessageHelper message = new MimeMessageHelper(mm,"UTF-8");
-                message.setTo((String) model.get("adress"));                    
-                System.out.println(getTemplateText((int)model.get("index"),model));
+                message.setTo((String) model.get("adress"));   
                 message.setText(getTemplateText((int)model.get("index"),model), true);
         }        
     }
@@ -130,5 +149,21 @@ public class MailService implements IMailService {
                 File file = new  File(servletContext.getRealPath("WEB-INF/forms/form"+model.get("id")+".pdf"));
                 message.addAttachment("Your_completed_questionnaire",file) ;
         }        
+    }
+    
+    private static class messageForInterviewers implements MimeMessagePreparator{
+        Map model = null;
+
+        public messageForInterviewers(Map model) {
+            this.model = model;
+        }     
+
+        @Override
+        public void prepare(MimeMessage mm) throws Exception {
+            MimeMessageHelper message = new MimeMessageHelper(mm,"UTF-8");
+            message.setTo((String[]) model.get("adress"));
+            message.setText(getTemplateText((int)model.get("index"),model), true);
+        }
+        
     }
 }

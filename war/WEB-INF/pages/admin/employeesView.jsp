@@ -14,22 +14,22 @@
         <form action="sortedEmployees.html" method="POST">
         <tr>
             <!-- radio buttons "role" -->
-             <td><input type="radio" name="role" value="0" checked>Все</td>
-             <td><input type="radio" name="role" value="2">HR</td>
-             <td><input type="radio" name="role" value="3">Tech</td>
-             <td><input type="radio" name="role" value="4">Admin</td>
+             <td><input type="radio" name="role" value="0" ${checkedAll}>Все</td>
+             <td><input type="radio" name="role" value="2" ${checkedHR}>HR</td>
+             <td><input type="radio" name="role" value="3" ${checkedTech}>Tech</td>
+             <td><input type="radio" name="role" value="4" ${checkedAdmin}>Admin</td>
              <td>
                  <!-- check box "byWhat" -->
                 <select name="byWhat">
-                    <option selected value="ALL">Показать всех</option>
-                    <option value="FULL_NAME">По имени и фамилии</option>
-                    <option value="FIRST_NAME">По имени</option>
-                    <option value="LAST_NAME">По фимилии</option>
-                    <option value="EMAIL">По email</option>
+                    <option ${selectedAll} value="ALL">Показать всех</option>
+                    <option ${selectedFull} value="FULL_NAME">По имени и фамилии</option>
+                    <option ${selectedFirst} value="FIRST_NAME">По имени</option>
+                    <option ${selectedLast} value="LAST_NAME">По фимилии</option>
+                    <option ${selectedEmail} value="EMAIL">По email</option>
                 </select>
              </td>
              <!-- text box "textValue" -->
-             <td><input type="text" name="textValue"></td>
+             <td><input type="text" name="textValue" value="${text}"></td>
              <td><input type="submit" value="Поиск"></td>
         </tr>
         </form>

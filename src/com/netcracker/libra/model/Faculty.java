@@ -13,12 +13,19 @@ public class Faculty {
     private int facultyId;
     private String facultyName;
     private int universityId;
+    private String universityName;
     
     public void setFacultyId(int facultyId){
         this.facultyId=facultyId;
     }
     public int getFacultyId(){
         return facultyId;
+    }
+    public void setUniversityName(String universityName){
+        this.universityName=universityName;
+    }
+    public String getUniversityName(){
+        return universityName;
     }
     public void setFacultyName(String facultyName){
         this.facultyName=facultyName;

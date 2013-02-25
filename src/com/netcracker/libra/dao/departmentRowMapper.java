@@ -20,6 +20,10 @@ public class departmentRowMapper implements RowMapper{
         Department department=new Department();
         department.setDepartmentId(rs.getInt("departmentId"));
         department.setDepartmentName(rs.getString("departmentName"));
+        department.setFacId(rs.getInt("facultyId"));
+        department.setFacultyName(rs.getString("facultyName"));
+        department.setUniversityId(rs.getInt("universityId"));
+        department.setUniversityName(rs.getString("universityName"));
         return department;
     }
     
