@@ -50,7 +50,7 @@
     </bean>
     
     <bean id="mailService" class="com.netcracker.libra.util.mail.MailService">
-        <property name="mailSender" ref="mailSender"/>
+     <!-- <property name="mailSender" ref="mailSender"/>-->
         <property name="velocityEngine" ref="velocityEngine"/>
         <property name="servletContext" ref="servletcontext"/>
     </bean>    
