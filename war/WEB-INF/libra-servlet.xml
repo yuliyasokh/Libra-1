@@ -57,10 +57,10 @@
      <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
         <property name="resourceLoaderPath" value="WEB-INF/templates/" />        
     </bean>
-    
-     <bean id="PDFCreator" class="com.netcracker.libra.util.pdf.PDFCreator">
+   	<!--  
+     <bean id="PDFCreator" class="com.netcracker.libra.util.pdf.PDFCreatorTest">
          <property name="servletContext" ref="servletcontext"/>
      </bean>
-    
+    -->
     
 </beans>

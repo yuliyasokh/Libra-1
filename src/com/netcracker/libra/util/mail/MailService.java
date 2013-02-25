@@ -44,11 +44,11 @@ public class MailService implements IMailService {
         this.velocityEngine = velocityEngine;
     }
 
-    public  JavaMailSender getmailSender() {
+    public  JavaMailSender getMailSender() {
         return mailSender;
     }
 
-    public  void setmailSender(JavaMailSender mailSender) {
+    public  void setMailSender(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
     
