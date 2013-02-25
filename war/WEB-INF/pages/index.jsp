@@ -26,7 +26,11 @@
         <a href="admin/employees.html">Admin</a>
         <a href="sendmail.html">SendMail</a>
         <a href="showInterviewDate.html">Записаться на собеседование</a>
-        <a href="hr/showStudentByEducation.html">Поиск2</a>
-
+        <a href="hr/showStudentByEducation.html">Поиск2</a> 
+        <br>
+        <a href="hr/showUniversities.html">Управление универами</a>
+        <a href="hr/showFaculties.html">Управление факультетами</a>
+        <a href="hr/showDepartments.html">Управление кафедрами</a>
+        <br>
 </body>
 </html>
