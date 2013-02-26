@@ -1,6 +1,6 @@
 <%-- 
-    Document   : interviewDate
-    Created on : 05.02.2013, 0:34:43
+    Document   : interviewDateAdd
+    Created on : 26.02.2013, 14:12:36
     Author     : Yuliya
 --%>
 
@@ -11,13 +11,23 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Управление датами интервью</title>
+        <title>Управление датами интервью - добавление</title>
     </head>
     <body>
         <center>
-            <a href="interviewDateAdd.html">Добавить новую дату интервью</a>
-            <br>
-            <br>
+            <form method="POST" action="interviewDateAdd.html">
+        <h2 align="center">Добавить новую дату</h2>
+        Введите дату (20/05/2013): <input type="text" name="begin"><br>
+        Введите время начала и конца: <input type="text" name="timeStart" style="width: 50px" > - <input type="text" name="end"style="width: 50px" ><br>   
+        Введите продолжительность: <input type="text" name="duration" ><br>   
+        <br> 
+        Выберите интервьюеров:<br> 
+        <c:forEach items="${Inters}" var="i">
+            <input type="checkbox" name="checkInterviewers[]" value=<c:out value="${i.userid}"/> unchecked> <c:out value="${i.inters}"/> <br>
+        </c:forEach>
+            <br> 
+        <input type="submit" name="submitDate" value="Добавить">
+    </form>
          <h2 align="center">Информация о рассписании собеседований</h2><br> 
           <form method="GET" action="delInterviewDate.html">
         <table border="1" cellspacing="0" cellpadding="4">
@@ -49,8 +59,7 @@
       </td>
   </tr>
     </c:forEach>
-    </table>
-          </form>
-         </center>
+    </table></form>
+      </center>
     </body>
 </html>

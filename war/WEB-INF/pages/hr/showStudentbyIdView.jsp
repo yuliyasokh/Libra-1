@@ -11,29 +11,30 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Найти студента по № анкеты</title>
+        <title>Поиск студентов</title>
     </head>
     <body>
       
         <h1>Список студентов</h1>
+        <h3>${msg}</h3>
        <TABLE>
         Фильтр  
         <form method="post" action="showStudentbyIdView.html">
         <select name="filter">
-        <option value="1">Показать всех</option>
-        <option value="2">Номер анкеты</option>
-        <option value="3">Имя</option>
-        <option value="4">Фамилия</option>
-        <option value="5">Email</option>
-
+        <option value="1" ${filterInt == '1' ? 'selected' : ''}>Показать всех</option>
+        <option value="2" ${filterInt == '2' ? 'selected' : ''}>Номер анкеты</option>
+        <option value="3" ${filterInt == '3' ? 'selected' : ''}>Имя</option>
+        <option value="4" ${filterInt == '4' ? 'selected' : ''}>Фамилия</option>
+        <option value="5" ${filterInt == '5' ? 'selected' : ''}>Email</option>
 </select>
-    <input type="text" name="textBox">
+    <input type="text" name="textBox" value="${textBox}">
     <input type="submit" value="Поиск">
 </form>
             <th>№ анкеты</th>
             <th>Имя</th>
             <th>Фамилия</th>
             <th>Email</th>
+            <th></th>
             <th></th>
             <th></th>
             
@@ -43,12 +44,14 @@
       <td><c:out value="${s.name}"/></td>
       <td><c:out value="${s.lastName}"/></td>
       <td><c:out value="${s.email}"/></td>
-      <td> <input type="submit" value="Анкета"><td>
-      <td> <input type="submit" value="Интервью"><td>
+      <td> <input type="button" value="Анкета"><td>
+      <td> <input type="button" value="Интервью"><td>
+      <td> <input type="button" value="Удалить"><td>
 
   </tr>
     </c:forEach>
     </TABLE>
+    <h3>${msg1}</h3>
                       
     </body>
 </html>

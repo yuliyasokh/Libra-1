@@ -2,7 +2,6 @@
 package com.netcracker.libra.controller;
 
 import com.netcracker.libra.dao.HrJDBC;
-import com.netcracker.libra.dao.UniversityJDBC;
 import com.netcracker.libra.model.Department;
 import com.netcracker.libra.model.Faculty;
 import com.netcracker.libra.model.Student;
@@ -73,9 +72,10 @@ public class HRController {
     @RequestParam("fact") int facultyId,
     @RequestParam("dept") int departmentId){
         ModelAndView mav = new ModelAndView();
+       
         List<University> universities= hr.getAllUniversity();
         mav.addObject("univers",universities);
-        List<Student> std;
+        List<Student> std=null;
         if (facultyId==0){
            std = hr.getStudentByUniversity(universityId);
         }
@@ -89,6 +89,7 @@ public class HRController {
         mav.addObject("Model",std);
         mav.setViewName("hr/showStudentByEducation");
         return mav;
+       
         }   
     
     /**
@@ -99,47 +100,41 @@ public class HRController {
      */
       @RequestMapping(value="/hr/showStudentbyIdView", method= RequestMethod.POST)
       public ModelAndView showStudentByIdView(@RequestParam("textBox") String textBox, @RequestParam("filter") int filter){
-           if (filter==1){
-                List<Student> std=hr.listStudents();
-                return new ModelAndView("hr/showStudentbyIdView","Model",std);
-            }
-           if (filter==2){
-                try{
+          ModelAndView mav = new ModelAndView();
+          mav.setViewName("hr/showStudentbyIdView");
+          mav.addObject("textBox", textBox);
+          mav.addObject("filterInt", filter);
+          if (textBox.equals("") && (filter!=1)){
+              mav.addObject("msg", "Input data for search!");
+              return mav;
+          }
+          List<Student> std=null;
+          try{
+            if (filter==1){
+                    std=hr.listStudents();              
+                    }
+            if (filter==2){
                     int i=Integer.parseInt(textBox);
-                    List<Student> std =hr.getStudent(i);
-                    return new ModelAndView("hr/showStudentbyIdView","Model",std);
-                }
-                catch(Exception ex){
-              
-             }
-             }
+                    std=hr.getStudent(i);
+                    } 
             if (filter==3){
-                try{
-                    List<Student> std =hr.getStudentsByFirstName(textBox);
-                    return new ModelAndView("hr/showStudentbyIdView","Model",std);
-                }
-                catch(Exception ex){  
-                }
-            }
+                   std =hr.getStudentsByFirstName(textBox);
+                    }
             if (filter==4){
-                try{
-                    List<Student> std =hr.getStudentsByLastName(textBox);
-                    return new ModelAndView("hr/showStudentbyIdView","Model",std);
-                }
-                catch(Exception ex){
-              
-                }
-                }
+                   std =hr.getStudentsByLastName(textBox);
+                    }
             if (filter==5){
-                try{
-                    List<Student> std =hr.getStudentsByEmail(textBox);
-                    return new ModelAndView("hr/showStudentbyIdView","Model",std);
-                }
-            catch(Exception ex){  
-                }
-            }
-      return null;
-        
+                   std =hr.getStudentsByEmail(textBox);
+                    }
+            mav.addObject("Model",std);
+          }
+          catch(Exception ex){
+            mav.addObject("msg","Input data is not in correct format! Try again!");   
+          }
+          if (std.isEmpty()){
+              mav.addObject("msg1", "Студенты не найдены.");
+          }
+          return mav;
     }
      
     
