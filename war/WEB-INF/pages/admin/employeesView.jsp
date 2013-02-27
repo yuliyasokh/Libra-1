@@ -36,12 +36,12 @@
         <table border="1" cellspacing="0" cellpadding="4">
         <caption>Список служащих</caption>
         <tr>
-            <th>Должность</th>
-            <th>ID</th>
-            <th>Имя</th>
-            <th>Фамилия</th>
-            <th>Email</th>
-            <th>Пароль</th>
+            <th><a href="sortEmployees.html?orderBy=ROLE">Должность</a></th>
+            <th><a href="sortEmployees.html?orderBy=ID">ID</a></th>
+            <th><a href="sortEmployees.html?orderBy=FIRST_NAME">Имя</a></th>
+            <th><a href="sortEmployees.html?orderBy=LAST_NAME">Фамилия</a></th>
+            <th><a href="sortEmployees.html?orderBy=EMAIL">Email</a></th>
+            <th><a href="sortEmployees.html?orderBy=PASSWORD">Пароль</a></th>
             <th>Редактировать</th>
             <th>Удалить</th>
         </tr>
