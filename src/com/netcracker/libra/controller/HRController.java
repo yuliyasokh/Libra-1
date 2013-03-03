@@ -4,8 +4,14 @@ package com.netcracker.libra.controller;
 import com.netcracker.libra.dao.HrJDBC;
 import com.netcracker.libra.model.Department;
 import com.netcracker.libra.model.Faculty;
+import com.netcracker.libra.model.Interview;
+import com.netcracker.libra.model.InterviewDate;
+import com.netcracker.libra.model.InterviewResults;
 import com.netcracker.libra.model.Student;
 import com.netcracker.libra.model.University;
+import com.netcracker.libra.model.User;
+import com.netcracker.libra.model.UserResult;
+import com.netcracker.libra.service.TimeService;
 import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -136,6 +142,124 @@ public class HRController {
           }
           return mav;
     }
+      
+      
+      
+      /**
+       * @author Alexander Lebed
+       * @param appId
+       * @param firstName
+       * @param lastName
+       * @return 
+       */
+      
+      
+      @RequestMapping("hr/showStudentInterview")
+      public ModelAndView showStudentInterview(
+                            @RequestParam("appId") int appId,
+                            @RequestParam("firstName") String firstName,
+                            @RequestParam("lastName") String lastName) {
+
+          ModelAndView mv = new ModelAndView();
+          HrJDBC hrjdbc = new HrJDBC();
+          
+          Interview interview = hrjdbc.getInterview(appId);
+          System.out.println("- got the inteview with");
+          InterviewDate interviewDate = hrjdbc.getInterviewDate(interview.getInterviewDateId());
+          System.out.println("- got the inteviewDate");
+          List <InterviewResults> interviewResults = hrjdbc.getInterviewResults(interview.getInterviewId());
+          System.out.println("- got the List of inteviewResults");
+          
+          
+          
+          //CASE 1
+          if(!sheduledInterview(interview)) {
+              System.out.println("- case 1");
+              mv.setViewName("hr/messageView");
+              mv.addObject("message", "Студент "+ firstName +" "+ lastName +" не записался на интервью");
+          }
+          
+          //CASE 2
+          else if(actual(interviewDate.getDateFinish())) {
+              System.out.println("- case 2 (дата будущего интервью, время и интервьюеры)");
+              //дата интервью, время и интервьюеры;
+              List <User> employees = hrjdbc.getInterviewersFromInterviewerList(interview.getInterviewDateId());              
+              TimeService timeService = new TimeService();
+              
+              System.out.println("- got the List of inteviewers");
+
+              mv.setViewName("hr/showStudentInterviewInfo");
+              mv.addObject("appId", interview.getAppId());
+              mv.addObject("employees", employees);
+              mv.addObject("interviewDate", interviewDate);
+              mv.addObject("timeService", timeService);
+          }
+          
+          //CASE 3
+          else if(wasInterviewed(interviewResults)) {
+              System.out.println("- case 3 (результаты интервью)");
+              //результаты интервью, интервьюеры и дата пройденного интервью;
+              List <UserResult> userResults = hrjdbc.getUserResults(interview.getInterviewId());
+              TimeService timeService = new TimeService();
+              System.out.println("- first interviewer's name " + userResults.get(0).getFirstName());
+              mv.setViewName("hr/showStudentInterviewResults");
+              mv.addObject("appId", interview.getAppId());
+              mv.addObject("userResults", userResults);
+              mv.addObject("interviewDate", interviewDate);
+              mv.addObject("timeService", timeService);
+          }
+          
+          //CASE 4
+          else {
+              System.out.println("- case 4");
+              mv.setViewName("hr/messageView");
+              mv.addObject("message", "Студент "+ firstName +" "+ lastName +" не явился на интервью");
+          }
+          
+          return mv;
+      }
+      
+      
+      
+      /**
+       * @return true если интервью было назначено
+       */
+      public boolean sheduledInterview(Interview interview) {
+          System.out.println("- sheduledInterview method started");
+          //return interview != null ? true : false;
+          if(interview != null) {
+              System.out.println("- interview is not null - true");
+              return true;
+          }
+          else {
+              System.out.println("- interview is null - false");
+              return false;
+          }
+      }
+      
+      /**
+       * @return true если интервью состоялось
+       */
+      public boolean wasInterviewed(List <InterviewResults> interviewResults) {
+          System.out.println("- wasInterviewed method started");
+          return interviewResults.isEmpty() ? false : true;
+      }
+      
+      /**
+       * @return true если собеседование БУДЕТ; false - если БЫЛО
+       */
+      public boolean actualInterview(InterviewDate interviewDate) {
+          System.out.println("- actualInterview method started");
+          return interviewDate != null ? true : false;
+      }
+      
+      public boolean actual(java.util.Date interviewDate) {
+        java.util.Date currentDate = new java.util.Date();
+        return (currentDate.before(interviewDate)) ? true : false;
+      }
+      
+      
+
      
     
 

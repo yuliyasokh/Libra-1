@@ -2,12 +2,15 @@ package com.netcracker.libra.dao;
 
 import com.netcracker.libra.model.Department;
 import com.netcracker.libra.model.Faculty;
+import com.netcracker.libra.model.Interview;
+import com.netcracker.libra.model.InterviewDate;
+import com.netcracker.libra.model.InterviewResults;
 import com.netcracker.libra.model.Student;
 import com.netcracker.libra.model.University;
+import com.netcracker.libra.model.User;
+import com.netcracker.libra.model.UserResult;
 import java.util.List;
-import java.util.Map;
 import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -275,5 +278,58 @@ public class HrJDBC implements HrDAO {
     }
     
     
+    
+    /**
+     * Возвращает интервью, которое было назначено по ID анкеты
+     * @author Alexander Lebed
+     */
+    public Interview getInterview(Integer appId) {
+        String SQL = "SELECT * FROM Interview WHERE appId = ?";
+        Interview interview = jdbcTemplateObject.queryForObject(SQL, new Object[] {appId}, new InterviewRowMapper());
+        return interview;
+    }
+    
+    public InterviewDate getInterviewDate(Integer interviewDateId) {
+        String SQL = "SELECT * FROM InterviewDate WHERE interviewDateId = ?";
+        InterviewDate interviewDate = jdbcTemplateObject.queryForObject(SQL, new Object[] {interviewDateId}, new InterviewDateRowMapper());
+        return interviewDate;
+    }
+    
+    public List <User> getInterviewersFromInterviewerList(Integer interviewDateId) {
+        String SQL = "SELECT * FROM Users WHERE userId IN (SELECT userId FROM InterviewerList WHERE interviewDateId = ?)";
+        List <User> users = jdbcTemplateObject.query(SQL, new Object[] {interviewDateId}, new UserRowMapper());
+        return users;
+    }
+    
+    public List <User> getInterviewersFromInterviewResults(Integer interviewId) {
+        String SQL = "SELECT * FROM Users WHERE userId IN (SELECT userId FROM InterviewResults WHERE interviewId = ?)";
+        List <User> users = jdbcTemplateObject.query(SQL, new Object[] {interviewId}, new UserRowMapper());
+        return users;
+    }
+    
+    public List <InterviewResults> getInterviewResults(Integer interviewId) {
+        String SQL = "SELECT * FROM InterviewResults WHERE interviewId = ?";
+        List <InterviewResults> interviewResults = jdbcTemplateObject.query(SQL, new Object[] {interviewId}, new InterviewResultsRowMapper());
+        return interviewResults;
+    }
+    
+    public List <UserResult> getUserResults(Integer interviewId) {
+        String SQL = "SELECT u.userId, u.firstName, u.lastName, u.roleId, r.mark, r.comments FROM Users u, InterviewResults r WHERE u.UserId = r.UserId AND r.interviewId = ?";
+        List <UserResult> userResults = jdbcTemplateObject.query(SQL, new Object[] {interviewId}, new UserResultRowMapper());
+        return userResults;
+    }
+    
+    /**
+     * @param interviewId - ID интерьвью
+     * @param dateFinish - дата окончания интервью
+     * @return true если интервью БУДЕТ, false - БЫЛО
+     */
+//    public boolean getActualInterview(Integer interviewId, Date dateFinish) {
+//        String SQL = "SELECT 1 FROM InterviewDate id, Interview i "+
+//                     "WHERE SYSDATE < ? AND id.InterviewDateId = i.InterviewDateId AND i.InterviewId = ?";
+//        Object[] params = new Object[] {dateFinish, interviewId};
+//        int var = jdbcTemplateObject.queryForInt(SQL, params);
+//        return (var==1) ? true : false;
+//    }
 
 }

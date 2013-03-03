@@ -40,14 +40,16 @@
             
     <c:forEach items="${Model}" var="s">
     <tr>
-      <td><c:out value="${s.appId}"/></td>
-      <td><c:out value="${s.name}"/></td>
-      <td><c:out value="${s.lastName}"/></td>
-      <td><c:out value="${s.email}"/></td>
-      <td> <input type="button" value="Анкета"><td>
-      <td> <input type="button" value="Интервью"><td>
-      <td> <input type="button" value="Удалить"><td>
-
+        <form action="showStudentInterview.html" method="POST">
+      <td><input type="hidden" name="appId" value="<c:out value='${s.getAppId()}'/>"/>${s.getAppId()}</td>
+      <td><input type="hidden" name="firstName" value="<c:out value='${s.getName()}'/>"/>${s.getName()}</td>
+      <td><input type="hidden" name="lastName" value="<c:out value='${s.getLastName()}'/>"/>${s.getLastName()}</td>
+      <td><input type="hidden" name="email" value="<c:out value='${s.getEmail()}'/>"/>${s.getEmail()}</td>
+      <td> <input type="submit" value="Анкета"><td>
+          
+                <td> <input type="submit" value="Интервью"><td>
+          </form>
+      <td> <input type="submit" value="Удалить"><td>
   </tr>
     </c:forEach>
     </TABLE>
