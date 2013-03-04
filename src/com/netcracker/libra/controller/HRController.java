@@ -44,7 +44,12 @@ public class HRController {
     @RequestMapping("/hr/showStudentbyIdView")
     public ModelAndView showStudentbyId(){
         List<Student> std=hr.listStudents();
-        return new ModelAndView("hr/showStudentbyIdView","Model",std);
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("Model", std);
+        mav.addObject("direction","asc");
+        mav.addObject("orderBy","appId");
+        mav.setViewName("hr/showStudentbyIdView");
+        return mav;
       }
   
     /**
@@ -73,6 +78,7 @@ public class HRController {
     * @param departmentId
     * @return list os Students and list of University
     */
+   
     @RequestMapping(value="/hr/showStudentByEducation", method=RequestMethod.POST)
     public ModelAndView showStudentsByEd(@RequestParam("univ") int universityId,
     @RequestParam("fact") int facultyId,
@@ -105,10 +111,13 @@ public class HRController {
      * @return list of Students
      */
       @RequestMapping(value="/hr/showStudentbyIdView", method= RequestMethod.POST)
-      public ModelAndView showStudentByIdView(@RequestParam("textBox") String textBox, @RequestParam("filter") int filter){
+      public ModelAndView showStudentByIdView(@RequestParam("textBox") String textBox, 
+      @RequestParam("filter") int filter){
           ModelAndView mav = new ModelAndView();
           mav.setViewName("hr/showStudentbyIdView");
           mav.addObject("textBox", textBox);
+          mav.addObject("direction","asc");
+          mav.addObject("orderBy","appId");
           mav.addObject("filterInt", filter);
           if (textBox.equals("") && (filter!=1)){
               mav.addObject("msg", "Input data for search!");
@@ -132,17 +141,87 @@ public class HRController {
             if (filter==5){
                    std =hr.getStudentsByEmail(textBox);
                     }
+            if (filter==6){
+                std = hr.getStudentsByAllFields(textBox);
+            }
             mav.addObject("Model",std);
           }
           catch(Exception ex){
             mav.addObject("msg","Input data is not in correct format! Try again!");   
-          }
+         }
           if (std.isEmpty()){
               mav.addObject("msg1", "Студенты не найдены.");
           }
           return mav;
     }
       
+      @RequestMapping(value = "/hr/sortedBy", method = RequestMethod.GET)
+      public ModelAndView sortedby( 
+      org.springframework.web.context.request.WebRequest webRequest
+       ){
+          String orderBy = webRequest.getParameter("orderBy");
+          String direction = webRequest.getParameter("direction");
+          String textBox = webRequest.getParameter("textBox");
+          String filter = webRequest.getParameter("filter");
+          ModelAndView mav = new ModelAndView();
+          List<Student> std=null;
+          switch(filter){
+              case("2"): 
+                  std = hr.getOrderStudent("appId", textBox, orderBy);
+                            break;
+              case("3"): std = hr.getOrderStudent("firstName", textBox, orderBy);
+                            break;
+              case("4"): std = hr.getOrderStudent("lastName", textBox, orderBy);
+                            break;
+              case("5"): std = hr.getOrderStudent("email", textBox, orderBy);
+                            break;
+              case("6"): std = hr.getOrderStudent("allFields", textBox, orderBy);
+                            break;
+              default: std = hr.getOrderStudent("getAll", textBox, orderBy);   
+                            break;
+          } 
+          mav.addObject("textBox", textBox);
+          mav.addObject("filterInt", filter);
+          mav.addObject("Model", std);
+          mav.setViewName("hr/showStudentbyIdView");
+          return mav;
+      }
+      
+      @RequestMapping(value = "/hr/sortedByEducation", method = RequestMethod.GET)
+      public ModelAndView sortedbyEdu( 
+      org.springframework.web.context.request.WebRequest webRequest
+       ){
+          String orderBy = webRequest.getParameter("orderBy");
+          String direction = webRequest.getParameter("direction");
+          String universityId = webRequest.getParameter("universityId");
+          String facultyId = webRequest.getParameter("facultyId");
+          String departmentId = webRequest.getParameter("departmentId");
+          ModelAndView mav = new ModelAndView();
+          List<Student> std=null;
+          if (universityId.equals("")){
+              std = hr.getOrderStudent("getAll", "bla", orderBy);
+          }
+          else{ 
+          if ((!universityId.equals("0")) && (facultyId.equals("0"))){
+               std = hr.getOrderedStudentByEdu("universityId", universityId, orderBy);
+            } else {
+              if ((!facultyId.equals("0")) && (departmentId.equals("0"))){
+                  std = hr.getOrderStudent("facultyId", facultyId, orderBy);
+              }
+              else {
+                  if (!departmentId.equals("0")){
+                      std = hr.getOrderStudent("departmentId", departmentId, orderBy);
+                  }
+                  else {
+                      std = hr.getOrderStudent("getAll", "bla", orderBy);
+                  }
+              }        
+          }
+          }
+          mav.addObject("Model", std);
+          mav.setViewName("hr/showStudentByEducation");
+          return mav;
+      }
       
       
       /**

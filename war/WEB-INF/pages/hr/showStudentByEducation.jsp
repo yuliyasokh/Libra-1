@@ -35,6 +35,7 @@ function getFact(){
     }  
 </script>
 </head>
+<center>
     <body>
        <h2 align="center">Список студентов</h2>   
         <form method="post" action="showStudentByEducation.html">
@@ -60,11 +61,28 @@ function getFact(){
        <br>       
        <input type="submit" value="Поиск">
         </form>
-          <table>
-            <th>№ анкеты</th>
-            <th>Имя</th>
-            <th>Фамилия</th>
-            <th>Email</th>
+          <form method="GET">
+          <table border ="1"> 
+            <th>
+                <a href="sortedByEducation.html?orderBy=appId&direction=asc&universityId=<c:out value='${univ}'/>&facultyId=<c:out value='${fact}'/>&departmentId=<c:out value='${dept}'/>">
+                    № анкеты
+                    </a>
+            </th>
+            <th>
+              <a href="sortedByEducation.html?orderBy=firstName&direction=asc&universityId=<c:out value='${universityId}'/>&facultyId=<c:out value='${facultyId}'/>&departmentId=<c:out value='${departmentId}'/>">
+                Имя
+                </a>
+            </th>
+            <th>
+              <a href="sortedByEducation.html?orderBy=lastName&direction=asc&universityId=<c:out value='${universityId}'/>&facultyId=<c:out value='${facultyId}'/>&departmentId=<c:out value='${departmentId}'/>">
+                Фамилия
+                </a>
+            </th>
+            <th>
+              <a href="sortedByEducation.html?orderBy=email&direction=asc&universityId=<c:out value='${universityId}'/>&facultyId=<c:out value='${facultyId}'/>&departmentId=<c:out value='${departmentId}'/>">  
+                Email
+                </a>
+            </th>
             <th></th>
             <th></th>
             <th></th>
@@ -81,6 +99,6 @@ function getFact(){
   </tr>
     </c:forEach>
     </table>
-       
+       </center>
     </body>
 </html>

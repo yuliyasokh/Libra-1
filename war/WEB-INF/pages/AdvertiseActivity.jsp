@@ -29,7 +29,7 @@
             var data = [${data}];
             var plot1 = jQuery.jqplot ('chartdiv', [data],
             {
-                title:'Єффективность рекламы',
+                title:'Эффективность рекламы',
                 seriesDefaults: {
                     renderer: jQuery.jqplot.PieRenderer,
                     rendererOptions: {
