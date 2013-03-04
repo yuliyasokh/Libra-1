@@ -54,19 +54,27 @@ public class TypeJDBC implements TypeDAO
         List <Type> types = jdbcTemplateObject.query(SQL, new TypeRowMapper());
         return types;
     }
-    
-    public int add(String name)
+    public List<Type> getAllInfo() 
+    {
+          String SQL ="select TypeId, Name, "+
+                  "Decode(Name, 'string','Максимальная длина строки '||Description||' символов','integer',regexp_replace(Description,'(\\d+)(,)(\\d+)','Диапазон: от \\1 до \\3'),'Возможны значения :'||Description)  as Description "+
+                  "from Types order by typeId";
+                  
+                  List <Type> types = jdbcTemplateObject.query(SQL, new TypeRowMapper());
+        return types;
+    }
+    public int add(String name,String description)
     {
         int i=getCurVal();
-        String SQL ="INSERT INTO Types VALUES(?,?)";
-        jdbcTemplateObject.update(SQL,i,name);
+        String SQL ="INSERT INTO Types VALUES(?,?,?)";
+        jdbcTemplateObject.update(SQL,i,name,description);
         return i;
     }
     @Override
-    public void update(int id, String name) 
+    public void update(int id,String description) 
     {
-        String SQL = "update Types set name = ? where TypeId = ?";
-       jdbcTemplateObject.update(SQL, name, id);
+        String SQL = "update Types set Description=?  where TypeId = ?";
+       jdbcTemplateObject.update(SQL, description, id);
     }
 
     @Override
@@ -76,16 +84,28 @@ public class TypeJDBC implements TypeDAO
        jdbcTemplateObject.update(SQL, id);
     }
     
-    public List<InfoForDelete> getInfoForDelete(int type)
+    public int getOtherType()
+    {
+        String SQL = "select typeId from types where (description) =("+
+                        "select max(description) from types where name='string' "+
+                        ")";
+       return jdbcTemplateObject.queryForInt(SQL);
+    }
+    public List<InfoForDelete> getInfoForDelete(int[] type)
     {
         String sql = "select distinct u.userId, u.firstname, u. lastname, af.patronymic, af.appId "+
                       "from columnFields cf join columns c on cf.columnId=c.columnId "+
 					"join appForm  af on af.appId=cf.appId "+
 					"join users u on u.userId=af.userId "+
-                                        "join types on types.TypeId=c.TypeId "+
-                                        "where types.TypeId=? "+
-                                        " order by af.appId";
-        List<InfoForDelete> listOfInfo=jdbcTemplateObject.query(sql, new InfoForDeleteRowMapper(),type);
+                                        "join types on types.TypeId=c.TypeId where ";
+                                        
+                for(int i=0;i<type.length-1;i++)
+                {
+                                       sql+= " types.TypeId="+type[i]+" or";
+                }
+                 sql+= " types.TypeId="+type[type.length-1];
+                 sql+= " order by af.appId";
+        List<InfoForDelete> listOfInfo=jdbcTemplateObject.query(sql, new InfoForDeleteRowMapper());
         return listOfInfo;
     }
 }
