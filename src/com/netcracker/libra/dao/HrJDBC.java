@@ -302,28 +302,28 @@ public class HrJDBC implements HrDAO {
         }
         if (param.equals("firstName")){
             String query="select a.appid, u.firstname,u.lastname,u.email from users u "
-                            + "join appform a on u.userid=a.userid and u.firstname like '%"+value+"%' order by ?";
-            List<Student> std = jdbcTemplateObject.query(query, new ShortStudentRowMapper(), orderBy);
+                            + "join appform a on u.userid=a.userid and u.firstname like '%"+value+"%' order by "+orderBy;
+            List<Student> std = jdbcTemplateObject.query(query, new ShortStudentRowMapper());
             return std;
         }
         if (param.equals("lastName")){
             String query="select a.appid, u.firstname,u.lastname,u.email from users u "
-                            + "join appform a on u.userid=a.userid and u.lastname like '%"+value+"%' order by ?";
-            List<Student> std = jdbcTemplateObject.query(query, new ShortStudentRowMapper(), orderBy);
+                            + "join appform a on u.userid=a.userid and u.lastname like '%"+value+"%' order by "+orderBy;
+            List<Student> std = jdbcTemplateObject.query(query, new ShortStudentRowMapper());
             return std;
         }
         if (param.equals("email")){
             String query="select a.appid, u.firstname,u.lastname,u.email from users u "
-                            + "join appform a on u.userid=a.userid and u.email like '%"+value+"%' order by ?";
-            List<Student> std = jdbcTemplateObject.query(query, new ShortStudentRowMapper(), orderBy);
+                            + "join appform a on u.userid=a.userid and u.email like '%"+value+"%' order by "+orderBy;
+            List<Student> std = jdbcTemplateObject.query(query, new ShortStudentRowMapper());
             return std;
         }
         if (param.equals("allFields")){
             String query = "select a.appid, u.firstname,u.lastname,u.email from users u "
                         + "join appform a on u.userid=a.userid and "
                              + "((a.appid like '"+value+"') or (u.firstname like '%"+value+"%') "
-                                + "or (u.lastname like '%"+value+"%') or (u.email like '%"+value+"%')) order by ?";
-            List<Student> std = jdbcTemplateObject.query(query, new ShortStudentRowMapper(), orderBy);
+                                + "or (u.lastname like '%"+value+"%') or (u.email like '%"+value+"%')) order by "+orderBy;
+            List<Student> std = jdbcTemplateObject.query(query, new ShortStudentRowMapper());
             return std;
         }
         return null;
@@ -333,8 +333,8 @@ public class HrJDBC implements HrDAO {
         String query=null;
         if (param.equals("getAll")){
             query="select a.appid, u.firstname,u.lastname,u.email from users u "+ 
-                    "join appform a on u.userid=a.userid order by ?";
-            List <Student> students = jdbcTemplateObject.query(query, new ShortStudentRowMapper(), orderBy);
+                    "join appform a on u.userid=a.userid order by "+orderBy;
+            List <Student> students = jdbcTemplateObject.query(query, new ShortStudentRowMapper());
             return students;
         }
         if (param.equals("universityId")){
@@ -343,7 +343,7 @@ public class HrJDBC implements HrDAO {
                         "join department d on d.departmentId=a.DepartmentId "+ 
                             "join faculty f on f.facultyid=d.facultyId "+
 				"join university un on un.universityId=f.universityId and un.universityId=?"
-                                    + " order by ?";
+                                    + " order by "+orderBy;
         }
         if (param.equals("facultyId")){
             query="select a.appid, u.firstname,u.lastname,u.email, d.departmentName from users u "+
@@ -351,13 +351,13 @@ public class HrJDBC implements HrDAO {
                         "join department d on d.departmentId=a.DepartmentId "+ 
                             "join faculty f on f.facultyid=d.facultyId "+
 				"join university un on un.universityId=f.universityId and f.facultyid=?"
-                                    + " order by ?";
+                                    + " order by "+orderBy;
         }
         if (param.equals("departmentId")){
             query="select a.appid, u.firstname,u.lastname,u.email from users u "+ 
-                    "join appform a on u.userid=a.userid and a.departmentId=? order by ?";
+                    "join appform a on u.userid=a.userid and a.departmentId=? order by "+orderBy;
         }
-        List <Student> students = jdbcTemplateObject.query(query, new ShortStudentRowMapper(), value, orderBy);
+        List <Student> students = jdbcTemplateObject.query(query, new ShortStudentRowMapper(), value);
         return students;
     }
     
