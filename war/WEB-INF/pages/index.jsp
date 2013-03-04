@@ -32,5 +32,10 @@
         <a href="hr/showFaculties.html">Управление факультетами</a>
         <a href="hr/showDepartments.html">Управление кафедрами</a>
         <br>
+        <a href="showStudentRecords.html">Отчет График записи студентов</a>
+        <a href="showRegReport.html">Отчет зарегистрировались/пришли</a>
+        <a href="showAdvertise.html">Отчет эффективности рекламы</a>
+        <a href="showStudentActivity.html">Отчет посещаемости собеседований</a>
+        <br>
 </body>
 </html>
