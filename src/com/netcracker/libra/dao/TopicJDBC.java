@@ -4,6 +4,7 @@
  */
 package com.netcracker.libra.dao;
 
+import com.netcracker.libra.model.AppFormTopics;
 import com.netcracker.libra.model.Columns;
 import com.netcracker.libra.model.InfoForDelete;
 import javax.sql.DataSource;
@@ -60,7 +61,7 @@ public class TopicJDBC implements TopicDAO
         int i=getCurVal();
         if(parentTopic!=0)
         {
-        SQL ="INSERT INTO Topic VALUES(?,?,?,?, "+parentTopic+",?)";
+            SQL ="INSERT INTO Topic VALUES(?,?,?,?, "+parentTopic+",?)";
         }
         else
         {
@@ -80,8 +81,18 @@ public class TopicJDBC implements TopicDAO
     @Override
     public void updateTopic(int id, String name, String comments, int templateId, int parentTopic, int require) 
     {
-        String SQL = "update Topic set name =?, comments=?, templateid=?, parentTopic=?, requireOther =? where TopicId =?";
-       jdbcTopicObject.update(SQL,name,comments,templateId,parentTopic,require,id);
+        String SQL;
+        if(parentTopic==0)
+        {
+            SQL = "update Topic set name =?, comments=?, templateid=?, parentTopic=NULL, requireOther =? where TopicId =?";
+           jdbcTopicObject.update(SQL,name,comments,templateId,require,id);
+        }
+        else
+        {
+            SQL = "update Topic set name =?, comments=?, templateid=?, parentTopic=?, requireOther =? where TopicId =?";        
+            jdbcTopicObject.update(SQL,name,comments,templateId,parentTopic,require,id);
+        }
+        
     }
     
     public int getTemplateForTopic(int id)
@@ -100,17 +111,33 @@ public class TopicJDBC implements TopicDAO
         String sql = "select Count(*) from topic where TopicId=?";
         return jdbcTopicObject.queryForInt(sql,id);
     }
-    public List<InfoForDelete> getInfoForDelete(int topicId)
+    public List<InfoForDelete> getInfoForDelete(int[] topics)
     {
         String sql = "select distinct u.userId, u.firstname, u. lastname, af.patronymic, af.appId "+
                       "from topic top join columns c on c.topicId=top.topicId "+
 					"join columnFields cf on cf.columnId=c.columnId "+
 					"join appForm  af on af.appId=cf.appId "+
 					"join users u on u.userId=af.userId "+
-                                        "where top.topicId=?"+
-                                        " order by af.appId";
-        List<InfoForDelete> listOfInfo=jdbcTopicObject.query(sql, new InfoForDeleteRowMapper(),topicId);
+                                        "where";
+         for(int i=0;i<topics.length-1;i++)
+                {
+                                       sql+= " top.topicId="+topics[i]+" or";
+                }
+                 sql+= " top.topicId="+topics[topics.length-1];
+                                       sql+= " order by af.appId";
+        List<InfoForDelete> listOfInfo=jdbcTopicObject.query(sql, new InfoForDeleteRowMapper());
         return listOfInfo;
+    }
+    
+    public List<AppFormTopics> getAppFormTopics(int id)
+    {
+        String SQL="select top.requireOther, top.topicId, top.name,top.parentTopic,level "+
+                    "from topic top "+
+                    "where  top.templateId=? "+
+                    "START WITH  top.parentTopic is null "+
+                    "CONNECT BY  prior  top.topicId =  top.parentTopic ";
+        List<AppFormTopics> topicList=jdbcTopicObject.query(SQL, new AppFormTopicRowMapper(),id);
+        return topicList;
     }
     
     //Added 02.02.2013

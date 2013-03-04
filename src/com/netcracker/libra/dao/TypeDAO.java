@@ -16,8 +16,8 @@ public interface TypeDAO
 {
     public void setDataSource(DataSource dataSource);
     public Type getType(int id);
-    public int add(String name);
+    public int add(String name,String descroption);
     public List<Type> getAll();
-    public void update(int id,String name);
+    public void update(int id,String description);
     public void delete(int id);
 }

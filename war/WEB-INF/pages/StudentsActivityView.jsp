@@ -1,9 +1,9 @@
 <%-- 
-    Document   : AdvertiseActivity
-    Created on : 19.02.2013, 23:42:32
+    Document   : StudentsActivityView
+    Created on : 27.02.2013, 21:58:03
     Author     : MorrDeck
 --%>
-    
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -18,22 +18,21 @@
         <script type="text/javascript" src="../src/plugins/jqplot.categoryAxisRenderer.min.js"></script>
         <script type="text/javascript" src="../src/plugins/jqplot.pointLabels.min.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <title>AdvertiseActivity</title>
+        <title>Students Activity</title>
     </head>
     <body>
-
-        <h1 align="center">Advertise Activity</h1>
-        <br>
+    <center><h1>Students Activity</h1></center>
+    <br>
     <center> <div id="chartdiv" style="height:500px;width:500px; alignment-adjust: middle " ></div></center>
-    <script language="javascript" type="text/javascript">
+        <script language="javascript" type="text/javascript">
             var data = [${data}];
             var plot1 = jQuery.jqplot ('chartdiv', [data],
             {
-                title:'Єффективность рекламы',
+                title:'Отчет посещаемости собеседований',
                 seriesDefaults: {
                     renderer: jQuery.jqplot.PieRenderer,
                     rendererOptions: {
-                        seriesColors: [ "#3b00ff", "#ff00ff", "#00ff7f", "#7fffd4"],
+                        seriesColors: [ "red", "blue"],
                         showDataLabels: true
                     }
                 },
@@ -41,6 +40,6 @@
             }
         );
             
-    </script>
-</body>
+        </script>
+    </body>
 </html>

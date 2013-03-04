@@ -4,6 +4,7 @@
  */
 package com.netcracker.libra.dao;
 
+import com.netcracker.libra.model.AppColumns;
 import com.netcracker.libra.model.Columns;
 import com.netcracker.libra.model.ColumnsShow;
 import com.netcracker.libra.model.InfoForDelete;
@@ -48,6 +49,17 @@ public class ColumnsJDBC implements ColumnsDAO
         return columns;
     }
 
+    public List<AppColumns> getAllByTemplate(int templateId) 
+    {
+        String SQL = "select typ.Name typeName, c.ColumnId, c.topicId, c.name, c.typeId,c.Required "
+                + "from Columns c join topic t on t.topicId=c.topicId "
+                +" join types typ on typ.TypeId=c.TypeId"
+                + " where t.templateId=? "
+                + " and c.Required=1 "
+                + "order by c.ColumnId";
+        List <AppColumns> columns = jdbcColumnObject.query(SQL, new AppColumnsRowMapper(),templateId);
+        return columns;
+    }
     @Override
     public int add(int topicId, String name, int typeId, int required) 
     {
@@ -60,7 +72,9 @@ public class ColumnsJDBC implements ColumnsDAO
     @Override
     public List<ColumnsShow> getColumnsShow(int id)
     {
-        String SQL = "select c.ColumnId, c.topicId, c.Name, t.TypeId, c.Required, top.Name as TopicName, t.Name as TypeName from Columns c join Types t "+
+        String SQL = "select c.ColumnId, c.topicId, c.Name, "+
+                "Decode(t.Name, 'string','Максимальная длина строки '||t.Description||' символов','integer',regexp_replace(t.Description,'(\\d+)(,)(\\d+)','Диапазон: от \\1 до \\3'),'Возможны значения :'||t.Description)  as TypeName ,"+
+                "t.TypeId, c.Required, top.Name as TopicName from Columns c join Types t "+
                 "on t.TypeId=c.TypeId join Topic top on top.TopicId=c.TopicId where top.TopicId=?  order by ColumnId ";
         List<ColumnsShow> columnsShow = jdbcColumnObject.query(SQL, new ColumnsShowRowMapper(),id);
         return columnsShow;
@@ -82,17 +96,36 @@ public class ColumnsJDBC implements ColumnsDAO
         String sql = "select Count(*) from Columns where columnId=?";
         return jdbcColumnObject.queryForInt(sql,id);
     }
-     public List<InfoForDelete> getInfoForDelete(int columnId)
+     public List<InfoForDelete> getInfoForDelete(int[] columns)
     {
         String sql = "select distinct u.userId, u.firstname, u. lastname, af.patronymic, af.appId "+
                       "from columnFields cf join columns c on cf.columnId=c.columnId "+
 					"join appForm  af on af.appId=cf.appId "+
 					"join users u on u.userId=af.userId "+
-                                        "where c.columnId=?"+
-                                        " order by af.appId";
-        List<InfoForDelete> listOfInfo=jdbcColumnObject.query(sql, new InfoForDeleteRowMapper(),columnId);
+                                        "where ";
+         for(int i=0;i<columns.length-1;i++)
+                {
+                                       sql+= " c.columnId="+columns[i]+" or";
+                }
+                 sql+= " c.columnId="+columns[columns.length-1];
+                                       sql+= " order by af.appId";
+        List<InfoForDelete> listOfInfo=jdbcColumnObject.query(sql, new InfoForDeleteRowMapper());
         return listOfInfo;
     }
-     
-
+     private int getCurColumnField()
+    {
+        String sqlSeq = "select ColumnFields_seq.NEXTVAL as Id from dual";
+        return jdbcColumnObject.queryForInt(sqlSeq);
+    }
+     public int  addColumnField(int columnId,int userId,String value,int status)
+     {
+         int i=getCurColumnField();
+         String sql="INSERT INTO ColumnFields VALUES (?,"+
+		"?,"+
+		"(select appId from appForm where UserId=?), "+
+		"?,"+
+		"?)";
+                    jdbcColumnObject.update(sql,i,columnId,userId,value,status);   
+         return 1;
+     }
 }

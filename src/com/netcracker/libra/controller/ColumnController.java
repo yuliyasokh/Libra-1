@@ -13,12 +13,14 @@ import com.netcracker.libra.dao.TopicJDBC;
 import com.netcracker.libra.dao.ColumnsJDBC;
 import com.netcracker.libra.model.Topic;
 import com.netcracker.libra.dao.TypeJDBC;
+import com.netcracker.libra.dao.UserPreferences;
 import com.netcracker.libra.model.Columns;
 import com.netcracker.libra.model.ColumnsShow;
 import com.netcracker.libra.model.InfoForDelete;
 import com.netcracker.libra.model.Type;
 import com.netcracker.libra.service.TemplateService;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 /**
  *
  * @author Sashenka
@@ -30,6 +32,8 @@ public class ColumnController
     ColumnsJDBC columnsJDBC=new ColumnsJDBC();
     TopicJDBC topicJDBC=new TopicJDBC();
     int topicId;
+    @Autowired
+    UserPreferences userPreferences;
     /**
      * Метод который передает данные на страничку для
      * формирования странички добавления колонки
@@ -38,22 +42,25 @@ public class ColumnController
     @RequestMapping(value="addColumn", method= RequestMethod.GET)    
     public ModelAndView processGet(@RequestParam("topic") int topic)
     {
-        
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("addColumnView");
-        List<Type> types=typeJDBC.getAll();
-        if(topicJDBC.existTopic(topic)==0)
+        if(userPreferences.accessLevel==1)
         {
-            mav.addObject("link","<a href='showColumns.html?topic="+topicId+"'>Посмотреть все типы</a>");
-            mav.addObject("message","Такой темы нету");
-            mav.addObject("title","Ошибка");
-            return mav; 
+            ModelAndView mav = new ModelAndView();
+            mav.setViewName("addColumnView");
+            List<Type> types=typeJDBC.getAllInfo();
+            if(topicJDBC.existTopic(topic)==0)
+            {
+                return message("<a href='showColumns.html?topic="+topicId+"'>Вернуться назад</a>", "Такой темы нету", "Ошибка"); 
+            }
+            mav.addObject("topic",topicJDBC.getTopic(topic));
+            topicId=topic;
+            mav.addObject("id",topic);
+            mav.addObject("types",types);
+            return mav;
+        } 
+        else
+        {
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
-        mav.addObject("topic",topicJDBC.getTopic(topic));
-        topicId=topic;
-        mav.addObject("id",topic);
-        mav.addObject("types",types);
-        return mav;
     }
     
     /**
@@ -64,46 +71,33 @@ public class ColumnController
     @RequestMapping(value="SubmitColumn", method= RequestMethod.POST)
     public ModelAndView processPost(@RequestParam("name") String name,
     @RequestParam("selType") int selType)
-    {    
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("messageView");
-        String message=TemplateService.checkColumn(name);
-         if(!message.equals(""))
-         {
-             mav.addObject("link","addColumn.html?topic="+topicId);
-             mav.addObject("message",message);
-             mav.addObject("title","Ошибка");
-             return mav;
-         }
-         if(typeJDBC.existType(selType)==0)
-         {
-            mav.addObject("link","<a href='addColumn.html?topic="+topicId+"'>Вернуться назад</a>");
-             mav.addObject("message","Нету такого типа");
-             mav.addObject("title","Ошибка");
-             return mav;   
-         }
-        Columns col=columnsJDBC.getColumn(columnsJDBC.add(topicId, name, selType, 1));
-        mav.addObject("link","<a href='showColumns.html?topic="+topicId+"'>Вернуться назад</a>");
-        mav.addObject("message","Колонка с именем "+col.getName()+" успешно добавлена");
-        mav.addObject("title","Успех!");
-        return mav;
+    {   
+        if(userPreferences.accessLevel==1)
+        {
+            ModelAndView mav = new ModelAndView();
+            mav.setViewName("messageView");
+            String message=TemplateService.checkColumn(name);
+             if(!message.equals(""))
+             {
+                 return message("<a href='addColumn.html?topic="+topicId+"'>Вернуться назад</a>", message, "Ошибка");
+             }
+             if(typeJDBC.existType(selType)==0)
+             {
+                 return message("<a href='addColumn.html?topic="+topicId+"'>Вернуться назад</a>", "Нету такого типа", "Ошибка");   
+             }
+            Columns col=columnsJDBC.getColumn(columnsJDBC.add(topicId, name, selType, 1));
+            return showGetTopics(topicId);
+         } 
+        else
+        {
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
+        }
     }
     
     /**
      * Метод передает данные о существубщих колонках
      * Вызывается при запросе по ссылке "showColumns.html"
      */
-   /* @RequestMapping("showColumns")
-    public ModelAndView showTopics()
-    {
-        ModelAndView mav = new ModelAndView();
-        List<ColumnsShow> columns=columnsJDBC.getColumnsShow(topicId);
-        mav.addObject("columns",columns);
-        mav.addObject("topics",topicJDBC.getAllTopics());
-        mav.setViewName("showColumnsView");       
-        return mav;
-    }
-    */
     @RequestMapping(value="showColumns", method= RequestMethod.GET)
     public ModelAndView showGetTopics(@RequestParam("topic") int topic)
     {
@@ -112,7 +106,9 @@ public class ColumnController
         List<ColumnsShow> columns=columnsJDBC.getColumnsShow(topicId);
         mav.addObject("columns",columns);
         mav.addObject("topic", topicJDBC.getTopic(topic));
-       // mav.addObject("topics",topicJDBC.getAllTopics());
+        
+        List<Type> types=typeJDBC.getAllInfo();
+        mav.addObject("types",types);
         mav.setViewName("showColumnsView");       
         return mav;
     }
@@ -127,15 +123,12 @@ public class ColumnController
         ModelAndView mav = new ModelAndView();
         if(columnsJDBC.existColumn(column)==0)
         {
-            mav.addObject("link","<a href='showColumns.html?topic="+topicId+"'>Посмотреть все типы</a>");
-            mav.addObject("message","Такой темы нету");
-            mav.addObject("title","Ошибка");
-            return mav; 
+            return message("<a href='showColumns.html?topic="+topicId+"'>Посмотреть все типы</a>", "Такой темы нету", "Ошибка"); 
         }
         Columns c=columnsJDBC.getColumn(column);
         Topic topic=topicJDBC.getTopic(c.getTopicId());
         mav.setViewName("showColumnView");
-        List<Type> types=typeJDBC.getAll();
+        List<Type> types=typeJDBC.getAllInfo();
         mav.addObject("types",types);
         mav.addObject("topic",topic);
         mav.addObject("column",c);
@@ -154,8 +147,7 @@ public class ColumnController
     public ModelAndView editPost(@RequestParam("name") String name,
     @RequestParam("selType") int selType,
             @RequestParam("topic") int topic,
-            @RequestParam("column") int column,
-            @RequestParam("require") int require)
+            @RequestParam("column") int column)
     {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("messageView");
@@ -170,24 +162,14 @@ public class ColumnController
          //update(int id, int topicId,String name, int typeId, int require) 
          if(typeJDBC.existType(selType)==0)
          {
-            mav.addObject("link","<a href='addColumn.html?topic="+topicId+"'>Вернуться назад</a>");
-             mav.addObject("message","Нету такого типа");
-             mav.addObject("title","Ошибка");
-             return mav;   
+             return message("<a href='addColumn.html?topic="+topicId+"'>Вернуться назад</a>", "Нету такого типа", "Ошибка");   
          }
          if(topicJDBC.existTopic(topic)==0)
          {
-            mav.addObject("link","<a href='addColumn.html?topic="+topicId+"'>Вернуться назад</a>");
-             mav.addObject("message","Нету такой темы");
-             mav.addObject("title","Ошибка");
-             return mav;   
+             return message("<a href='addColumn.html?topic="+topicId+"'>Вернуться назад</a>", "Нету такой темы", "Ошибка");   
          }
-        columnsJDBC.update(column, topic, name, selType, require);
-        List<ColumnsShow> columns=columnsJDBC.getColumnsShow(topicId);
-        mav.addObject("columns",columns);
-        //mav.addObject("topics",topicJDBC.getAllTopics());
-        mav.setViewName("showColumnsView");
-        return mav;
+        columnsJDBC.update(column, topic, name, selType, 1);
+        return showGetTopics(topicId);
     }
     /**
      * Метод передает информацию о колнке для 
@@ -201,18 +183,15 @@ public class ColumnController
         if(columnsJDBC.existColumn(columnId)==0)
         {
             mav.setViewName("messageView");
-            mav.addObject("link","<a href='showColumns.html?topic="+topicId+"'>Посмотреть все типы</a>");
-            mav.addObject("message","Такой темы нету");
-            mav.addObject("title","Ошибка");
-            return mav; 
+            return message("<a href='showColumns.html?topic="+topicId+"'>Посмотреть все типы</a>", "Такой темы нету", "Ошибка"); 
         }
         mav.setViewName("delColumnView");          
         mav.addObject("column", columnId);
         //getInfoUsers
-                    List<InfoForDelete> info=columnsJDBC.getInfoForDelete(columnId);
-        int infoSize=info.size();
-        mav.addObject("info", info);
-        mav.addObject("infoSize",infoSize);
+        //            List<InfoForDelete> info=columnsJDBC.getInfoForDelete(columnId);
+        //int infoSize=info.size();
+        //mav.addObject("info", info);
+        //mav.addObject("infoSize",infoSize);
         return mav;
     }
     /**
@@ -221,15 +200,11 @@ public class ColumnController
      */
     @RequestMapping(value="delSubmitColumn", method= RequestMethod.POST)
     public ModelAndView delSubmitType(@RequestParam("column") int column)
-    {
+    {     
         ModelAndView mav = new ModelAndView();
         if(columnsJDBC.existColumn(column)==0)
         {
-            mav.setViewName("messageView");
-            mav.addObject("link","<a href='showColumns.html?topic="+topicId+"'>Посмотреть все типы</a>");
-            mav.addObject("message","Такой темы нету");
-            mav.addObject("title","Ошибка");
-            return mav; 
+            return message("<a href='showColumns.html?topic="+topicId+"'>Посмотреть все типы</a>","Такой темы нету","Ошибка"); 
         }
         columnsJDBC.delete(column);
         List<ColumnsShow> columns=columnsJDBC.getColumnsShow(topicId);
@@ -238,4 +213,14 @@ public class ColumnController
         mav.setViewName("showColumnsView");
         return mav;
     }
+    
+     public ModelAndView message(String link,String message,String title)
+     {
+         ModelAndView mav=new ModelAndView();
+         mav.setViewName("messageView");
+         mav.addObject("link",link);
+         mav.addObject("message",message);
+         mav.addObject("title",title);
+         return mav;
+     }
 }

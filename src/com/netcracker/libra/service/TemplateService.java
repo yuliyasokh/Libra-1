@@ -4,6 +4,11 @@
  */
 package com.netcracker.libra.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * 
  * @author Sashenka
@@ -100,5 +105,16 @@ public class TemplateService
             return "<p>Должно быть больше 0</p>";
         }
         return "";
+    }
+    
+    public static List<String> getEnumTypes(String description)
+    {
+        String [] map=description.split(",");
+        List<String> map2=new ArrayList<String>();
+        for(int i=0;i<map.length;i++)
+        {
+            map2.add(map[i]);
+        }
+        return map2;
     }
 }

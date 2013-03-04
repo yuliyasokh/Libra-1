@@ -11,19 +11,16 @@
         <title>Редактирование колонки</title>
     </head>
     <body>
-        <h1>Добавить колонку к ${topic.getName()} </h1>
+        <h1>Добавить колонку </h1>
         <form method="POST" action="showColumns.html">
             Введите имя колонки <input type="text" name="name" value="<c:out value='${column.getName()}' />"/></br>
             Выберите тип колонки<select name="selType">
                 <c:forEach items="${types}" var="t">
-                    <option value="${t.getTypeId()}"><c:out value="${t.getTypeName()}" /></option>
+                    <option value="${t.getTypeId()}"><c:out value="${t.getDescription()}" /></option>
                 </c:forEach>
             </select></br>
                     <input type="hidden"  name="column" value="<c:out value='${column.getColumnId()}'/>"/>
-                    <input type="hidden"  name="topic" value="<c:out value='${topic.getTopicId()}'/>"/>
-             Разрешить добавлять свои ответы
-            <input type="radio" name="require" value="0"> Нет
-            <input type="radio" name="require" value="1" checked>Да </br>       
+                    <input type="hidden"  name="topic" value="<c:out value='${topic.getTopicId()}'/>"/></br>       
             <input type="submit" value="OK"/>
         </form>
     </body>

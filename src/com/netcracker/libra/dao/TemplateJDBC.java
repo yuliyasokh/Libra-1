@@ -117,7 +117,7 @@ public class TemplateJDBC implements TemplateDAO
         return jdbcTemplateObject.queryForInt(sql,id);
     }
     
-    public List<InfoForDelete> getInfoForDelete(int templateId)
+    public List<InfoForDelete> getInfoForDelete(int[] templates)
     {
         String sql = "select distinct u.userId, u.firstname, u. lastname, af.patronymic, af.appId "+
                       "from template temp join topic top on temp.templateId=top.templateId "+
@@ -125,9 +125,14 @@ public class TemplateJDBC implements TemplateDAO
 					"join columnFields cf on cf.columnId=c.columnId "+
 					"join appForm  af on af.appId=cf.appId "+
 					"join users u on u.userId=af.userId "+
-                                        "where temp.templateId=?"+
-                                        " order by af.appId";
-        List<InfoForDelete> listOfInfo=jdbcTemplateObject.query(sql, new InfoForDeleteRowMapper(),templateId);
+                                        "where ";
+        for(int i=0;i<templates.length-1;i++)
+                {
+                                       sql+= " temp.templateId="+templates[i]+" or";
+                }
+                 sql+= " temp.templateId="+templates[templates.length-1];
+                                       sql+= " order by af.appId";
+        List<InfoForDelete> listOfInfo=jdbcTemplateObject.query(sql, new InfoForDeleteRowMapper());
         return listOfInfo;
     }
 }

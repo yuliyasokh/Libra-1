@@ -36,6 +36,18 @@ public class InterviewDateController
         mav.addObject("Inters",inters);
         return mav;
      }
+    
+    @RequestMapping("/hr/interviewDateAdd")
+    public ModelAndView interDateAdd()
+    {
+        ModelAndView mav = new ModelAndView();
+        List<InterviewDate> id=iDateJdbc.getAllInterviewDatesWithInterviewers();  
+        List<Map<String,Object>> inters=iDateJdbc.getInterviewers();
+        mav.setViewName("hr/interviewDateAdd");
+        mav.addObject("Model",id);
+        mav.addObject("Inters",inters);
+        return mav;
+     }
     /**
      * 
      * @param begin
@@ -44,7 +56,7 @@ public class InterviewDateController
      * @param interviewers
      * @return 
      */
-      @RequestMapping(value="hr/interviewDate", method= RequestMethod.POST)
+      @RequestMapping(value="hr/interviewDateAdd", method= RequestMethod.POST)
       public ModelAndView addInterviewDate(@RequestParam("begin") String begin,
       @RequestParam("end") String end,  
       @RequestParam("timeStart") String timeStart,
