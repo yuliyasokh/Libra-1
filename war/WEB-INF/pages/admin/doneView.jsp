@@ -10,7 +10,7 @@
         <title>${title}</title>
     </head>
     <body>
-        <!-- Отчет о произошедшем действии -->
+        <!-- statement of changes -->
         <h1>${message}</h1>
             ${link} 
     </body>

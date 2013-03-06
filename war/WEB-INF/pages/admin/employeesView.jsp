@@ -1,5 +1,17 @@
 <%-- 
     Author     : Alexander Lebed
+
+- radio buttons "role" for filtering by a job title
+- check box "byWhat" for searching by a full name, first name, last name, email
+- links like "sortEmployees.html?orderBy..." for sorting by a job title, ID, 
+    first name, last name, email, password in ascending or descending order
+- displaying the employees by searhing/filtering/sorting (HR, Tech.interviewer, Administrator)
+    all employees by default
+- editing employee
+- remote employee
+- change employee's password
+- addition employee
+
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -64,9 +76,9 @@
             </form>
             </c:forEach>
         </table>
-        <!-- Выдача сообщения в случае нулевого результата -->
+        <!-- Issuing message when no results -->
         <c:if test="${employees.isEmpty()}"> ${noResults} </c:if>
         
-        <br><a href="addEmloyee.html">Добавить служащего</a>
+        <br><a href="addEmployee.html">Добавить служащего</a>
     </body>
 </html>

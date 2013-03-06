@@ -3,8 +3,8 @@ package com.netcracker.libra.controller;
 import com.netcracker.libra.dao.AdminJDBC;
 import com.netcracker.libra.model.User;
 import com.netcracker.libra.service.LengthService;
-import com.netcracker.libra.service.SortService;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,26 +13,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * Контроллер для Админа
+ * Controller for administrator
+ * 
+ * - displaying the employees (HR, Tech.interviewer, Administrator)
+ * - sorting by a job title, ID, first name, last name, email, password
+ *   in ascending or descending order
+ * - filtering by a job title
+ * - searching by a full name, first name, last name, email
+ * - addition employee
+ * - editing employee
+ * - remote employee
+ * - change employee's password
  * 
  * @author Alexander Lebed
  */
 @Controller
 public class UsersController {
-
-    
-    List <User> employees;  //выводимый список служащих
-    String noResults;   //выводимое значение в случае нулевого результата
-    String checked;     //выбранное значение в фильтре по должности служащего
-    String jobTitle;
-    String selected;    //выбранное значение сортировки по имени/фамилии и т.д.
-    String text;        //введенное значение в текстовом поле
-    boolean ASC;        //переключатель сортировки; true - в алфавитном порядке/от меньшого к большему, false - наоборот
+ 
+    List <User> employees;  //outputting list of employees
+    String noResults;   //output value in no results case
+    String checked;     //selected value in the filter by employee's job title
+    String jobTitle;    //job title of employee
+    String selected;    //selected value in the sorting by first name/last name/email etc.
+    String text;        //the value entered in the text field
+    boolean order;      //value of ascending or descending order; true when ascending
     
     /**
-     * Выводит на страничку со списком всех служащих (Hr, Tech, Admin),
-     * возможностью сортировки, фильтра, поиска сотрудников и
-     * ссылкой на добавление нового сотрудника
+     * Displays on the page all employees (HR, Tech.interviewer, Administrator)
      */
     @RequestMapping("admin/employees")
     public ModelAndView showEmployees() {
@@ -50,17 +57,13 @@ public class UsersController {
     }
     
     /**
-     * Выводит на страничку со списком служащих (Hr, Tech, Admin)
-     * по результатам сортировки/фильтра/поиска
-     * и ссылкой на добавление нового сотрудника
+     * Displays on the page employees by results of sorting/filtering/searching
+     * or throws an appropriate message when no employees
+     * and saves chosen values
      * 
-     * @param role - должность сотрудника (RoleId в таблице Users (БД)), где
-     * 0 - все сотрудники (Hr, Tech, Admin),
-     * 2 - Hr,
-     * 3 - Tech,
-     * 4 - Admin
-     * @param textValue - вводимое пользователем значение (имя/email)
-     * @param byWhat - сортировка по... (по имени/по email)
+     * @param role - job title of employee (0 - all employees, 2 - HR, 3 - Tech, 4 - Admin)
+     * @param textValue the value entered in the text field
+     * @param byWhat - the value of sorting (by first name/email etc.)
      */
     @RequestMapping("admin/sortedEmployees")
     public ModelAndView showRequiredEmployees(
@@ -72,6 +75,7 @@ public class UsersController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/employeesView");
         
+        //defining the job title and radio buttons
         switch(role) {
             case 0: checked = "checkedAll";
                     break;
@@ -90,6 +94,7 @@ public class UsersController {
         mv.addObject("text", text);
         AdminJDBC jdbc = new AdminJDBC();
         
+        //defining the search value and saving this value
         switch(byWhat) {
             case "ALL":
                 if(role == 0) {
@@ -169,10 +174,10 @@ public class UsersController {
     }
     
     /**
-     * Соритровка слухащих по ID, должности, имени, фамилии, email, паролю.
-     * Сортировка строк в алфавитном/обратном алфавитном порядке, числел  - 
-     * от меньшего к большему или наоборот.
-     * @param orderBy - строка с названием элемента сортировки
+     * The sorting in ascending or descending order 
+     * by the job title, ID, first name, last name, email and password.
+     * 
+     * @param orderBy the value of sorting (like by the "ID" or "FIRST_NAME")
      */
     @RequestMapping("admin/sortEmployees")
     public ModelAndView sortEmployees(@RequestParam("orderBy") String orderBy) {
@@ -187,68 +192,38 @@ public class UsersController {
         if(employees.size() > 1) {
             switch(orderBy) {
             case "ROLE":
-                if(ASC) {
-                    SortService.orderByRoleASC(employees);
-                }
-                else {
-                    SortService.orderByRoleDESC(employees);
-                }
+                Collections.sort(employees, new RoleComparator(order));
                 break;
                 
             case "ID":
-                if(ASC) {
-                    SortService.orderByIdASC(employees);
-                }
-                else {
-                    SortService.orderByIdDESC(employees);
-                }
+                Collections.sort(employees, new IdComparator(order));
                 break;
                 
             case "FIRST_NAME":
-                if(ASC) {
-                    SortService.orderByFirstNameASC(employees);
-                }
-                else {
-                    SortService.orderByFirstNameDESC(employees);
-                }
+                Collections.sort(employees, new FirstNameComparator(order));
                 break;
                 
             case "LAST_NAME":
-                if(ASC) {
-                    SortService.orderByLastNameASC(employees);
-                }
-                else {
-                    SortService.orderByLastNameDESC(employees);
-                }
+                Collections.sort(employees, new LastNameComparator(order));
                 break;
                 
             case "EMAIL":
-                if(ASC) {
-                    SortService.orderByEmailASC(employees);
-                }
-                else {
-                    SortService.orderByEmailDESC(employees);
-                }
+                Collections.sort(employees, new EmailComparator(order));
                 break;
                 
             case "PASSWORD":
-                if(ASC) {
-                    SortService.orderByPasswordASC(employees);
-                }
-                else {
-                    SortService.orderByPasswordDESC(employees);
-                }
+                Collections.sort(employees, new PasswordComparator(order));
                 break;
             }
         }
         
-        ASC = (ASC==true) ? false : true;
+        order = (order==true) ? false : true;
         mv.addObject("employees", employees);
         return mv;
     }
     
     /**
-     * Выводит страничку для редактирования данных о служащем по его ID
+     * Displays the page for edit the data of certain employee by his or her ID
      */
     @RequestMapping("admin/editEmployee")
     public ModelAndView editEmployee(@RequestParam("employeeId") int employeeId) {
@@ -259,8 +234,8 @@ public class UsersController {
     }
     
     /**
-     * Производит изменения о служащем в таблице Users
-     * Возвращает страничку с отчетом об изменении
+     * Changes the employee's data by his or her ID 
+     * and displays the statement of changes
      */
     @RequestMapping(value="admin/doneEdit", method = RequestMethod.POST)
     public ModelAndView updateEmployee (
@@ -272,18 +247,16 @@ public class UsersController {
                         @RequestParam("password") String password) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/doneView");
-        // воздращает пустую строку, если вводимое значение удоблетворяет условиям БД
+        //returns an empty string if the input value satisfies DB
         String message = LengthService.checkFirstNameLength(firstName) + LengthService.checkLastNameLength(lastName) +
                         LengthService.checkEmailLength(email) + LengthService.checkPasswordLength(password);
         
         if(message.equals("")) {
             (new AdminJDBC()).updateEmployee(employeeId, firstName, lastName, email, password, roleId);
-            
             User employee = (new AdminJDBC()).getEmployee(employeeId);
-            message = "Служащий "+ employee.getFirstName() +" "+ employee.getLastName() +" успешно изменен.";
             String link= "<a href=\"employees.html\">Список служащих</a>";
             mv.addObject("title", "Готово");
-            mv.addObject("message", message);
+            mv.addObject("message", "Служащий "+ employee.getFirstName() +" "+ employee.getLastName() +" успешно изменен.");
             mv.addObject("link", link);
             return mv;
         }
@@ -297,10 +270,10 @@ public class UsersController {
     }
     
     /**
-     * Выводит страничку со списком всех служащих (Hr, Tech, Admin) и
-     * возможностью внесения информации о новом сотруднике
+     * Displays on the page all employees (HR, Tech.interviewer, Administrator)
+     * and the ability to add the new one
      */
-    @RequestMapping("admin/addEmloyee")
+    @RequestMapping("admin/addEmployee")
     public ModelAndView addEmployeeView() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/addEmployeeView");
@@ -309,8 +282,7 @@ public class UsersController {
     }
     
     /**
-     * Добавляет нового служащего в таблицу Users и выводит
-     * отчет о его добавлении
+     * Adds a new employee and displays the statement of changes
      */
     @RequestMapping(value="admin/doneAdd", method = RequestMethod.POST)
     public ModelAndView addEmployee (
@@ -321,17 +293,15 @@ public class UsersController {
                         @RequestParam("password") String password) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/doneView");
-        // воздращает пустую строку, если вводимое значение удоблетворяет условиям БД
+        //returns an empty string if the input value satisfies DB
         String message = LengthService.checkFirstNameLength(firstName) + LengthService.checkLastNameLength(lastName) +
                         LengthService.checkEmailLength(email) + LengthService.checkPasswordLength(password);
         
         if(message.equals("")) {
             (new AdminJDBC()).addEmployee(firstName, lastName, email, password, roleId);
-
-            message = "Служащий "+ firstName +" "+ lastName +" успешно добавлен.";
             String link= "<a href=\"employees.html\">Список служащих</a>";
             mv.addObject("title", "Готово");
-            mv.addObject("message", message);
+            mv.addObject("message", "Служащий "+ firstName +" "+ lastName +" успешно добавлен.");
             mv.addObject("link", link);
             return mv;
         }
@@ -345,7 +315,7 @@ public class UsersController {
     }
     
     /**
-     * Выводит страничку о потверждении удаления служащего (Y/N)
+     * Displays the page with confirmation about deleting the employee (Y/N)
      */
     @RequestMapping("admin/deleteSure")
     public ModelAndView deleteSure(@RequestParam("employeeId") int employeeId) {
@@ -356,14 +326,14 @@ public class UsersController {
     }
     
     /**
-     * Удаляет данные о служащем из всех таблиц, в которых есть информация о нем
-     * Возвращает страничку с отчетом об удалении
+     * Deleting of employee from all database tabels
+     * and displays the statement of changes
      */
     @RequestMapping(value="admin/deleteEmployee", method = RequestMethod.GET)
     public ModelAndView deleteEmployee (@RequestParam("employeeId") int employeeId) {
         ModelAndView mv = new ModelAndView();
         User employee = (new AdminJDBC()).getEmployee(employeeId);
-        // удаляет служащего во всех таблицах с ним
+        //deleting of employee from all database tabels
         (new AdminJDBC()).deleteEmployee(employeeId);
         
         String message = "Служащий "+ employee.getFirstName() +" "+ employee.getLastName() +" успешно удален.";
@@ -373,6 +343,115 @@ public class UsersController {
         mv.addObject("message", message);
         mv.addObject("link", link);
         return mv;
+    }
+    
+    
+    /**
+     * Comparator has been created to be passed to a method Collections.sort to sort of objects list
+     * in ascending or descending order by the ID (look the sortEmployees method in UsersController class).
+     */
+    public static class IdComparator implements Comparator <User> {
+        private boolean asc; // true - sorts in ascending order, fasle - descending
+        public IdComparator(boolean asc) {
+            this.asc = asc;
+        }
+        @Override
+        public int compare(User user1, User user2) {
+            if(asc) {
+                return (user1.getUserId() > user2.getUserId()) ? 1 
+                    : (user1.getUserId() == user2.getUserId()) ? 0 : -1;
+            }
+            else {
+                return (user2.getUserId() > user1.getUserId()) ? 1 
+                    : (user2.getUserId() == user1.getUserId()) ? 0 : -1;
+            }
+        }
+    }
+    
+    /**
+     * Comparator has been created to be passed to a method Collections.sort to sort of objects list
+     * in ascending or descending order by the first name (look the sortEmployees method in UsersController class).
+     */
+    public static class FirstNameComparator implements Comparator <User> {
+        private boolean asc; //true - sorts in ascending order, fasle - descending
+        public FirstNameComparator(boolean asc) {
+            this.asc = asc;
+        }
+        @Override
+        public int compare(User o1, User o2) {
+            return asc ? (o1.getFirstName().compareToIgnoreCase(o2.getFirstName())) 
+                       : (o2.getFirstName().compareToIgnoreCase(o1.getFirstName()));
+        }
+    }
+    
+    /**
+     * Comparator has been created to be passed to a method Collections.sort to sort of objects list
+     * in ascending or descending order by the last name (look the sortEmployees method in UsersController class).
+     */
+    public static class LastNameComparator implements Comparator <User> {
+        private boolean asc; //true - sorts in ascending order, fasle - descending
+        public LastNameComparator(boolean asc) {
+            this.asc = asc;
+        }
+        @Override
+        public int compare(User o1, User o2) {
+            return asc ? (o1.getLastName().compareToIgnoreCase(o2.getLastName())) 
+                       : (o2.getLastName().compareToIgnoreCase(o1.getLastName()));
+        }
+    }
+    
+    /**
+     * Comparator has been created to be passed to a method Collections.sort to sort of objects list
+     * in ascending or descending order by the email (look the sortEmployees method in UsersController class).
+     */
+    public static class EmailComparator implements Comparator <User> {
+        private boolean asc; //true - sorts in ascending order, fasle - descending
+        public EmailComparator(boolean asc) {
+            this.asc = asc;
+        }
+        @Override
+        public int compare(User o1, User o2) {
+            return asc ? (o1.getEmail().compareToIgnoreCase(o2.getEmail())) 
+                       : (o2.getEmail().compareToIgnoreCase(o1.getEmail()));
+        }
+    }
+    
+    /**
+     * Comparator has been created to be passed to a method Collections.sort to sort of objects list
+     * in ascending or descending order by the password (look the sortEmployees method in UsersController class).
+     */
+    public static class PasswordComparator implements Comparator <User> {
+        private boolean asc; //true - sorts in ascending order, fasle - descending
+        public PasswordComparator(boolean asc) {
+            this.asc = asc;
+        }
+        @Override
+        public int compare(User o1, User o2) {
+            return asc ? (o1.getPassword().compareToIgnoreCase(o2.getPassword())) 
+                       : (o2.getPassword().compareToIgnoreCase(o1.getPassword()));
+        }
+    }
+    
+    /**
+     * Comparator has been created to be passed to a method Collections.sort to sort of objects list
+     * in ascending or descending order by the role (look the sortEmployees method in UsersController class).
+     */
+    public static class RoleComparator implements Comparator <User> {
+        private boolean asc; //true - sorts in ascending order, fasle - descending
+        public RoleComparator(boolean asc) {
+            this.asc = asc;
+        }
+        @Override
+        public int compare(User user1, User user2) {
+            if(asc) {
+                return (user1.getRoleId() > user2.getRoleId()) ? 1 
+                    : (user1.getRoleId() == user2.getRoleId()) ? 0 : -1;
+            }
+            else {
+                return (user2.getRoleId() > user1.getRoleId()) ? 1 
+                    : (user2.getRoleId() == user1.getRoleId()) ? 0 : -1;
+            }
+        }
     }
     
 }

@@ -1,5 +1,6 @@
 <%-- 
     Author     : Alexander Lebed
+                Interview's results of the student (date, interviewers, assessment interview)
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -12,30 +13,30 @@
     </head>
     <body>
         <table border="1" cellspacing="0" cellpadding="4">
+            <caption>Информация о пройденном собеседовании студента</caption>
             <tr>
-                <td>№ Анкеты</td>
-                <td>Дата и время начала</th>
-                <td>Дата и время окончания</td>
+                <td>№ анкеты студента</td>
+                <td>Дата</th>
+                <td>Время</td>
                 <td>Имя интервьюера</td>
-                <td>Фамилия интервьюера</td>
-                <td>Должность</td>
-                <td>Оценка</td>
-                <td>Комментарий</td>
+                <td>Должность интервьюера</td>
+                <td>Оценка интервьюера</td>
+                <td>Комментарий интервьюера</td>
             </tr>
             
-            <c:forEach items="${userResults}" var="item">
+            <c:forEach items="${resultList}" var="result">
                 <tr>
-                    <td>${appId}</td>
-                    <td>${timeService.toDateAndTime(interviewDate.dateStart)}</td> <!-- not working -->
-                    <td>${timeService.toDateAndTime(interviewDate.dateFinish)}</td> <!-- not working -->
-                    <td>${item.firstName}</td>
-                    <td>${item.lastName}</td>
-                    <td>${item.roleId==2 ? 'HR-менеджер' : item.roleId==3 ? 'Тех.интервьюер' : item.roleId==4 ? "Администратор" : "N/A"}</td>
-                    <td>${item.mark}</td>
-                    <td>${item.comments}</td>
+                    <td>${result.appId}</td>
+                    <td>${result.interviewDate}</td>
+                    <td>${result.interviewTime}</td>
+                    <td>${result.interviewerName}</td>
+                    <td>${result.interviewerRole==2 ? 'HR-менеджер' : result.interviewerRole==3 ? 'Тех.интервьюер' : result.interviewerRole==4 ? "Администратор" : "Интервьюер"}</td>
+                    <td>${result.interviewerMark}</td>
+                    <td>${result.interviewerComments}</td>
                 </tr>
             </c:forEach>
         </table>
-                    <br><a href="showStudentbyIdView.html">Назад</a>
+        
+                    <br>${view == 0 ? '<a href="showStudentbyIdView.html">Назад</a>' : '<a href="showStudentByEducation.html">Назад</a>'}
     </body>
 </html>

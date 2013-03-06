@@ -12,6 +12,6 @@
     <body>
         <!-- Отчет о произошедшем действии -->
         <h1>${message}</h1>
-            <br><a href="showStudentbyIdView.html">Назад</a>
+            <br>${view == 0 ? '<a href="showStudentbyIdView.html">Назад</a>' : '<a href="showStudentByEducation.html">Назад</a>'}
     </body>
 </html>

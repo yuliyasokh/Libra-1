@@ -1,7 +1,7 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ * This class has an information about the interviewer and his or her assessment of the interview
  * @author Alexander Lebed
  */
 public class UserResult {

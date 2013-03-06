@@ -1,10 +1,9 @@
 package com.netcracker.libra.dao;
 
+import com.netcracker.libra.model.DateAndInterviewer;
+import com.netcracker.libra.model.DateAndInterviewerResults;
 import com.netcracker.libra.model.Department;
 import com.netcracker.libra.model.Faculty;
-import com.netcracker.libra.model.Interview;
-import com.netcracker.libra.model.InterviewDate;
-import com.netcracker.libra.model.InterviewResults;
 import com.netcracker.libra.model.Student;
 import com.netcracker.libra.model.University;
 import com.netcracker.libra.model.User;
@@ -12,6 +11,7 @@ import com.netcracker.libra.model.UserResult;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 /**
@@ -372,56 +372,106 @@ public class HrJDBC implements HrDAO {
     
     
     /**
-     * Возвращает интервью, которое было назначено по ID анкеты
+     * Returns interview's ID by application's form ID
      * @author Alexander Lebed
      */
-    public Interview getInterview(Integer appId) {
-        String SQL = "SELECT * FROM Interview WHERE appId = ?";
-        Interview interview = jdbcTemplateObject.queryForObject(SQL, new Object[] {appId}, new InterviewRowMapper());
-        return interview;
+    public Integer getInterviewId (Integer appId) {
+        String SQL = "SELECT interviewId FROM Interview WHERE appId = ?";
+        int interviewId;
+        try{
+            interviewId = jdbcTemplateObject.queryForInt(SQL, new Object[] {appId});
+        }
+        catch (EmptyResultDataAccessException e) {
+            interviewId = 0;
+            e.printStackTrace();
+        }
+        return interviewId;
     }
     
-    public InterviewDate getInterviewDate(Integer interviewDateId) {
-        String SQL = "SELECT * FROM InterviewDate WHERE interviewDateId = ?";
-        InterviewDate interviewDate = jdbcTemplateObject.queryForObject(SQL, new Object[] {interviewDateId}, new InterviewDateRowMapper());
-        return interviewDate;
+    /**
+     * Retutns a string of interview's finish date and time
+     */
+    public String getInterviewFinishDate(Integer interviewId) {
+        String SQL = "SELECT to_char(d.dateFinish,'DD.MM.YYYY HH24:MI') FROM InterviewDate d, Interview i "+
+                     "WHERE d.interviewDateId = i.interviewDateId AND i.interviewId = ?";
+        String interviewDateFinish;
+        try{
+            interviewDateFinish = jdbcTemplateObject.queryForObject(SQL, new Object[] {interviewId}, String.class);
+        }
+        catch (EmptyResultDataAccessException e) {
+            interviewDateFinish = null;
+            e.printStackTrace();
+        }
+        return interviewDateFinish;
     }
     
+    /**
+     * Returns a List of interviewers who were assigned to a certain time
+     */
     public List <User> getInterviewersFromInterviewerList(Integer interviewDateId) {
-        String SQL = "SELECT * FROM Users WHERE userId IN (SELECT userId FROM InterviewerList WHERE interviewDateId = ?)";
+        String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE userId IN (SELECT userId FROM InterviewerList WHERE interviewDateId = ?)";
         List <User> users = jdbcTemplateObject.query(SQL, new Object[] {interviewDateId}, new UserRowMapper());
         return users;
     }
     
+    /**
+     * Returns a List of interviewers who interviewed at a particular interview
+     */
     public List <User> getInterviewersFromInterviewResults(Integer interviewId) {
-        String SQL = "SELECT * FROM Users WHERE userId IN (SELECT userId FROM InterviewResults WHERE interviewId = ?)";
+        String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE userId IN (SELECT userId FROM InterviewResults WHERE interviewId = ?)";
         List <User> users = jdbcTemplateObject.query(SQL, new Object[] {interviewId}, new UserRowMapper());
         return users;
     }
     
-    public List <InterviewResults> getInterviewResults(Integer interviewId) {
-        String SQL = "SELECT * FROM InterviewResults WHERE interviewId = ?";
-        List <InterviewResults> interviewResults = jdbcTemplateObject.query(SQL, new Object[] {interviewId}, new InterviewResultsRowMapper());
-        return interviewResults;
+    /**
+     * Returns true if a student was interviewed
+     */
+    public boolean getInterviewResults(Integer interviewId) {
+        String SQL = "SELECT DISTINCT(1) FROM InterviewResults WHERE interviewId = ?";
+        int result;
+        try {
+            result = jdbcTemplateObject.queryForInt(SQL, new Object[] {interviewId});
+        }
+        catch (EmptyResultDataAccessException e) {
+            result = 0;
+            e.printStackTrace();
+        }
+        return result==1 ? true : false;
     }
     
+    /**
+     * Returns a List of UserResult (interviewer's data and his or her assessment of interview) of certain interview 
+     */
     public List <UserResult> getUserResults(Integer interviewId) {
-        String SQL = "SELECT u.userId, u.firstName, u.lastName, u.roleId, r.mark, r.comments FROM Users u, InterviewResults r WHERE u.UserId = r.UserId AND r.interviewId = ?";
+        String SQL = "SELECT u.userId, u.firstName, u.lastName, u.roleId, r.mark, r.comments FROM Users u, InterviewResults r WHERE u.userId = r.userId AND r.interviewId = ?";
         List <UserResult> userResults = jdbcTemplateObject.query(SQL, new Object[] {interviewId}, new UserResultRowMapper());
         return userResults;
     }
     
     /**
-     * @param interviewId - ID интерьвью
-     * @param dateFinish - дата окончания интервью
-     * @return true если интервью БУДЕТ, false - БЫЛО
+     * Returns a List with information of application's form ID, date and time of certain interview, 
+     * assigned interviewers and their assessment of the theinterview by interview's ID
      */
-//    public boolean getActualInterview(Integer interviewId, Date dateFinish) {
-//        String SQL = "SELECT 1 FROM InterviewDate id, Interview i "+
-//                     "WHERE SYSDATE < ? AND id.InterviewDateId = i.InterviewDateId AND i.InterviewId = ?";
-//        Object[] params = new Object[] {dateFinish, interviewId};
-//        int var = jdbcTemplateObject.queryForInt(SQL, params);
-//        return (var==1) ? true : false;
-//    }
+    public List <DateAndInterviewerResults> getDateAndInterviewerResults (Integer interviewId) {
+        String SQL = "SELECT i.AppId, to_char(d.dateStart,'dd.mm.yyyy') interviewDate, to_char(d.dateStart,'hh24:mi')||' - '||  to_char(d.dateFinish,'hh24:mi') interviewTime, "+
+                     "u.firstName||' '|| u.lastName interviewerName, u.roleId interviewerRole, r.mark interviewerMark, r.comments interviewerComments "+
+                     "FROM interviewResults r, interview i, interviewDate d, users u "+
+                     "WHERE i.interviewId = r.interviewId AND i.interviewDateId = d.interviewDateId AND u.userId = r.userId AND i.interviewId = ?";
+        List <DateAndInterviewerResults> resultList = jdbcTemplateObject.query(SQL, new Object[] {interviewId}, new DateAndInterviewerResultsRowMapper());
+        return resultList;
+    }
+    
+    /**
+     * Returns a List with information of application's form ID, date and time of certain interview, 
+     * assigned interviewers by interview's ID
+     */
+    public List <DateAndInterviewer> getDateAndInterviewer (Integer interviewId) {
+        String SQL = "SELECT i.AppId, to_char(d.dateStart,'dd.mm.yyyy') interviewDate, to_char(d.dateStart,'hh24:mi')||' - '||  to_char(d.dateFinish,'hh24:mi') interviewTime, "+
+                     "u.firstName||' '|| u.lastName interviewerName, u.roleId interviewerRole FROM interviewerList l, interview i, interviewDate d, users u "+
+                     "WHERE i.interviewDateId = d.interviewDateId AND d.interviewDateId = l.interviewDateId AND l.userId = u.userId AND i.interviewId = ?";
+        List <DateAndInterviewer> resultList = jdbcTemplateObject.query(SQL, new Object[] {interviewId}, new DateAndInterviewerRowMapper());
+        return resultList;
+    }
+    
 
 }
