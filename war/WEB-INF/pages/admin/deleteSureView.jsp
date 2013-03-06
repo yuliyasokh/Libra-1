@@ -9,10 +9,9 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Удалить?</title>
-        <!-- Запрос об удалении -->
     </head>
     <body>
-
+        <!-- Removal request -->
         <form action="deleteEmployee.html" method="GET">
             <table>
             <tr>

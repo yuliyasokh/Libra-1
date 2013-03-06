@@ -12,27 +12,26 @@
     </head>
     <body>
         <table border="1" cellspacing="0" cellpadding="4">
+            <caption>Информация о предстоящем собеседовании студента</caption>
             <tr>
-                <td>№ Анкеты</td>
-                <td>Дата и время начала</th>
-                <td>Дата и время окончания</td>
+                <td>№ Анкеты студента</td>
+                <td>Дата</th>
+                <td>Время</td>
                 <td>Имя интервьюера</td>
-                <td>Фамилия интервьюера</td>
-                <td>Должность</td>
+                <td>Должность интервьюера</td>
             </tr>
             
-            <c:forEach items="${employees}" var="item">
+            <c:forEach items="${resultList}" var="result">
                 <tr>
-                    <td>${appId}</td>
-                    <td>${timeService.toDateAndTime(interviewDate.dateStart)}</td> <!-- not working -->
-                    <td>${timeService.toDateAndTime(interviewDate.dateFinish)}</td> <!-- not working -->
-                    <td>${item.firstName}</td>
-                    <td>${item.lastName}</td>
-                    <td>${item.roleId==2 ? 'HR-менеджер' : item.roleId==3 ? 'Тех.интервьюер' : item.roleId==4 ? "Администратор" : "N/A"}</td>
+                    <td>${result.appId}</td>
+                    <td>${result.interviewDate}</td>
+                    <td>${result.interviewTime}</td> 
+                    <td>${result.interviewerName}</td>
+                    <td>${result.interviewerRole==2 ? 'HR-менеджер' : result.interviewerRole==3 ? 'Тех.интервьюер' : result.interviewerRole==4 ? "Администратор" : "Интервьюер"}</td>
                 </tr>
             </c:forEach>
             
         </table>
-                <br><a href="showStudentbyIdView.html">Назад</a>
+                <br>${view == 0 ? '<a href="showStudentbyIdView.html">Назад</a>' : '<a href="showStudentByEducation.html">Назад</a>'}
     </body>
 </html>

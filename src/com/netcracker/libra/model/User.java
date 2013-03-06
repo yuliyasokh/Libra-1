@@ -1,7 +1,9 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ * User contains a general information about person who may be a student, HR, technical interviewer,
+ * or administrator.
+ * Formed at the stage of registration.
  * @author Alexander Lebed
  */
 public class User {
