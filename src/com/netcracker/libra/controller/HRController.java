@@ -149,9 +149,9 @@ public class HRController {
           catch(Exception ex){
             mav.addObject("msg","Input data is not in correct format! Try again!");   
          }
-          if (std.isEmpty()){
+       /*   if (std.isEmpty()){
               mav.addObject("msg1", "Студенты не найдены.");
-          }
+          }*/
           return mav;
     }
       
