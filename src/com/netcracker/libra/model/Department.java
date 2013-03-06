@@ -4,7 +4,10 @@
  */
 package com.netcracker.libra.model;
 
-/**
+/**Departemnt consists from department number, department name, faculty number, faculty name, 
+ * university number and university name.
+ * Uses in student's search and filling appform
+ * Department can be created, edited and deleted.
  *
  * @author Yuliya
  */

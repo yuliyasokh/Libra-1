@@ -1,6 +1,12 @@
 package com.netcracker.libra.model;
 import java.sql.Date;
 
+
+/*
+ * Uses for displaying possible interview dates
+ * Interview date can be created, edited or deleted.
+ */
+
 public class InterviewDate {
     
     private int interviewDateId;
