@@ -59,7 +59,6 @@
             <th>Удалить</th>
         </tr>
         <c:forEach items="${employees}" var="emp">
-            <form action="employees.html" method="POST">
                 <tr>
                     <td>
                         <c:if test="${emp.getRoleId() == 2}"><b>HR</b></c:if>
@@ -70,19 +69,25 @@
                     <td>${emp.getFirstName()}</td>
                     <td>${emp.getLastName()}</td>
                     <td>${emp.getEmail()}</td>
-                    <td><a href="changeEmployeePassword.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img src="resources\images\edit.png"  width="25" height="25" border="0" title="Сменить пароль"/></a></td>
+                    <form action="changedEmployeePassword.html" method="POST">
+                    <c:choose>
+                    <c:when test="${id != emp.getUserId()}">
+                        <td><a href="changeEmployeePassword.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img src="resources\images\edit.png"  width="25" height="25" border="0" title="Сменить пароль"/></a></td>
+                    </c:when>
+                    <c:otherwise> 
+                        <td><input type="text" name="passwordValue"><input type="submit" value="Ok"></td>
+                        <input type="hidden" name="employeeId" value="${emp.getUserId()}">
+                    </c:otherwise>
+                    </c:choose>
+                    </form>
                     <td><a href="editEmployee.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img src="resources\images\edit.png"  width="25" height="25" border="0" title="Редактировать"/></a></td>
                     <td><a href="deleteSure.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img src="resources\images\del.jpg"  width="25" height="25" border="0" title="Удалить"/></a></td>
                 </tr>
-            </form>
             </c:forEach>
         </table>
         <!-- Issuing message when no results -->
         <c:if test="${employees.isEmpty()}"> ${noResults} </c:if>
         
         <br><a href="addEmployee.html">Добавить служащего</a>
-        
-        <br><br>${message}
-        
     </body>
 </html>
