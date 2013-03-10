@@ -3,9 +3,12 @@ package com.netcracker.libra.controller;
 import com.netcracker.libra.dao.AdminJDBC;
 import com.netcracker.libra.model.User;
 import com.netcracker.libra.service.LengthService;
+import com.netcracker.libra.util.security.Security;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,8 +25,8 @@ import org.springframework.web.servlet.ModelAndView;
  * - searching by a full name, first name, last name, email
  * - addition employee
  * - editing employee
- * - remote employee
- * - change employee's password
+ * - removes employee
+ * - changes employee's password
  * 
  * @author Alexander Lebed
  */
@@ -210,10 +213,6 @@ public class UsersController {
             case "EMAIL":
                 Collections.sort(employees, new EmailComparator(order));
                 break;
-                
-            case "PASSWORD":
-                Collections.sort(employees, new PasswordComparator(order));
-                break;
             }
         }
         
@@ -243,16 +242,24 @@ public class UsersController {
                         @RequestParam("employeeId") int employeeId,
                         @RequestParam("firstName") String firstName, 
                         @RequestParam("lastName") String lastName,
-                        @RequestParam("email") String email, 
-                        @RequestParam("password") String password) {
+                        @RequestParam("email") String email) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/doneView");
-        //returns an empty string if the input value satisfies DB
+        //returns an empty string if the input value is ok (satisfies DB); otherwise - the message with the restriction
         String message = LengthService.checkFirstNameLength(firstName) + LengthService.checkLastNameLength(lastName) +
-                        LengthService.checkEmailLength(email) + LengthService.checkPasswordLength(password);
-        
-        if(message.equals("")) {
-            (new AdminJDBC()).updateEmployee(employeeId, firstName, lastName, email, password, roleId);
+                        LengthService.checkEmailLength(email);
+
+        //checks the duplicate emails, true if there are
+        if(checkDublicateValues(email, employeeId, employees)){
+            String link= "<a href=\"editEmployee.html?employeeId="+ employeeId +"\">Назад</a>";
+            mv.addObject("title", "Ошибка");
+            mv.addObject("message", "Адрес эл.почты должен быть уникальным");
+            mv.addObject("link", link);
+            return mv;
+        }
+        else if(message.equals("")) {
+            
+            (new AdminJDBC()).updateEmployee(employeeId, firstName, lastName, email, roleId);
             User employee = (new AdminJDBC()).getEmployee(employeeId);
             String link= "<a href=\"employees.html\">Список служащих</a>";
             mv.addObject("title", "Готово");
@@ -293,12 +300,12 @@ public class UsersController {
                         @RequestParam("password") String password) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/doneView");
-        //returns an empty string if the input value satisfies DB
+        //returns an empty string if the input value satisfies DB; otherwise - the message with the restriction
         String message = LengthService.checkFirstNameLength(firstName) + LengthService.checkLastNameLength(lastName) +
                         LengthService.checkEmailLength(email) + LengthService.checkPasswordLength(password);
         
         if(message.equals("")) {
-            (new AdminJDBC()).addEmployee(firstName, lastName, email, password, roleId);
+            (new AdminJDBC()).addEmployee(firstName, lastName, email, Security.getMD5hash(password), roleId);
             String link= "<a href=\"employees.html\">Список служащих</a>";
             mv.addObject("title", "Готово");
             mv.addObject("message", "Служащий "+ firstName +" "+ lastName +" успешно добавлен.");
@@ -345,6 +352,50 @@ public class UsersController {
         return mv;
     }
     
+    /**
+     * Displays the page with changing the password of employee
+     */
+    @RequestMapping("admin/changeEmployeePassword")
+    public ModelAndView changeEmployeePassword (@RequestParam("employeeId") int employeeId) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin/changeEmployeePasswordView");
+        
+        mv.addObject("id", employeeId);
+        mv.addObject(checked, "checked");
+        mv.addObject(selected, "selected");
+        mv.addObject("text", text);
+        mv.addObject("employees", employees);
+        return mv;
+    }
+    
+    /**
+     * Changes the password of employee, goes to the page with employees
+     * and displays the message of changing
+     */
+    @RequestMapping("admin/changedEmployeePassword")
+    public ModelAndView changedEmployeePassword (@RequestParam("employeeId") int employeeId,
+                                                 @RequestParam("passwordValue") String passwordValue) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin/employeesView");
+        mv.addObject(checked, "checked");
+        mv.addObject(selected, "selected");
+        mv.addObject("text", text);
+        mv.addObject("employees", employees);
+        
+        //returns an empty string if the input value satisfies DB; otherwise - the message with the restriction
+        String message = LengthService.checkPasswordLength(passwordValue);
+        
+        if(message.equals("")) {
+            String password = Security.getMD5hash(passwordValue);
+            new AdminJDBC().changePassword(password, employeeId);
+            mv.addObject("message", "Пароль был изменен");
+        }
+        else {
+            mv.addObject("message", message);
+        }
+        
+        return mv;
+    }
     
     /**
      * Comparator has been created to be passed to a method Collections.sort to sort of objects list
@@ -418,22 +469,6 @@ public class UsersController {
     
     /**
      * Comparator has been created to be passed to a method Collections.sort to sort of objects list
-     * in ascending or descending order by the password (look the sortEmployees method in UsersController class).
-     */
-    public static class PasswordComparator implements Comparator <User> {
-        private boolean asc; //true - sorts in ascending order, fasle - descending
-        public PasswordComparator(boolean asc) {
-            this.asc = asc;
-        }
-        @Override
-        public int compare(User o1, User o2) {
-            return asc ? (o1.getPassword().compareToIgnoreCase(o2.getPassword())) 
-                       : (o2.getPassword().compareToIgnoreCase(o1.getPassword()));
-        }
-    }
-    
-    /**
-     * Comparator has been created to be passed to a method Collections.sort to sort of objects list
      * in ascending or descending order by the role (look the sortEmployees method in UsersController class).
      */
     public static class RoleComparator implements Comparator <User> {
@@ -452,6 +487,28 @@ public class UsersController {
                     : (user2.getRoleId() == user1.getRoleId()) ? 0 : -1;
             }
         }
+    }
+    
+    /**
+     * Checks for duplicates of emails by employee's ID
+     * Returns true if there are duplicates, false - otherwise
+     */
+    public boolean checkDublicateValues(String email, Integer employeeId, List <User> users) {
+        
+        List <User> list = users;
+        Set set = new TreeSet();
+        //add the changed email first
+        set.add(email);
+        boolean dublicate = false;
+        //check all emails except for the old employee's email
+        for(User user : list) {
+            if(user.getUserId()!= employeeId) {
+                if(!set.add(user.getEmail())) {
+                dublicate = true;
+                }
+            }
+        }
+        return dublicate;
     }
     
 }

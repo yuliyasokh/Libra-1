@@ -245,10 +245,18 @@ public class AdminJDBC implements AdminDAO {
          * Replace an employee's data by his or her ID
          */
         public void updateEmployee(Integer employeeId, String firstName, String lastName, 
-                                        String email, String password, Integer roleId) {
+                                        String email, Integer roleId) {
             String SQL = "UPDATE Users SET firstName = ?, lastName = ?,"+
-                         "email = ?, password = ?, roleId = ? WHERE userId = ?";
-            jdbcTemplateObject.update(SQL, firstName, lastName, email, password, roleId, employeeId);
+                         "email = ?, roleId = ? WHERE userId = ?";
+            jdbcTemplateObject.update(SQL, firstName, lastName, email, roleId, employeeId);
+        }
+        
+        /**
+         * Changes the password of employee by ID
+         */
+        public void changePassword(String password, Integer employeeId) {
+            String SQL = "UPDATE Users SET password = ? WHERE userId = ?";
+            jdbcTemplateObject.update(SQL, password, employeeId);
         }
         
         /**

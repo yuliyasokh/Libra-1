@@ -19,7 +19,6 @@
             <th>Имя</th>
             <th>Фамилия</th>
             <th>Email</th>
-            <th>Пароль</th>
             <th></th>
         </tr>
         <form action="doneEdit.html" method="POST">
@@ -39,7 +38,6 @@
         <td><input type="text" name="firstName" value="<c:out value='${emp.getFirstName()}'/>"/></td>
         <td><input type="text" name="lastName" value="<c:out value='${emp.getLastName()}'/>"/></td>
         <td><input type="text" name="email" value="<c:out value='${emp.getEmail()}'/>"/></td>
-        <td><input type="text" name="password" value="<c:out value='${emp.getPassword()}'/>"/></td>
         <td><input type="submit" value="OK"></td>
         </form>
         </table>
