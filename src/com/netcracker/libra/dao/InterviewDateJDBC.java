@@ -61,11 +61,17 @@ public class InterviewDateJDBC implements InterviewDateDAO {
     }
 
     public List <InterviewDate> getAllInterviewDatesWithInterviewers() {
-        String query = "select  d.interviewdateid, to_char(d.dateStart,'dd.mm.yyyy') dateInter, to_char(d.dateStart,'hh24:mi')||' - '||  to_char(d.dateFinish,'hh24:mi') timeInter, d.InterviewDuration,"+
-        "rtrim(xmlagg(xmlelement(e, u.firstname||' '||u.lastname,', ').extract('//text()')),', ') listInterviewers "+ 
-        "from  interviewdate d left join  interviewerlist l on d.interviewdateid=l.interviewdateid " 
-		+"left join  users u on u.userid=l.userid "+
-      "group by d.interviewdateid,d.datestart,d.datefinish,d.InterviewDuration";
+      String query = "select  d.interviewdateid, "
+                     + "(select (case when u.roleid=2 then 'HR'  else 'Tech' end) "
+                        + "from users u join interviewerList i on i.userId=u.userId "
+                            + "where (u.roleId=2 or u.roleId=3) and rownum<2 and i.interviewDateId=d.interviewDateId) typeInterview, "
+                                + "to_char(d.dateStart,'dd.mm.yyyy') dateInter, "
+                                    + "to_char(d.dateStart,'hh24:mi')||' - '||to_char(d.dateFinish,'hh24:mi') timeInter, d.InterviewDuration, "
+                                        + "rtrim(xmlagg(xmlelement(e, u.firstname||' '||u.lastname,', ').extract('//text()')),', ') listInterviewers "
+                                            + "from interviewdate d left join interviewerlist l on d.interviewdateid=l.interviewdateid "
+                                                + "left join users u on u.userid=l.userid "
+                                                    + "group by d.interviewdateid,d.datestart,d.datefinish,d.InterviewDuration "
+                                                        + "order by d.datestart";
         List <InterviewDate> interviewDates;
         interviewDates = jdbcTemplateObject.query(query, new WithInterviewersInterviewDateRowMapper());
         return interviewDates;
@@ -80,11 +86,16 @@ public class InterviewDateJDBC implements InterviewDateDAO {
     
     @Override
     public InterviewDate getInterviewDateById(Integer Id) {
-        String query = "select  d.interviewdateid, to_char(d.dateStart,'dd.mm.yyyy') dateInter, to_char(d.dateStart,'hh24:mi')||' - '||  to_char(d.dateFinish,'hh24:mi') timeInter, d.InterviewDuration,"+
-        "rtrim(xmlagg(xmlelement(e, u.firstname||' '||u.lastname,', ').extract('//text()')),', ') listInterviewers "+ 
-        "from  interviewdate d left join  interviewerlist l on d.interviewdateid=l.interviewdateid " 
-		+"left join  users u on u.userid=l.userid where d.interviewdateid = ? "+
-      "group by d.interviewdateid,d.datestart,d.datefinish,d.InterviewDuration";
+        String query = "select  d.interviewdateid, "
+                        + "(select (case when u.roleid=2 then 'HR'  else 'Tech' end) "
+                        + "from users u join interviewerList i on i.userId=u.userId "
+                        + "where (u.roleId=2 or u.roleId=3) and rownum<2 and i.interviewDateId=d.interviewDateId) typeInterview, "
+                        + "to_char(d.dateStart,'dd.mm.yyyy') dateInter, to_char(d.dateStart,'hh24:mi')||' - '||  to_char(d.dateFinish,'hh24:mi') timeInter, d.InterviewDuration,"+
+                            "rtrim(xmlagg(xmlelement(e, u.firstname||' '||u.lastname,', ').extract('//text()')),', ') listInterviewers "+ 
+                                "from  interviewdate d left join  interviewerlist l on d.interviewdateid=l.interviewdateid " 
+                                    +"left join  users u on u.userid=l.userid where d.interviewdateid = ? "+
+                                        "group by d.interviewdateid,d.datestart,d.datefinish,d.InterviewDuration"
+                                            + " order by d.datestart";
         InterviewDate interviewDate = jdbcTemplateObject.queryForObject(query, 
                         new Object[]{Id}, new WithInterviewersInterviewDateRowMapper());
         return interviewDate;
@@ -107,13 +118,16 @@ public class InterviewDateJDBC implements InterviewDateDAO {
         List<Map<String, Object>> interviewers = jdbcTemplateObject.queryForList(query,interviewDateId) ;
         return interviewers;
     }
-    /*
-     * Метод получает всех интервьеров из БД
-     */
-    public List<Map<String, Object>> getInterviewers(){
-        String query="select userid, lastname||' '||firstname||"
-                + "(case when roleid=2 then '(HR)' else '(Тех)' end) inters "
-                + "from users where roleid=2 or roleid=3";
+    
+    public List<Map<String, Object>> getInterviewersHr(){
+        String query="select userid, lastname||' '||firstname as inters " 
+                + "from users where roleid=2";
+        List<Map<String, Object>> interviewers = jdbcTemplateObject.queryForList(query) ;
+        return interviewers;
+    }
+    public List<Map<String, Object>> getInterviewersTech(){
+        String query="select userid, lastname||' '||firstname as inters " 
+                + "from users where roleid=3";
         List<Map<String, Object>> interviewers = jdbcTemplateObject.queryForList(query) ;
         return interviewers;
     }

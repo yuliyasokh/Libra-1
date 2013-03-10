@@ -39,7 +39,6 @@ function getFact(){
                     </c:forEach>  
                 </select> 
                 <br>
-                <center>
                 Факультет:
                 <select name="fact" id="fact">
                     <option value="0"> Выберите университет </option> 
@@ -49,7 +48,6 @@ function getFact(){
             </form>
         <br>
         <br>
-        <center> 
             <form name="myForm" action="showDepartmentsSearch.html" method="get">
         <select name="departmentSearch">
             <option value="0"> - </option>
@@ -62,26 +60,34 @@ function getFact(){
         <input type="submit" value="Показать" name="search">
             </form>
         <br><br>
-        <center>
         <table border ="1">
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
+            <tr>            
                 <td>№ кафедры </td>
                 <td>Кафедра</td>
                 <td>Факультет</td>
                 <td>Университет</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
             </tr>
            <c:forEach items="${depts}" var="d">
                 <tr>
-                    <td><a href= "delDepartment.html?departmentId=<c:out value='${d.departmentId}'/> ">удалить</a> </td>
-                    <td><a href="editDepartment.html?departmentId=<c:out value='${d.departmentId}'/>">править</a></td>
-                    <td><c:out value="${d.departmentId}"/></td>
+                   <td><c:out value="${d.departmentId}"/></td>
                     <td><c:out value="${d.departmentName}"/></td>
                     <td><c:out value="${d.facultyName}"/></td>
                     <td><c:out value="${d.universityName}"/></td>
+                    <td>
+                        <a href="editDepartment.html?departmentId=<c:out value='${d.departmentId}'/>">
+                            править
+                        </a>
+                    </td>
+                    <td>
+                        <a href= "delDepartment.html?departmentId=<c:out value='${d.departmentId}'/> ">
+                            удалить
+                        </a> 
+                    </td>
                 </tr>
         </c:forEach>
         </table>
+        </center>
     </body>
 </html>

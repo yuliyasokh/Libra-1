@@ -11,20 +11,27 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
-        <title>Edit Interview Date</title>
+        <title>Управление датами - правка</title>
     </head>
     <body>
+        <center>
         <h2 align="center"> Правка даты интервью </h2>
         <form method="POST" action="doneDate.html">
          <table border="1" cellspacing="0" cellpadding="4">
              <tr>
                  <td>№ Даты</td>
+                  <td>Тип</td>
                   <td>Дата</td>
                   <td>Время</td>
                   <td>Продолжительность</td>
                  </tr>
-        <td><label for="interviewDateId">${d.interviewDateId}</label>
-        <input type="hidden" name="interviewDateId" value="<c:out value='${d.interviewDateId}  '/>"/></td>
+        <td>
+            <label for="interviewDateId">${d.interviewDateId}</label>
+        <input type="hidden" name="interviewDateId" value="<c:out value='${d.interviewDateId}  '/>"/>
+        </td>
+        <td>
+            <label for="interviewDate">${d.typeInterview}</label>
+        </td>
         <td><input type="text" name="dateInter" value="${d.dateInter}"/></td>
         <td><input type="text" name="timeInter" value="${d.timeInter}"/></td>
         <td><input type="text" name="interviewDuration" value="${d.interviewDuration}"/></td>
@@ -40,5 +47,6 @@
         </c:forEach>
         <input type="submit" name="submitDate" value="Изменить">
         </form>
+        </center>
     </body>
 </html>

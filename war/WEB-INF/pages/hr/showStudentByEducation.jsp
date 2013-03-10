@@ -35,8 +35,8 @@ function getFact(){
     }  
 </script>
 </head>
-<center>
-    <body>
+   <body>
+    <center>
        <h2 align="center">Список студентов</h2>   
         <form method="post" action="showStudentByEducation.html">
        Университет:

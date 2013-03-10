@@ -1,17 +1,15 @@
 <%-- 
-    Document   : interviewDate
-    Created on : 05.02.2013, 0:34:43
+    Document   : showInterviewDateSearch
+    Created on : 07.03.2013, 16:47:58
     Author     : Yuliya
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Управление датами интервью</title>
+        <title>Управление датами - поиск</title>
     </head>
     <body>
         <center>
@@ -30,10 +28,11 @@
         <input type="submit" value="Показать" name="search">
             </form>
             <br>
-         <h2 align="center">Информация о рассписании собеседований</h2><br> 
+         <h2 align="center">Информация о рассписании собеседований</h2>
+         <br> 
           <form method="GET" action="delInterviewDate.html">
-        <table border="1" cellspacing="0" cellpadding="4">
-          <tr>
+              <table border="1" cellspacing="0" cellpadding="4">
+           <tr>
             <th>№ даты</th>
             <th>Тип</th>
             <th>Дата</th>
@@ -43,7 +42,7 @@
             <th>Уведомить</th>
             <th>Править</th>
             <th>Удалить</th>
-          </tr>
+           </tr>
     <c:forEach items="${Model}" var="d">
     <tr>
       <td><c:out value="${d.interviewDateId}"/></td>
@@ -62,14 +61,15 @@
           </a>
       </td>
       <td>
-         <a href="delInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId} '/>">
-             удалить
-            </a>
+       <a href="delInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId} '/>">
+         удалить
+         </a>
         </td>
   </tr>
     </c:forEach>
     </table>
           </form>
          </center>
+    </body>
     </body>
 </html>

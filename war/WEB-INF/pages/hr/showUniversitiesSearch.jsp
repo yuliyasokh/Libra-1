@@ -34,17 +34,25 @@
         <center>
         <table border ="1">
             <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
                 <td>№ университета </td>
                 <td>Университет</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
             </tr>
            <c:forEach items="${univers}" var="u">
                 <tr>
-                   <td><a href= "delUniversity.html?universityId=<c:out value='${u.universityId}'/> ">удалить</a></td>
-                   <td><a href="editUniversity.html?universityId=<c:out value='${u.universityId}'/>">править</a></td>
                    <td><c:out value="${u.universityId}"/></td>
                    <td><c:out value="${u.universityName}"/></td>
+                   <td>
+                       <a href="editUniversity.html?universityId=<c:out value='${u.universityId}'/>">
+                           править
+                       </a>
+                   </td>
+                   <td>
+                       <a href= "delUniversity.html?universityId=<c:out value='${u.universityId}'/> ">
+                           удалить
+                       </a>
+                   </td>
                 </tr>
         </c:forEach>
         </table>
