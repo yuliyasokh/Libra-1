@@ -88,7 +88,7 @@
       <input type="hidden" name="interviewDateId" value="<c:out value='${d.interviewDateId}  '/>"/>
       </td>
       <td>
-          <a href="editInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId}'/>">
+          <a href="editInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId}'/>&type=<c:out value='${d.typeInterview}'/> ">
               править
           </a>
       </td>

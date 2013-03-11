@@ -13,7 +13,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Управление университетами - Добавить университет </title>
     </head>
-    
     <body>
         <center>
             <h3>${msg}</h3>
@@ -21,25 +20,23 @@
                 Введите название университета: 
                 <input type="text" name ="univerName">
                 <input type="submit" value="Добавить" name="add">
-            </form>
-            <br>
+            </form><br>
         <form name="myForm" action="showUniversitiesSearch.html" method="get">
         <select name="univerSearch">
-            <option value="0"> - </option>
-            <option value="1">№ университета </option>
-            <option value="2">Университет</option>
+            <option value="0"  ${univerSearchInt == '0' ? 'selected' : ''}>Все </option>
+            <option value="1"  ${univerSearchInt == '1' ? 'selected' : ''}>№ университета </option>
+            <option value="2"  ${univerSearchInt == '2' ? 'selected' : ''}>Университет</option>
         </select>
-        <input type="text" name ="textBox">
+        <input type="text" name ="textBox" value="${textBox}">
         <input type="submit" value="Показать" name="search">
             </form>
         <br><br>
-        <center>
         <table border ="1">
             <tr>
                 <td>№ университета </td>
                 <td>Университет</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
+                <td>Править</td>
+                <td>Удалить</td>
             </tr>
            <c:forEach items="${univers}" var="u">
                 <tr>
@@ -58,6 +55,6 @@
                 </tr>
         </c:forEach>
         </table>
-       
+        </center>
     </body>
 </html>

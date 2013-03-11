@@ -50,13 +50,13 @@ function getFact(){
         <br>
             <form name="myForm" action="showDepartmentsSearch.html" method="get">
         <select name="departmentSearch">
-            <option value="0"> - </option>
-            <option value="1">№ кафедры </option>
-            <option value="2">Кафедра</option>
-            <option value="3">Факультет</option>
-            <option value="4">Университет</option>
+            <option value="0" ${departmentSearchInt == '0' ? 'selected' : ''}>Все </option>
+            <option value="1" ${departmentSearchInt == '1' ? 'selected' : ''}>№ кафедры </option>
+            <option value="2" ${departmentSearchInt == '2' ? 'selected' : ''}>Кафедра</option>
+            <option value="3" ${departmentSearchInt == '3' ? 'selected' : ''}>Факультет</option>
+            <option value="4" ${departmentSearchInt == '4' ? 'selected' : ''}>Университет</option>
         </select>
-        <input type="text" name ="textBox">
+        <input type="text" name ="textBox" value="${textBox}">
         <input type="submit" value="Показать" name="search">
             </form>
         <br><br>
@@ -66,8 +66,8 @@ function getFact(){
                 <td>Кафедра</td>
                 <td>Факультет</td>
                 <td>Университет</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
+                <td>Править</td>
+                <td>Удалить</td>
             </tr>
            <c:forEach items="${depts}" var="d">
                 <tr>

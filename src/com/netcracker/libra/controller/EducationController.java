@@ -55,6 +55,12 @@ public class EducationController {
         List<University> univers = hr.getUniversityById(universityId);
         ModelAndView mav = new ModelAndView();
         mav.addObject("univers", univers);
+        int countFact = hr.getCountFaculty(universityId);
+        int countDept = hr.getCountDepts("u.universityId", universityId);
+        int countStudents = hr.getCountStudents("u.universityId", universityId);
+        mav.addObject("countFact", countFact);
+        mav.addObject("countDept", countDept);
+        mav.addObject("countStudents", countStudents);
         return mav;
     }
     @RequestMapping(value="/hr/delFaculty", method=RequestMethod.GET)
@@ -62,12 +68,18 @@ public class EducationController {
         List<Faculty> facts = hr.getAllFacultiesById(facultyId);
         ModelAndView mav = new ModelAndView();
         mav.addObject("facts", facts);
+        int countDept=hr.getCountDepts("f.facultyId", facultyId);
+        int countStudents = hr.getCountStudents("f.facultyId", facultyId);
+        mav.addObject("countDept", countDept);
+        mav.addObject("countStudents", countStudents);
         return mav;
     }
     @RequestMapping(value="/hr/delDepartment", method=RequestMethod.GET)
     public ModelAndView delDept(@RequestParam("departmentId") int departmentId){
         List<Department> depts = hr.getAllDepartments("d.departmentId", departmentId);
         ModelAndView mav= new ModelAndView();
+        int countStudents = hr.getCountStudents("d.departmentId", departmentId);
+        mav.addObject("countStudents", countStudents);
         mav.addObject("depts", depts);
         return mav;
     }
@@ -249,34 +261,116 @@ public class EducationController {
             
             
     @RequestMapping(value="/hr/addUniversities", method= RequestMethod.GET)
-    public ModelAndView addUniver(){
+    public ModelAndView addUniver(
+    org.springframework.web.context.request.WebRequest webRequest){
+        String univerSearch = webRequest.getParameter("univerSearch");
+        String textbox = webRequest.getParameter("textBox");
         ModelAndView mav = new ModelAndView();
-        List<University> univers = hr.getAllUniversity();
-        mav.addObject("univers", univers);
-        mav.setViewName("/hr/addUniversities");
-        return mav;
+        List<University> univers=null;
+        
+        try{
+            int univerSearchInt=Integer.parseInt(univerSearch);
+            mav.addObject("textBox", textbox);
+            mav.addObject("univerSearchInt", univerSearch);
+            if (univerSearchInt==0){
+                univers = hr.getAllUniversity();
+            }
+            if (univerSearchInt==1){
+            try{
+            int n=Integer.parseInt(textbox);
+             univers = hr.getUniversityById(n);
+            }
+            catch(Exception e){
+                mav.addObject("msg", "№ university has not correct format!");
+                univers = hr.getAllUniversity();
+                    }
+                }
+            if (univerSearchInt==2){
+            univers = hr.getUniversityByName(textbox);
+            }
+        }
+        catch(Exception ex){
+            univers = hr.getAllUniversity();
+        }
+        finally{
+            mav.addObject("univers", univers);
+            mav.setViewName("/hr/addUniversities");
+            return mav;
+    }
     }
     @RequestMapping(value="/hr/addFaculties", method=RequestMethod.GET)
-    public ModelAndView addFac(){
+    public ModelAndView addFac(
+    org.springframework.web.context.request.WebRequest webRequest){
+        String facultySearch = webRequest.getParameter("facultySearch");
+        String textbox = webRequest.getParameter("textBox");
+        List<Faculty> facts=null;
         ModelAndView mav = new ModelAndView();
-        List<University> univers = hr.getAllUniversity();
-        mav.addObject("univers", univers);
-        List<Faculty> facts = hr.getAllFaculties();
-        mav.addObject("facts", facts);
-        mav.setViewName("/hr/addFaculties");
-        return mav;
+        try{
+            int facultySearchInt=Integer.parseInt(facultySearch);
+            if (facultySearchInt==1){
+                facts = hr.getAllFacultiesById(Integer.parseInt(textbox));
+                    }
+            if (facultySearchInt==2){
+                facts = hr.getAllFaculties("facultyName", textbox);
+                }
+            if (facultySearchInt==3){
+                facts = hr.getAllFaculties("universityName", textbox);
+                    }
+            if (facultySearchInt==0){
+                facts = hr.getAllFaculties();
+                }
+            mav.addObject("facultySearchInt", facultySearchInt);
+            mav.addObject("textBox", textbox);
+            }
+        catch(Exception ex){
+             facts = hr.getAllFaculties();
+        }
+        finally{
+            mav.addObject("univers", hr.getAllUniversity());
+            mav.addObject("facts", facts);
+            mav.setViewName("/hr/addFaculties");
+            return mav;
+        }
     }
     @RequestMapping(value="/hr/addDepartments", method=RequestMethod.GET)
-    public ModelAndView addDept(){
+    public ModelAndView addDept(
+    org.springframework.web.context.request.WebRequest webRequest){
         ModelAndView mav = new ModelAndView();
-        List<University> univers = hr.getAllUniversity();
-        mav.addObject("univers", univers);
-        List<Faculty> facts = hr.getAllFaculties();
-        mav.addObject("facts", facts);
-        List<Department> dept = hr.gelAllDepartemtns();
-        mav.addObject("depts", dept);
-        mav.setViewName("/hr/addDepartments");
-        return mav;
+        String departmentSearch = webRequest.getParameter("departmentSearch");
+        String textbox = webRequest.getParameter("textBox");
+        List<Department> dept=null;
+        try{
+            int departmentSearchInt=Integer.parseInt(departmentSearch);
+            if (departmentSearchInt==1){
+                dept = hr.getAllDepartments("d.departmentId", Integer.parseInt(textbox));
+                }
+            if (departmentSearchInt==2){
+                dept = hr.getAllDepartments("d.departmentName", textbox);
+                }
+            if (departmentSearchInt==3){
+                dept = hr.getAllDepartments("f.facultyName", textbox);
+                }
+            if (departmentSearchInt==4){
+                dept = hr.getAllDepartments("u.universityName", textbox);
+                }
+            if (departmentSearchInt==0){
+                dept = hr.gelAllDepartemtns();
+                }
+            mav.addObject("textBox", textbox);
+            mav.addObject("departmentSearchInt", departmentSearchInt);
+        }
+        catch(Exception ex){
+             dept = hr.gelAllDepartemtns();
+        }
+        finally{
+            List<University> univers = hr.getAllUniversity();
+            mav.addObject("univers", univers);
+            List<Faculty> facts = hr.getAllFaculties();
+            mav.addObject("facts", facts);
+            mav.addObject("depts", dept);
+            mav.setViewName("/hr/addDepartments");
+            return mav;
+        }
     }
     
     @RequestMapping(value="hr/addUniversitiesAdded", method= RequestMethod.GET)
@@ -356,7 +450,7 @@ public class EducationController {
         return mav;
         
     }
-    
+     
     @RequestMapping(value="hr/showFacultiesSearch", method= RequestMethod.GET)
     public ModelAndView searchFacts(
     @RequestParam("textBox")String name,

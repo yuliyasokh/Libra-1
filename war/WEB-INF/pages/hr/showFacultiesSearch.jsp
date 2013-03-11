@@ -16,12 +16,14 @@
     <body>
         <br>
         <center>
-        <a href="addFaculties.html">Добавить новый факультет</a>
+        <a href="addFaculties.html?textBox=<c:out value='${textBoxString}'/>&facultySearch=<c:out value='${facultySearchInt}'/>">
+            Добавить новый факультет
+        </a>
         <br>
         <br>
             <form name="myForm" action="showFacultiesSearch.html" method="get">
         <select name="facultySearch">
-            <option value="0" ${facultySearchInt == '0' ? 'selected' : ''}> - </option>
+            <option value="0" ${facultySearchInt == '0' ? 'selected' : ''}>Все </option>
             <option value="1" ${facultySearchInt == '1' ? 'selected' : ''}>№ факультета </option>
             <option value="2" ${facultySearchInt == '2' ? 'selected' : ''}>Факультет </option>
             <option value="3" ${facultySearchInt == '3' ? 'selected' : ''}>Университет</option>
@@ -36,8 +38,8 @@
                 <td>№ факультета </td>
                 <td>Факультет</td>
                 <td>Университет</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
+                <td>Править</td>
+                <td>Удалить</td>
             </tr>
            <c:forEach items="${facts}" var="f">
                 <tr>             

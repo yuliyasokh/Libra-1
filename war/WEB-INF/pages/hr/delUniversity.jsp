@@ -12,6 +12,7 @@
         <title>Управление универами - Удаление</title>
     </head>
     <body>
+        <center>
         <h2>Удаление университета</h2>
         Вы действительно хотите удалить университет, все его факультеты и кафедры?
         <form  action="deletedUniversities.html" method="post">
@@ -27,11 +28,16 @@
                     <td><c:out value="${u.universityName}"/></td>
                 </tr>
         </c:forEach>
-        </table>
-            <input type="submit" value="Удалить" name="delete">
-        </form>
+        </table><br>
+        Количество факультетов: ${countFact}<br>
+        Количество кафедр: ${countDept}<br>
+        При удалении этого университета также удаляется студенты, которые в нем учатся!<br>
+        Количество студентов: ${countStudents}<br>
         <br>
-        <input value="Назад" onclick="location.href='showUniversities.html'" type="button"/>
-
+           <input value="Назад" onclick="location.href='showUniversities.html'" type="button"/> 
+           <input type="submit" value="Удалить" name="delete">
+        </form>
+        
+        </center>
     </body>
 </html>

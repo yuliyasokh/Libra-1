@@ -16,28 +16,27 @@
     <body>
         <br>
         <center>
-        <a href="addUniversities.html">Добавить новый университет</a>
+            <a href="addUniversities.html?textBox=<c:out value='${textBoxString}'/>&univerSearch=<c:out value='${univerSearchInt}'/>">Добавить новый университет</a>
         <br>
         <br>
-        <center> 
             <h3>${msg}</h3>
             <form name="myForm" action="showUniversitiesSearch.html" method="get">
         <select name="univerSearch">
-            <option value="0" ${univerSearchInt == '0' ? 'selected' : ''}> - </option>
+            <option value="0" ${univerSearchInt == '0' ? 'selected' : ''}>Все </option>
             <option value="1" ${univerSearchInt == '1' ? 'selected' : ''}>№ университета </option>
             <option value="2" ${univerSearchInt == '2' ? 'selected' : ''}>Университет</option>
         </select>
                 <input type="text" name ="textBox" value="${textBoxString}">
         <input type="submit" value="Показать" name="search">
             </form>
-        <br><br>
-        <center>
+        <br>
+        <br>
         <table border ="1">
             <tr>
                 <td>№ университета </td>
                 <td>Университет</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
+                <td>Правка</td>
+                <td>Удалить</td>
             </tr>
            <c:forEach items="${univers}" var="u">
                 <tr>
@@ -56,5 +55,6 @@
                 </tr>
         </c:forEach>
         </table>
+        </center>
     </body>
 </html>

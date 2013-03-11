@@ -22,7 +22,7 @@
             <h3>${msg}</h3>
             <form name="myForm" action="showFacultiesSearch.html" method="get">
         <select name="facultySearch">
-            <option value="0"> - </option>
+            <option value="0">Все </option>
             <option value="1">№ факультета </option>
             <option value="2">Факультет</option>
             <option value="3">Университет</option>
@@ -36,8 +36,8 @@
                 <td>№ факультета </td>
                 <td>Факультет</td>
                 <td>Университет</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
+                <td>Правка</td>
+                <td>Удалить</td>
             </tr>
            <c:forEach items="${facts}" var="f">
                 <tr>

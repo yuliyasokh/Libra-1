@@ -21,7 +21,7 @@
             <h3>${msg}</h3>
             <form name="myForm" action="showInterviewDateSearch.html" method="get">
         <select name="interSearch">
-            <option value="0"> - </option>
+            <option value="0">Все </option>
             <option value="1">№ даты</option>
             <option value="2">Дата</option>
             <option value="3">Интервьер</option>
@@ -31,7 +31,7 @@
             </form>
             <br>
          <h2 align="center">Информация о рассписании собеседований</h2><br> 
-          <form method="GET" action="delInterviewDate.html">
+          <form method="GET">
         <table border="1" cellspacing="0" cellpadding="4">
           <tr>
             <th>№ даты</th>
@@ -57,7 +57,7 @@
       <input type="hidden" name="interviewDateId" value="<c:out value='${d.interviewDateId}  '/>"/>
       </td>
       <td>
-          <a href="editInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId}'/>">
+          <a href="editInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId}'/>&type=<c:out value='${d.typeInterview}'/> ">
               править
           </a>
       </td>

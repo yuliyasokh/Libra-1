@@ -21,7 +21,7 @@
         <br>
             <form name="myForm" action="showDepartmentsSearch.html" method="get">
         <select name="departmentSearch">
-            <option value="0"> - </option>
+            <option value="0">Все </option>
             <option value="1">№ кафедры </option>
             <option value="2">Кафедра</option>
             <option value="3">Факультет</option>
@@ -37,8 +37,8 @@
                 <td>Кафедра</td>
                 <td>Факультет</td>
                 <td>Университет</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
+                <td>Правка</td>
+                <td>Удалить</td>
             </tr>
            <c:forEach items="${depts}" var="d">
                 <tr>                   

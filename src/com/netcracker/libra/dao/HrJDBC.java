@@ -291,6 +291,26 @@ public class HrJDBC implements HrDAO {
         String query="update department set departmentName=?, facultyId=? where departmentId=?";
         jdbcTemplateObject.update(query, departmentName, facId,departmentId);
     }
+    public int getCountDepts(String param, int id){
+        String query="select count(*) from department d "
+                        + "join faculty f on f.facultyId=d.facultyId "
+                            + "join university u on u.universityId=f.universityId "
+                                + "where "+param+" = ?";
+        return jdbcTemplateObject.queryForInt(query, id);
+    }
+    
+    public int getCountFaculty(int universityId){
+        String query="select count(*) from faculty where universityId=?";
+        return jdbcTemplateObject.queryForInt(query,universityId);
+    }
+    public int getCountStudents(String param, int id){
+        String query="select count(*) from appForm a "
+                    + "join department d on a.departmentId=d.departmentId "
+                        + "join faculty f on f.facultyId=d.facultyId "
+                            + "join university u on u.universityId=f.universityId "
+                                + "where "+param+" = ?";
+        return jdbcTemplateObject.queryForInt(query, id);
+    }
     
     public List<Student> getOrderStudent(String param, String value, String orderBy){
         if (param.equals("getAll")){
