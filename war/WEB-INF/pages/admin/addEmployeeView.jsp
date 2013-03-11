@@ -11,6 +11,7 @@
         <title>Служащие</title>
     </head>
     <body>
+        <center>
         
         <table border="1" cellspacing="0" cellpadding="4">
         <caption>Внесите данные, чтобы добавить нового служащего</caption>
@@ -65,11 +66,12 @@
                     <td>${emp.getPassword()}</td>
                     <td><a href="editEmployee.html?employeeId=<c:out value='${emp.getUserId()}'/>">
                             <img src="resources\images\edit.png"  width="25" height="25" border="0" title="Редактировать"/></a></td>
-                    <td><a href="deleteEmployee.html?employee=<c:out value='${emp.getUserId()}'/>">
+                    <td><a href="deleteSure.html?employeeId=<c:out value='${emp.getUserId()}'/>">
                             <img src="resources\images\del.jpg"  width="25" height="25" border="0" title="Удалить"/></a></td>
                 </tr>
             </form>
             </c:forEach>
         </table>
+        </center>
     </body>
 </html>

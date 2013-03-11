@@ -269,17 +269,11 @@ public class AdminJDBC implements AdminDAO {
         }
         
         /**
-         * Deletes an employee from the all database's tables by his or her ID
+         * Deletes an employee from the entire database by his or her ID
          */
         public void deleteEmployee(Integer employeeId) {
-            String SQL1 = "DELETE FROM InterviewerList WHERE UserId = ?";
-            String SQL2 = "DELETE FROM InterviewResults WHERE UserId = ?";
-            String SQL3 = "UPDATE AppForm SET ModifiedBy = null WHERE ModifiedBy = ?";
-            String SQL4 = "DELETE FROM Users WHERE UserId = ?";
-            jdbcTemplateObject.update(SQL1, employeeId);
-            jdbcTemplateObject.update(SQL2, employeeId);
-            jdbcTemplateObject.update(SQL3, employeeId);
-            jdbcTemplateObject.update(SQL4, employeeId);
+            String SQL = "DELETE FROM Users WHERE UserId = ?";
+            jdbcTemplateObject.update(SQL, employeeId);
         }
 
 }

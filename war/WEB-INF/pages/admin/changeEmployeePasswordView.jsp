@@ -23,6 +23,7 @@
         <title>Служащие</title>
     </head>
     <body>
+        <center>
         <form action="sortedEmployees.html" method="POST">
         <tr>
             <!-- radio buttons "role" -->
@@ -89,5 +90,6 @@
         <c:if test="${employees.isEmpty()}"> ${noResults} </c:if>
         
         <br><a href="addEmployee.html">Добавить служащего</a>
+        </center>
     </body>
 </html>

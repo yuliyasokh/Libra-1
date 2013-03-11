@@ -11,6 +11,7 @@
         <title>Редактировать</title>
     </head>
     <body>
+        <center>
         <table border="1" cellspacing="0" cellpadding="4">
         <caption>Измените данные, чтобы редактировать информацию о служащем</caption>
         <tr>
@@ -41,5 +42,6 @@
         <td><input type="submit" value="OK"></td>
         </form>
         </table>
+        </center>
     </body>
 </html>

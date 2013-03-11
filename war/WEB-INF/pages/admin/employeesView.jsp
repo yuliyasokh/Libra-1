@@ -23,6 +23,7 @@
         <title>Служащие</title>
     </head>
     <body>
+        <center>
         <form action="sortedEmployees.html" method="POST">
         <tr>
             <!-- radio buttons "role" -->
@@ -84,5 +85,6 @@
         
         <br><br>${message}
         
+        </center>
     </body>
 </html>

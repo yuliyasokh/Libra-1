@@ -409,6 +409,16 @@ public class HrJDBC implements HrDAO {
     }
     
     /**
+     * Returns interview's IDs by app.form ID
+     * @author Alexander Lebed
+     */
+    public List <Integer> getInterviewIds (Integer appId) {
+        String SQL = "SELECT interviewId FROM Interview WHERE appId = ?";
+        List <Integer> interviewId = jdbcTemplateObject.queryForList(SQL, new Object[] {appId}, Integer.class);
+        return interviewId;
+    }
+    
+    /**
      * Retutns a string of interview's finish date and time
      */
     public String getInterviewFinishDate(Integer interviewId) {
@@ -420,7 +430,7 @@ public class HrJDBC implements HrDAO {
         }
         catch (EmptyResultDataAccessException e) {
             interviewDateFinish = null;
-            e.printStackTrace();
+            e.getMessage();
         }
         return interviewDateFinish;
     }
@@ -454,7 +464,7 @@ public class HrJDBC implements HrDAO {
         }
         catch (EmptyResultDataAccessException e) {
             result = 0;
-            e.printStackTrace();
+            e.getMessage();
         }
         return result==1 ? true : false;
     }
