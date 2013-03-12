@@ -4,8 +4,10 @@
  */
 package com.netcracker.libra.model;
 
-/**
- *
+/** University consists from University number and University name.
+ *  Uses for student's search and filling appform
+ *  Universities can be created, edited, deleted.
+ * 
  * @author Yuliya
  */
 public class University {

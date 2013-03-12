@@ -22,7 +22,7 @@
             <h3>${msg}</h3>
             <form name="myForm" action="showFacultiesSearch.html" method="get">
         <select name="facultySearch">
-            <option value="0"> - </option>
+            <option value="0">Все </option>
             <option value="1">№ факультета </option>
             <option value="2">Факультет</option>
             <option value="3">Университет</option>
@@ -33,19 +33,27 @@
         <br><br>
          <table border ="1">
             <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
                 <td>№ факультета </td>
                 <td>Факультет</td>
                 <td>Университет</td>
+                <td>Правка</td>
+                <td>Удалить</td>
             </tr>
            <c:forEach items="${facts}" var="f">
                 <tr>
-                    <td><a href= "delFaculty.html?facultyId=<c:out value='${f.facultyId}'/> ">удалить</a> </td>
-                    <td><a href="editFaculty.html?facultyId=<c:out value='${f.facultyId}'/>">править</a></td>
                     <td><c:out value="${f.facultyId}"/></td>
                     <td><c:out value="${f.facultyName}"/></td>
                     <td><c:out value="${f.universityName}"/></td>
+                    <td>
+                        <a href="editFaculty.html?facultyId=<c:out value='${f.facultyId}'/>">
+                            править
+                        </a>
+                    </td>
+                    <td>
+                        <a href= "delFaculty.html?facultyId=<c:out value='${f.facultyId}'/> ">
+                            удалить
+                        </a> 
+                    </td>
                 </tr>
         </c:forEach>
         </table>

@@ -1,10 +1,9 @@
 package com.netcracker.libra.dao;
 
+import com.netcracker.libra.model.DateAndInterviewer;
+import com.netcracker.libra.model.DateAndInterviewerResults;
 import com.netcracker.libra.model.Department;
 import com.netcracker.libra.model.Faculty;
-import com.netcracker.libra.model.Interview;
-import com.netcracker.libra.model.InterviewDate;
-import com.netcracker.libra.model.InterviewResults;
 import com.netcracker.libra.model.Student;
 import com.netcracker.libra.model.University;
 import com.netcracker.libra.model.User;
@@ -12,6 +11,7 @@ import com.netcracker.libra.model.UserResult;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 /**
@@ -24,7 +24,8 @@ public class HrJDBC implements HrDAO {
         private static JdbcTemplate jdbcTemplateObject;
        
         public List<Student> listStudents() {
-        String SQL = "select a.appid, u.firstname,u.lastname,u.email from Users u join AppForm a on u.userId=a.userId and u.roleid=1";
+        String SQL = "select a.appid, u.firstname,u.lastname,u.email from Users u "
+                + "join AppForm a on u.userId=a.userId and u.roleid=1";
         List <Student> students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
         return students;
             }
@@ -86,14 +87,16 @@ public class HrJDBC implements HrDAO {
         }
 
     public List<Student> getStudent(Integer id) {
-        String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u join appform a on u.userid=a.userid and a.appid=?";
+        String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u "
+                + "join appform a on u.userid=a.userid and a.appid=?";
         List <Student> students = jdbcTemplateObject.query(SQL, new Object[]{id}, new ShortStudentRowMapper());
         return students;
      }
 
         @Override
      public List<Student> getStudentsByLastName(String lname) {
-        String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u join appform a on u.userid=a.userid and u.lastname like '%"+lname+"%'";
+        String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u "
+                + "join appform a on u.userid=a.userid and lower(u.lastname) like '%"+lname.toLowerCase()+"%'";
         List <Student> students;
         students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
         return students;
@@ -101,8 +104,8 @@ public class HrJDBC implements HrDAO {
         public List<Student> getStudentsByAllFields(String value){
         String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u "
                         + "join appform a on u.userid=a.userid and "
-                             + "((a.appid like '"+value+"') or (u.firstname like '%"+value+"%') "
-                                + "or (u.lastname like '%"+value+"%') or (u.email like '%"+value+"%'))";
+                             + "((a.appid like '"+value+"') or (lower(u.firstname) like '%"+value.toLowerCase()+"%') "
+                                + "or (lower(u.lastname) like '%"+value.toLowerCase()+"%') or (lower(u.email) like '%"+value.toLowerCase()+"%'))";
         List <Student> students;
         students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
         return students;
@@ -110,14 +113,16 @@ public class HrJDBC implements HrDAO {
 
         @Override
      public List<Student> getStudentsByFirstName(String fname) {
-         String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u join appform a on u.userid=a.userid and u.firstname like '%"+fname+"%'";
+         String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u "
+                 + "join appform a on u.userid=a.userid and lower(u.firstname) like '%"+fname.toLowerCase()+"%'";
          List <Student> students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
          return students;    
      }
 
         @Override
      public List<Student> getStudentsByEmail(String mail) {
-        String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u join appform a on u.userid=a.userid and u.email like '%"+mail+"%'";
+        String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u "
+                + "join appform a on u.userid=a.userid and lower(u.email) like '%"+mail.toLowerCase()+"%'";
         List <Student> students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
         return students;
      }
@@ -129,7 +134,7 @@ public class HrJDBC implements HrDAO {
      }
      
      public List<University> getUniversityByName(String name){
-         String query="select universityId, universityName from university where universityName like '%"+name+"%'";
+         String query="select universityId, universityName from university where lower(universityName) like '%"+name.toLowerCase()+"%'";
          List<University> universities = jdbcTemplateObject.query(query, new UniversityRowMapper());
          return universities;
      }
@@ -173,7 +178,7 @@ public class HrJDBC implements HrDAO {
      
      public List<Faculty> getAllFaculties(String param, String name) {
         String query="select f.facultyId, f.facultyName, u.universityId, u.universityName from faculty f "
-                        + "join university u on f.universityId=u.universityId  where "+param+" like '%"+name+"%'";
+                        + "join university u on f.universityId=u.universityId  where lower("+param+") like '%"+name.toLowerCase()+"%'";
         List<Faculty> faculties;
         faculties = jdbcTemplateObject.query(query, new FacultyRowMapper());
         return faculties;
@@ -197,7 +202,7 @@ public class HrJDBC implements HrDAO {
      public List<Department> getAllDepartments(String param, String name) {
         String query="select d.departmentId, d.departmentName, f.facultyId, f.facultyName, u.universityId, u.universityName from department d "
                         + "join faculty f on d.facultyId=f.facultyId "
-                            + "join university u on f.universityId=u.universityId where "+param+" like '%"+name+"%'";
+                            + "join university u on f.universityId=u.universityId where lower("+param+") like '%"+name.toLowerCase()+"%'";
         List<Department> departments = jdbcTemplateObject.query(query,new departmentRowMapper());
         return departments;
     }
@@ -279,12 +284,32 @@ public class HrJDBC implements HrDAO {
         jdbcTemplateObject.update(query, facultyName,univerId, facultyId);
     }
     public int getUniversityIdByName(String name){
-        String query="select universityId  from university where universityName = ?";
-        return jdbcTemplateObject.queryForInt(query, name);
+        String query="select universityId  from university where lower(universityName) = ?";
+        return jdbcTemplateObject.queryForInt(query, name.toLowerCase());
     }
     public void updateDepartment(int departmentId, String departmentName, int facId) {
         String query="update department set departmentName=?, facultyId=? where departmentId=?";
         jdbcTemplateObject.update(query, departmentName, facId,departmentId);
+    }
+    public int getCountDepts(String param, int id){
+        String query="select count(*) from department d "
+                        + "join faculty f on f.facultyId=d.facultyId "
+                            + "join university u on u.universityId=f.universityId "
+                                + "where "+param+" = ?";
+        return jdbcTemplateObject.queryForInt(query, id);
+    }
+    
+    public int getCountFaculty(int universityId){
+        String query="select count(*) from faculty where universityId=?";
+        return jdbcTemplateObject.queryForInt(query,universityId);
+    }
+    public int getCountStudents(String param, int id){
+        String query="select count(*) from appForm a "
+                    + "join department d on a.departmentId=d.departmentId "
+                        + "join faculty f on f.facultyId=d.facultyId "
+                            + "join university u on u.universityId=f.universityId "
+                                + "where "+param+" = ?";
+        return jdbcTemplateObject.queryForInt(query, id);
     }
     
     public List<Student> getOrderStudent(String param, String value, String orderBy){
@@ -302,27 +327,31 @@ public class HrJDBC implements HrDAO {
         }
         if (param.equals("firstName")){
             String query="select a.appid, u.firstname,u.lastname,u.email from users u "
-                            + "join appform a on u.userid=a.userid and u.firstname like '%"+value+"%' order by "+orderBy;
+                            + "join appform a on u.userid=a.userid and "
+                    + "lower(u.firstname) like '%"+value.toLowerCase()+"%' order by "+orderBy;
             List<Student> std = jdbcTemplateObject.query(query, new ShortStudentRowMapper());
             return std;
         }
         if (param.equals("lastName")){
             String query="select a.appid, u.firstname,u.lastname,u.email from users u "
-                            + "join appform a on u.userid=a.userid and u.lastname like '%"+value+"%' order by "+orderBy;
+                            + "join appform a on u.userid=a.userid and "
+                    + "lower(u.lastname) like '%"+value.toLowerCase()+"%' order by "+orderBy;
             List<Student> std = jdbcTemplateObject.query(query, new ShortStudentRowMapper());
             return std;
         }
         if (param.equals("email")){
             String query="select a.appid, u.firstname,u.lastname,u.email from users u "
-                            + "join appform a on u.userid=a.userid and u.email like '%"+value+"%' order by "+orderBy;
+                            + "join appform a on u.userid=a.userid and "
+                    + "lower(u.email) like '%"+value.toLowerCase()+"%' order by "+orderBy;
             List<Student> std = jdbcTemplateObject.query(query, new ShortStudentRowMapper());
             return std;
         }
         if (param.equals("allFields")){
             String query = "select a.appid, u.firstname,u.lastname,u.email from users u "
                         + "join appform a on u.userid=a.userid and "
-                             + "((a.appid like '"+value+"') or (u.firstname like '%"+value+"%') "
-                                + "or (u.lastname like '%"+value+"%') or (u.email like '%"+value+"%')) order by "+orderBy;
+                             + "((a.appid like '"+value+"') or (lower(u.firstname) like '%"+value.toLowerCase()+"%') "
+                                + "or (lower(u.lastname) like '%"+value.toLowerCase()+"%') "
+                    + "or (lower(u.email) like '%"+value.toLowerCase()+"%')) order by "+orderBy;
             List<Student> std = jdbcTemplateObject.query(query, new ShortStudentRowMapper());
             return std;
         }
@@ -363,56 +392,116 @@ public class HrJDBC implements HrDAO {
     
     
     /**
-     * Возвращает интервью, которое было назначено по ID анкеты
+     * Returns interview's ID by application's form ID
      * @author Alexander Lebed
      */
-    public Interview getInterview(Integer appId) {
-        String SQL = "SELECT * FROM Interview WHERE appId = ?";
-        Interview interview = jdbcTemplateObject.queryForObject(SQL, new Object[] {appId}, new InterviewRowMapper());
-        return interview;
+    public Integer getInterviewId (Integer appId) {
+        String SQL = "SELECT interviewId FROM Interview WHERE appId = ?";
+        int interviewId;
+        try{
+            interviewId = jdbcTemplateObject.queryForInt(SQL, new Object[] {appId});
+        }
+        catch (EmptyResultDataAccessException e) {
+            interviewId = 0;
+            e.printStackTrace();
+        }
+        return interviewId;
     }
     
-    public InterviewDate getInterviewDate(Integer interviewDateId) {
-        String SQL = "SELECT * FROM InterviewDate WHERE interviewDateId = ?";
-        InterviewDate interviewDate = jdbcTemplateObject.queryForObject(SQL, new Object[] {interviewDateId}, new InterviewDateRowMapper());
-        return interviewDate;
+    /**
+     * Returns interview's IDs by app.form ID
+     * @author Alexander Lebed
+     */
+    public List <Integer> getInterviewIds (Integer appId) {
+        String SQL = "SELECT interviewId FROM Interview WHERE appId = ?";
+        List <Integer> interviewId = jdbcTemplateObject.queryForList(SQL, new Object[] {appId}, Integer.class);
+        return interviewId;
     }
     
+    /**
+     * Retutns a string of interview's finish date and time
+     */
+    public String getInterviewFinishDate(Integer interviewId) {
+        String SQL = "SELECT to_char(d.dateFinish,'DD.MM.YYYY HH24:MI') FROM InterviewDate d, Interview i "+
+                     "WHERE d.interviewDateId = i.interviewDateId AND i.interviewId = ?";
+        String interviewDateFinish;
+        try{
+            interviewDateFinish = jdbcTemplateObject.queryForObject(SQL, new Object[] {interviewId}, String.class);
+        }
+        catch (EmptyResultDataAccessException e) {
+            interviewDateFinish = null;
+            e.getMessage();
+        }
+        return interviewDateFinish;
+    }
+    
+    /**
+     * Returns a List of interviewers who were assigned to a certain time
+     */
     public List <User> getInterviewersFromInterviewerList(Integer interviewDateId) {
-        String SQL = "SELECT * FROM Users WHERE userId IN (SELECT userId FROM InterviewerList WHERE interviewDateId = ?)";
+        String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE userId IN (SELECT userId FROM InterviewerList WHERE interviewDateId = ?)";
         List <User> users = jdbcTemplateObject.query(SQL, new Object[] {interviewDateId}, new UserRowMapper());
         return users;
     }
     
+    /**
+     * Returns a List of interviewers who interviewed at a particular interview
+     */
     public List <User> getInterviewersFromInterviewResults(Integer interviewId) {
-        String SQL = "SELECT * FROM Users WHERE userId IN (SELECT userId FROM InterviewResults WHERE interviewId = ?)";
+        String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE userId IN (SELECT userId FROM InterviewResults WHERE interviewId = ?)";
         List <User> users = jdbcTemplateObject.query(SQL, new Object[] {interviewId}, new UserRowMapper());
         return users;
     }
     
-    public List <InterviewResults> getInterviewResults(Integer interviewId) {
-        String SQL = "SELECT * FROM InterviewResults WHERE interviewId = ?";
-        List <InterviewResults> interviewResults = jdbcTemplateObject.query(SQL, new Object[] {interviewId}, new InterviewResultsRowMapper());
-        return interviewResults;
+    /**
+     * Returns true if a student was interviewed
+     */
+    public boolean getInterviewResults(Integer interviewId) {
+        String SQL = "SELECT DISTINCT(1) FROM InterviewResults WHERE interviewId = ?";
+        int result;
+        try {
+            result = jdbcTemplateObject.queryForInt(SQL, new Object[] {interviewId});
+        }
+        catch (EmptyResultDataAccessException e) {
+            result = 0;
+            e.getMessage();
+        }
+        return result==1 ? true : false;
     }
     
+    /**
+     * Returns a List of UserResult (interviewer's data and his or her assessment of interview) of certain interview 
+     */
     public List <UserResult> getUserResults(Integer interviewId) {
-        String SQL = "SELECT u.userId, u.firstName, u.lastName, u.roleId, r.mark, r.comments FROM Users u, InterviewResults r WHERE u.UserId = r.UserId AND r.interviewId = ?";
+        String SQL = "SELECT u.userId, u.firstName, u.lastName, u.roleId, r.mark, r.comments FROM Users u, InterviewResults r WHERE u.userId = r.userId AND r.interviewId = ?";
         List <UserResult> userResults = jdbcTemplateObject.query(SQL, new Object[] {interviewId}, new UserResultRowMapper());
         return userResults;
     }
     
     /**
-     * @param interviewId - ID интерьвью
-     * @param dateFinish - дата окончания интервью
-     * @return true если интервью БУДЕТ, false - БЫЛО
+     * Returns a List with information of application's form ID, date and time of certain interview, 
+     * assigned interviewers and their assessment of the theinterview by interview's ID
      */
-//    public boolean getActualInterview(Integer interviewId, Date dateFinish) {
-//        String SQL = "SELECT 1 FROM InterviewDate id, Interview i "+
-//                     "WHERE SYSDATE < ? AND id.InterviewDateId = i.InterviewDateId AND i.InterviewId = ?";
-//        Object[] params = new Object[] {dateFinish, interviewId};
-//        int var = jdbcTemplateObject.queryForInt(SQL, params);
-//        return (var==1) ? true : false;
-//    }
+    public List <DateAndInterviewerResults> getDateAndInterviewerResults (Integer interviewId) {
+        String SQL = "SELECT i.AppId, to_char(d.dateStart,'dd.mm.yyyy') interviewDate, to_char(d.dateStart,'hh24:mi')||' - '||  to_char(d.dateFinish,'hh24:mi') interviewTime, "+
+                     "u.firstName||' '|| u.lastName interviewerName, u.roleId interviewerRole, r.mark interviewerMark, r.comments interviewerComments "+
+                     "FROM interviewResults r, interview i, interviewDate d, users u "+
+                     "WHERE i.interviewId = r.interviewId AND i.interviewDateId = d.interviewDateId AND u.userId = r.userId AND i.interviewId = ?";
+        List <DateAndInterviewerResults> resultList = jdbcTemplateObject.query(SQL, new Object[] {interviewId}, new DateAndInterviewerResultsRowMapper());
+        return resultList;
+    }
+    
+    /**
+     * Returns a List with information of application's form ID, date and time of certain interview, 
+     * assigned interviewers by interview's ID
+     */
+    public List <DateAndInterviewer> getDateAndInterviewer (Integer interviewId) {
+        String SQL = "SELECT i.AppId, to_char(d.dateStart,'dd.mm.yyyy') interviewDate, to_char(d.dateStart,'hh24:mi')||' - '||  to_char(d.dateFinish,'hh24:mi') interviewTime, "+
+                     "u.firstName||' '|| u.lastName interviewerName, u.roleId interviewerRole FROM interviewerList l, interview i, interviewDate d, users u "+
+                     "WHERE i.interviewDateId = d.interviewDateId AND d.interviewDateId = l.interviewDateId AND l.userId = u.userId AND i.interviewId = ?";
+        List <DateAndInterviewer> resultList = jdbcTemplateObject.query(SQL, new Object[] {interviewId}, new DateAndInterviewerRowMapper());
+        return resultList;
+    }
+    
 
 }

@@ -14,6 +14,7 @@
         <title>Управление кафедрами - Удаление</title>
     </head>
     <body>
+        <center>
        <h2>Удаление кафедры</h2>
         Вы действительно хотите удалить кафедру?
         <form  action="deletedDepartments.html" method="post">
@@ -33,10 +34,13 @@
                     <td><c:out value="${d.universityName}"/></td>
                 </tr>
         </c:forEach >
-        </table>          
-            <input type="submit" value="Удалить" name="delete">
-        </form>
-        <br>
+        </table><br>
+        При удалении это кафедры также удаляется студенты, которые на ней учатся!<br>
+        Количество студентов: ${countStudents}
+        <br><br>
         <input value="Назад" onclick="location.href='showDepartments.html'" type="button"/>
-    </body>
+            <input type="submit" value="Удалить" name="delete">
+        </form>        
+        </center>
+        </body>
 </html>

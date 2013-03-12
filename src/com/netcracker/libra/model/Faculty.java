@@ -4,7 +4,9 @@
  */
 package com.netcracker.libra.model;
 
-/**
+/**Faculty consists from faculty number, faculty name, university number and university name.
+ * Uses in student's search and filling appform.
+ * Faculty can be created, edited or deleted.
  *
  * @author Yuliya
  */

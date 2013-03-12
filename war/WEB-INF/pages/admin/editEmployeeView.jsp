@@ -9,6 +9,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Редактировать</title>
+        <style type="text/css">
+        body {text-align: center; padding-top:100px }
+        table {margin: 0px auto;}
+        </style>
     </head>
     <body>
         <table border="1" cellspacing="0" cellpadding="4">
@@ -19,8 +23,7 @@
             <th>Имя</th>
             <th>Фамилия</th>
             <th>Email</th>
-            <th>Пароль</th>
-            <th></th>
+            <th>Подтвердить</th>
         </tr>
         <form action="doneEdit.html" method="POST">
         <td>
@@ -39,8 +42,7 @@
         <td><input type="text" name="firstName" value="<c:out value='${emp.getFirstName()}'/>"/></td>
         <td><input type="text" name="lastName" value="<c:out value='${emp.getLastName()}'/>"/></td>
         <td><input type="text" name="email" value="<c:out value='${emp.getEmail()}'/>"/></td>
-        <td><input type="text" name="password" value="<c:out value='${emp.getPassword()}'/>"/></td>
-        <td><input type="submit" value="OK"></td>
+        <td><input type="submit" value="Ok"><input type=button value="Cancel" onCLick="history.back()"></td>
         </form>
         </table>
     </body>

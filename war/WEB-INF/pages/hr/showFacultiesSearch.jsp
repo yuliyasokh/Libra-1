@@ -16,13 +16,14 @@
     <body>
         <br>
         <center>
-        <a href="addFaculties.html">Добавить новый факультет</a>
+        <a href="addFaculties.html?textBox=<c:out value='${textBoxString}'/>&facultySearch=<c:out value='${facultySearchInt}'/>">
+            Добавить новый факультет
+        </a>
         <br>
         <br>
-        <center> 
             <form name="myForm" action="showFacultiesSearch.html" method="get">
         <select name="facultySearch">
-            <option value="0" ${facultySearchInt == '0' ? 'selected' : ''}> - </option>
+            <option value="0" ${facultySearchInt == '0' ? 'selected' : ''}>Все </option>
             <option value="1" ${facultySearchInt == '1' ? 'selected' : ''}>№ факультета </option>
             <option value="2" ${facultySearchInt == '2' ? 'selected' : ''}>Факультет </option>
             <option value="3" ${facultySearchInt == '3' ? 'selected' : ''}>Университет</option>
@@ -31,25 +32,33 @@
         <input type="submit" value="Показать" name="search">
             </form>
         <br><br>
-        <center>
         <table border ="1">
             <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
+                
                 <td>№ факультета </td>
                 <td>Факультет</td>
                 <td>Университет</td>
+                <td>Править</td>
+                <td>Удалить</td>
             </tr>
            <c:forEach items="${facts}" var="f">
-                <tr>
-                    <td><a href= "delFaculty.html?facultyId=<c:out value='${f.facultyId}'/> ">удалить</a> </td>
-                    <td><a href="editFaculty.html?facultyId=<c:out value='${u.facultyId}'/>">править</a></td>
+                <tr>             
                     <td><c:out value="${f.facultyId}"/></td>
                     <td><c:out value="${f.facultyName}"/></td>
                     <td><c:out value="${f.universityName}"/></td>
+                    <td>
+                        <a href="editFaculty.html?facultyId=<c:out value='${u.facultyId}'/>">
+                            править
+                        </a>
+                    </td>
+                    <td>
+                        <a href= "delFaculty.html?facultyId=<c:out value='${f.facultyId}'/> ">
+                            удалить
+                        </a> 
+                    </td>
                 </tr>
         </c:forEach>
         </table>
-       
+       </center>
     </body>
 </html>

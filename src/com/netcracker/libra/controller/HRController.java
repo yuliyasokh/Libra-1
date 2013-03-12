@@ -2,17 +2,20 @@
 package com.netcracker.libra.controller;
 
 import com.netcracker.libra.dao.HrJDBC;
+import com.netcracker.libra.model.DateAndInterviewer;
+import com.netcracker.libra.model.DateAndInterviewerResults;
 import com.netcracker.libra.model.Department;
 import com.netcracker.libra.model.Faculty;
-import com.netcracker.libra.model.Interview;
-import com.netcracker.libra.model.InterviewDate;
 import com.netcracker.libra.model.InterviewResults;
 import com.netcracker.libra.model.Student;
 import com.netcracker.libra.model.University;
-import com.netcracker.libra.model.User;
-import com.netcracker.libra.model.UserResult;
-import com.netcracker.libra.service.TimeService;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -149,9 +152,9 @@ public class HRController {
           catch(Exception ex){
             mav.addObject("msg","Input data is not in correct format! Try again!");   
          }
-          if (std.isEmpty()){
+       /*   if (std.isEmpty()){
               mav.addObject("msg1", "Студенты не найдены.");
-          }
+          }*/
           return mav;
     }
       
@@ -223,120 +226,90 @@ public class HRController {
           return mav;
       }
       
-      
+
       /**
+       * Displays information about the student's interview.
        * @author Alexander Lebed
-       * @param appId
-       * @param firstName
-       * @param lastName
-       * @return 
        */
-      
-      
       @RequestMapping("hr/showStudentInterview")
       public ModelAndView showStudentInterview(
                             @RequestParam("appId") int appId,
                             @RequestParam("firstName") String firstName,
-                            @RequestParam("lastName") String lastName) {
+                            @RequestParam("lastName") String lastName,
+                            @RequestParam("view") int view) {
+          
+          //these values will be passed to the results page
+          String notAssigned = "";
+          String wasAbsent = "";
+          List dateAndInterviewerList = new ArrayList();
+          List dateAndInterviewerResultsList = new ArrayList();
+          
+          HrJDBC hrjdbc = new HrJDBC();
+          List <Integer> interviewIds = hrjdbc.getInterviewIds(appId);
+          
+          if(interviewIds.isEmpty()) {
+              //if no any information about the interview, displayed the message
+              notAssigned = "Студент "+ firstName +" "+ lastName +" не записался на интервью";
+          }
+          
+          for(Integer id : interviewIds) {
+              
+              int interviewId = id;
+              //string of interview's finish date and time
+              String interviewDateFinish = hrjdbc.getInterviewFinishDate(interviewId);
+              boolean wasInterviewed = hrjdbc.getInterviewResults(interviewId);
+              
+              if(actualInterview(interviewDateFinish)) {
+                  //else if the student will be interviewed, diplayed application's form ID, 
+                  //interview's date and time, assigned interviewers
+                  List <DateAndInterviewer> resultList = hrjdbc.getDateAndInterviewer(interviewId);
+                  dateAndInterviewerList.addAll(resultList);
+              }
+              else if(wasInterviewed) {
+                  //else if the student was interviewed, displayed the application's form ID, date and time of the interview, 
+                  //assigned interviewers, results of the interview (marks, comments)
+                  List <DateAndInterviewerResults> resultList = hrjdbc.getDateAndInterviewerResults(interviewId);
+                  dateAndInterviewerResultsList.addAll(resultList);
+              }
+              else {
+                  //else if the interview have been assigned but the student didn't come, displayed the corresponding message
+                  wasAbsent += "Студент "+ firstName +" "+ lastName +" не явился на интервью\n";
+              }
+          }
 
           ModelAndView mv = new ModelAndView();
-          HrJDBC hrjdbc = new HrJDBC();
-          
-          Interview interview = hrjdbc.getInterview(appId);
-          System.out.println("- got the inteview with");
-          InterviewDate interviewDate = hrjdbc.getInterviewDate(interview.getInterviewDateId());
-          System.out.println("- got the inteviewDate");
-          List <InterviewResults> interviewResults = hrjdbc.getInterviewResults(interview.getInterviewId());
-          System.out.println("- got the List of inteviewResults");
-          
-          
-          
-          //CASE 1
-          if(!sheduledInterview(interview)) {
-              System.out.println("- case 1");
-              mv.setViewName("hr/messageView");
-              mv.addObject("message", "Студент "+ firstName +" "+ lastName +" не записался на интервью");
-          }
-          
-          //CASE 2
-          else if(actual(interviewDate.getDateFinish())) {
-              System.out.println("- case 2 (дата будущего интервью, время и интервьюеры)");
-              //дата интервью, время и интервьюеры;
-              List <User> employees = hrjdbc.getInterviewersFromInterviewerList(interview.getInterviewDateId());              
-              TimeService timeService = new TimeService();
-              
-              System.out.println("- got the List of inteviewers");
-
-              mv.setViewName("hr/showStudentInterviewInfo");
-              mv.addObject("appId", interview.getAppId());
-              mv.addObject("employees", employees);
-              mv.addObject("interviewDate", interviewDate);
-              mv.addObject("timeService", timeService);
-          }
-          
-          //CASE 3
-          else if(wasInterviewed(interviewResults)) {
-              System.out.println("- case 3 (результаты интервью)");
-              //результаты интервью, интервьюеры и дата пройденного интервью;
-              List <UserResult> userResults = hrjdbc.getUserResults(interview.getInterviewId());
-              TimeService timeService = new TimeService();
-              System.out.println("- first interviewer's name " + userResults.get(0).getFirstName());
-              mv.setViewName("hr/showStudentInterviewResults");
-              mv.addObject("appId", interview.getAppId());
-              mv.addObject("userResults", userResults);
-              mv.addObject("interviewDate", interviewDate);
-              mv.addObject("timeService", timeService);
-          }
-          
-          //CASE 4
-          else {
-              System.out.println("- case 4");
-              mv.setViewName("hr/messageView");
-              mv.addObject("message", "Студент "+ firstName +" "+ lastName +" не явился на интервью");
-          }
-          
+          mv.setViewName("hr/showStudentInterviews");
+          mv.addObject("view", view); // 0 if redirected from showStudentbyIdView.jsp, 1 - from showStudentByEducation.jsp
+          mv.addObject("notAssigned", notAssigned);
+          mv.addObject("dateAndInterviewerList", dateAndInterviewerList);
+          mv.addObject("dateAndInterviewerResultsList", dateAndInterviewerResultsList);
+          mv.addObject("wasAbsent", wasAbsent);
           return mv;
       }
-      
-      
-      
+
       /**
-       * @return true если интервью было назначено
+       * @return true if the interview will be; false - if it was
        */
-      public boolean sheduledInterview(Interview interview) {
-          System.out.println("- sheduledInterview method started");
-          //return interview != null ? true : false;
-          if(interview != null) {
-              System.out.println("- interview is not null - true");
-              return true;
+      public boolean actualInterview(String interviewDateFinish) {
+          SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+          Date sqlDate = null;
+          try {
+             //forms the date based on the date-string and date-format
+             sqlDate = df.parse(interviewDateFinish);
+          } catch (ParseException ex) {
+              Logger.getLogger(HRController.class.getName()).log(Level.SEVERE, null, ex);
           }
-          else {
-              System.out.println("- interview is null - false");
-              return false;
-          }
+          Date current = new Date();
+          return current.before(sqlDate);
       }
       
       /**
-       * @return true если интервью состоялось
+       * @return true if the interview was conducted
        */
       public boolean wasInterviewed(List <InterviewResults> interviewResults) {
           System.out.println("- wasInterviewed method started");
           return interviewResults.isEmpty() ? false : true;
       }
-      
-      /**
-       * @return true если собеседование БУДЕТ; false - если БЫЛО
-       */
-      public boolean actualInterview(InterviewDate interviewDate) {
-          System.out.println("- actualInterview method started");
-          return interviewDate != null ? true : false;
-      }
-      
-      public boolean actual(java.util.Date interviewDate) {
-        java.util.Date currentDate = new java.util.Date();
-        return (currentDate.before(interviewDate)) ? true : false;
-      }
-      
       
 
      

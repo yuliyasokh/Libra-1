@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 /**
- *
+ * work of mapping each row of InterviewerList to a result object
  * @author Alexander Lebed
  */
 public class InterviewerListRowMapper implements RowMapper <InterviewerList>  {
