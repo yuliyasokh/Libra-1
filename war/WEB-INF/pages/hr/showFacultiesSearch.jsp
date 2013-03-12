@@ -78,9 +78,9 @@
         <table border ="1" class="faculty">
             <thead>
             <tr>
-                <th>№ факультета </th>
-                <th>Факультет</th>
-                <th>Университет</th>
+                <th><a href="#">№ факультета</a> </th>
+                <th><a href="#">Факультет</a></th>
+                <th><a href="#">Университет</a></th>
                 <th>Править</th>
                 <th>Удалить</th>
             </tr>

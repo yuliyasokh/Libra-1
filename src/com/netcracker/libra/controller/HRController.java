@@ -6,8 +6,6 @@ import com.netcracker.libra.model.DateAndInterviewer;
 import com.netcracker.libra.model.DateAndInterviewerResults;
 import com.netcracker.libra.model.Department;
 import com.netcracker.libra.model.Faculty;
-import com.netcracker.libra.model.Interview;
-import com.netcracker.libra.model.InterviewDate;
 import com.netcracker.libra.model.InterviewResults;
 import com.netcracker.libra.model.Student;
 import com.netcracker.libra.model.University;
@@ -196,8 +194,39 @@ public class HRController {
           mav.setViewName("hr/showStudentByEducation");
           return mav;
       }
-      
-
+      @RequestMapping(value = "/hr/sortedBy", method = RequestMethod.GET)
+      public ModelAndView sortedby( 
+      org.springframework.web.context.request.WebRequest webRequest
+       ){
+          String orderBy = webRequest.getParameter("orderBy");
+          String direction = webRequest.getParameter("direction");
+          String textBox = webRequest.getParameter("textBox");
+          String filter = webRequest.getParameter("filter");
+          ModelAndView mav = new ModelAndView();
+          List<Student> std=null;
+          switch(filter){
+              case("2"): 
+                  std = hr.getOrderStudent("appId", textBox, orderBy);
+                            break;
+              case("3"): std = hr.getOrderStudent("firstName", textBox, orderBy);
+                            break;
+              case("4"): std = hr.getOrderStudent("lastName", textBox, orderBy);
+                            break;
+              case("5"): std = hr.getOrderStudent("email", textBox, orderBy);
+                            break;
+              case("6"): std = hr.getOrderStudent("allFields", textBox, orderBy);
+                            break;
+              default: std = hr.getOrderStudent("getAll", textBox, orderBy);   
+                            break;
+          } 
+          mav.addObject("textBox", textBox);
+          mav.addObject("filterInt", filter);
+          mav.addObject("Model", std);
+          mav.setViewName("hr/showStudentbyIdView");
+          return mav;
+      }
+     
+     
       /**
        * Displays information about the student's interview.
        * @author Alexander Lebed

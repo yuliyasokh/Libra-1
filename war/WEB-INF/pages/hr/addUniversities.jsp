@@ -78,8 +78,8 @@
         <table border ="1" class="university">
             <thead>
             <tr>
-                <th>№ университета </th>
-                <th>Университет</th>
+                <th><a href="#">№ университета</a> </th>
+                <th><a href="#">Университет</a></th>
                 <th>Править</th>
                 <th>Удалить</th>
             </tr>

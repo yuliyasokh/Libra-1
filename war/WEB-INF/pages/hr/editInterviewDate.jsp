@@ -72,19 +72,27 @@
         
         <div id="hrDiv">
         <c:forEach items="${checkedIntersHr}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" value=<c:out value="${i.userid}"/> checked> <c:out value="${i.inters}"/> <br>
+            <input type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> checked> 
+           <label for="interviwers"> ${i.inters}</label> 
+            <br>
         </c:forEach>
         <c:forEach items="${uncheckedIntersHr}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" value=<c:out value="${i.userid}"/> unchecked> <c:out value="${i.inters}"/> <br>
+            <input type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> >
+            <label for="interviwers"> ${i.inters}</label>  
+            <br>
         </c:forEach>
         </div>
         
         <div style="display: none;"  id="techDiv">
        <c:forEach items="${checkedIntersTech}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" value=<c:out value="${i.userid}"/> checked> <c:out value="${i.inters}"/> <br>
+            <input type="checkbox" name="checkInterviewers[]" value=<c:out value="${i.userid}"/> checked>
+            <label for="interviwers"> ${i.inters}</label> 
+            <br>
         </c:forEach>
         <c:forEach items="${uncheckedIntersTech}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" value=<c:out value="${i.userid}"/> unchecked> <c:out value="${i.inters}"/> <br>
+            <input type="checkbox" name="checkInterviewers[]" value=<c:out value="${i.userid}"/> > 
+            <label for="interviwers"> ${i.inters}</label> 
+            <br>
         </c:forEach>
         </div>
         <input value="Назад" onclick="location.href='interviewDate.html'" type="button"/>

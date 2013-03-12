@@ -88,12 +88,16 @@
         Выберите интервьюеров:<br> 
         <div id="hrDiv">
         <c:forEach items="${Inters}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" value=<c:out value="${i.userid}"/> unchecked> <c:out value="${i.inters}"/> <br>
+            <input type="checkbox" name="checkInterviewers[]" id="interviwers" value=<c:out value="${i.userid}"/> unchecked>
+            <label for="interviwers"> ${i.inters}</label> 
+            <br>
         </c:forEach>
         </div>
         <div style="display: none;"  id="techDiv">
         <c:forEach items="${intersTech}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" value=<c:out value="${i.userid}"/> unchecked> <c:out value="${i.inters}"/> <br>
+            <input type="checkbox" name="checkInterviewers[]" id="interviwers" value=<c:out value="${i.userid}"/> unchecked> 
+           <label for="interviwers"> ${i.inters}</label>  
+            <br>
         </c:forEach>
         </div>
             <br> 
@@ -104,13 +108,13 @@
         <table border="1" cellspacing="0" cellpadding="4" class="interviewDate">
             <thead>
           <tr>
-            <th>№ даты</th>
-            <th>Тип</th>
-            <th>Дата</th>
-            <th>Время</th>
-            <th>Продолжительность</th>
-            <th>Интервьюеры</th>
-            <th>Уведомить</th>
+            <th><a href="#">№ даты</a></th>
+            <th><a href="#">Тип</a></th>
+            <th><a href="#">Дата</a></th>
+            <th><a href="#">Время</a></th>
+            <th><a href="#">Продолжительность</a></th>
+            <th><a href="#">Интервьюеры</a></th>
+            <th><a href="#">Уведомить</a></th>
             <th>Править</th>
             <th>Удалить</th>
           </tr>

@@ -12,54 +12,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Поиск студентов</title>
-        <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8">   
-        </script>
-        <script type="text/javascript">
-			$(function() {
-				function sortTable($table, cellIndex, direction) {
-					var $rows = $table.find('tbody tr');
-					var data = [];
-					$rows.each(function() {
-						data.push({
-							cellText: $(this).find('td').eq(cellIndex).text(),
-							$row: $(this)
-						});
-					});
-
-					data.sort(function(a, b) {
-						if (a.cellText == b.cellText) {
-							return 0;
-						}
-						var sign = direction == "ASC" ? 1 : -1;
-						if(a.cellText == parseInt(a.cellText) && b.cellText == parseInt(b.cellText))
-                                                    return sign * ((parseInt(a.cellText) < parseInt(b.cellText)) ? -1 : 1);
-						return sign * ((a.cellText < b.cellText) ? -1 : 1);
-					});
-					
-					
-					$table.find('tbody').empty();
-					$(data).each(function() {
-						$table.find('tbody').append(this.$row);
-					});
-				}			
-				var $interviews = $('.students');
-				$interviews.find('thead th').each(function(cellIndex) {
-					$(this).on('click', function() {
-						var lastDirection = $(this).data('lastDirection') || "DESC";
-						var direction = lastDirection == "DESC" ? "ASC" : "DESC";
-						$(this).data('lastDirection', direction);
-					
-						sortTable($interviews, cellIndex, direction);
-					});
-				});
-			});
-                                </script>
     </head>
     <body>
       <center>
         <h1>Список студентов</h1>
         <h3>${msg}</h3>
-        
+       <TABLE border ="1">
         Фильтр  
         <form method="post" action="showStudentbyIdView.html">
         <select name="filter">
@@ -74,21 +32,26 @@
     <input type="text" name="textBox" value="${textBox}">
     <input type="submit" value="Поиск">
             </form>
-    <br>
-    <br> 
-        <TABLE border ="1" class="students">
-            <thead>
-            <tr>
-                <th>№ анкеты</th>
-                <th>Имя</th>
-                <th>Фамилия</th>
-                <th>Email</th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
+    <br><br> 
+    <form method="GET">
+    <th>
+        <a href="sortedBy.html?orderBy=appId&direction=asc&textBox=<c:out value='${textBox}'/>&filter=<c:out value='${filterInt}'/>">№ анкеты
+        </a>
+    </th>
+    <th>
+        <a href="sortedBy.html?orderBy=firstName&textBox=<c:out value='${textBox}'/>&filter=<c:out value='${filterInt}'/>">Имя
+        </a>
+    </th>
+    <th><a href="sortedBy.html?orderBy=lastName&textBox=<c:out value='${textBox}'/>&filter=<c:out value='${filterInt}'/>">Фамилия
+        </a>
+    </th>
+   <th><a href="sortedBy.html?orderBy=email&textBox=<c:out value='${textBox}'/>&filter=<c:out value='${filterInt}'/>">Email
+       </a>
+   </th>
+            <th></th>
+            <th></th>
+            <th></th>
+    </form>
     <c:forEach items="${Model}" var="s">
     <tr>
         <form action="showStudentInterview.html" method="POST">
@@ -102,11 +65,10 @@
                 <td> <input type="submit" value="Интервью"></td>
           </form>
       <td> <input type="submit" value="Удалить"></td>
-        </tr>
-    </tbody>
+  </tr>
     </c:forEach>
     </TABLE>
     <h3>${msg1}</h3>
-   </center>         
+             </center>         
     </body>
 </html>

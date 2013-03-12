@@ -102,10 +102,10 @@ function getFact(){
         <table border ="1" class="department">
             <thead>
             <tr>            
-                <th>№ кафедры </th>
-                <th>Кафедра</th>
-                <th>Факультет</th>
-                <th>Университет</th>
+                <th><a href="#">№ кафедры </a></th>
+                <th><a href="#">Кафедра</a></th>
+                <th><a href="#">Факультет</a></th>
+                <th><a href="#">Университет</a></th>
                 <th>Править</th>
                 <th>Удалить</th>
             </tr>

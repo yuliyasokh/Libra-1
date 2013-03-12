@@ -78,12 +78,12 @@
               <table border="1" cellspacing="0" cellpadding="4" class="interviewDate">
                   <thead>
           <tr>
-            <th>№ даты</th>
-            <th>Тип</th>
-            <th>Дата</th>
-            <th>Время</th>
-            <th>Продолжительность</th>
-            <th>Интервьюеры</th>
+            <th><a href="#">№ даты</a></th>
+            <th><a href="#">Тип</a></th>
+            <th><a href="#">Дата</a></th>
+            <th><a href="#">Время</a></th>
+            <th><a href="#">Продолжительность</a></th>
+            <th><a href="#">Интервьюеры</a></th>
             <th>Уведомить</th>
             <th>Править</th>
             <th>Удалить</th>
