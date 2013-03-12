@@ -11,6 +11,7 @@ import com.netcracker.libra.model.Student;
 import com.netcracker.libra.model.University;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -237,49 +238,54 @@ public class HRController {
                             @RequestParam("firstName") String firstName,
                             @RequestParam("lastName") String lastName,
                             @RequestParam("view") int view) {
+          
+          //these values will be passed to the results page
+          String notAssigned = "";
+          String wasAbsent = "";
+          List dateAndInterviewerList = new ArrayList();
+          List dateAndInterviewerResultsList = new ArrayList();
+          
+          HrJDBC hrjdbc = new HrJDBC();
+          List <Integer> interviewIds = hrjdbc.getInterviewIds(appId);
+          
+          if(interviewIds.isEmpty()) {
+              //if no any information about the interview, displayed the message
+              notAssigned = "Студент "+ firstName +" "+ lastName +" не записался на интервью";
+          }
+          
+          for(Integer id : interviewIds) {
+              
+              int interviewId = id;
+              //string of interview's finish date and time
+              String interviewDateFinish = hrjdbc.getInterviewFinishDate(interviewId);
+              boolean wasInterviewed = hrjdbc.getInterviewResults(interviewId);
+              
+              if(actualInterview(interviewDateFinish)) {
+                  //else if the student will be interviewed, diplayed application's form ID, 
+                  //interview's date and time, assigned interviewers
+                  List <DateAndInterviewer> resultList = hrjdbc.getDateAndInterviewer(interviewId);
+                  dateAndInterviewerList.addAll(resultList);
+              }
+              else if(wasInterviewed) {
+                  //else if the student was interviewed, displayed the application's form ID, date and time of the interview, 
+                  //assigned interviewers, results of the interview (marks, comments)
+                  List <DateAndInterviewerResults> resultList = hrjdbc.getDateAndInterviewerResults(interviewId);
+                  dateAndInterviewerResultsList.addAll(resultList);
+              }
+              else {
+                  //else if the interview have been assigned but the student didn't come, displayed the corresponding message
+                  wasAbsent += "Студент "+ firstName +" "+ lastName +" не явился на интервью\n";
+              }
+          }
 
           ModelAndView mv = new ModelAndView();
+          mv.setViewName("hr/showStudentInterviews");
           mv.addObject("view", view); // 0 if redirected from showStudentbyIdView.jsp, 1 - from showStudentByEducation.jsp
-          HrJDBC hrjdbc = new HrJDBC();
-          
-          int interviewId = hrjdbc.getInterviewId(appId);
-          //string of interview's finish date and time
-          String interviewDateFinish = hrjdbc.getInterviewFinishDate(interviewId);
-          boolean wasInterviewed = hrjdbc.getInterviewResults(interviewId);
-          
-          if(!assignedInterview(interviewId)) {
-              //If the interview haven't been assigned, displayed the corresponding message
-              mv.setViewName("hr/messageView");
-              mv.addObject("message", "Студент "+ firstName +" "+ lastName +" не записался на интервью");
-          }
-          else if(actualInterview(interviewDateFinish)) {
-              //else if the student will be interviewed, diplayed application's form ID, 
-              //interview's date and time, assigned interviewers
-              List <DateAndInterviewer> resultList = hrjdbc.getDateAndInterviewer(interviewId);
-              mv.setViewName("hr/showStudentInterviewInfo");
-              mv.addObject("resultList", resultList);
-          }
-          else if(wasInterviewed) {
-              //else if the student was interviewed, displayed the application's form ID, date and time of the interview, 
-              //assigned interviewers, results of the interview (marks, comments)
-              List <DateAndInterviewerResults> resultList = hrjdbc.getDateAndInterviewerResults(interviewId);
-              mv.setViewName("hr/showStudentInterviewResults");
-              mv.addObject("resultList", resultList);
-          }
-          else {
-              //else if the interview have been assigned but the student didn't come, displayed the corresponding message
-              mv.setViewName("hr/messageView");
-              mv.addObject("message", "Студент "+ firstName +" "+ lastName +" не явился на интервью");
-          }
-          
+          mv.addObject("notAssigned", notAssigned);
+          mv.addObject("dateAndInterviewerList", dateAndInterviewerList);
+          mv.addObject("dateAndInterviewerResultsList", dateAndInterviewerResultsList);
+          mv.addObject("wasAbsent", wasAbsent);
           return mv;
-      }
-
-      /**
-       * @return true if the interview was scheduled
-       */
-      public boolean assignedInterview(int interviewId) {
-          return interviewId != 0 ? true : false;
       }
 
       /**

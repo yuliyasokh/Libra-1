@@ -1,6 +1,7 @@
 package com.netcracker.libra.controller;
 
 import com.netcracker.libra.dao.AdminJDBC;
+import com.netcracker.libra.dao.UserPreferences;
 import com.netcracker.libra.model.User;
 import com.netcracker.libra.service.LengthService;
 import com.netcracker.libra.util.security.Security;
@@ -9,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,22 +43,35 @@ public class UsersController {
     String text;        //the value entered in the text field
     boolean order;      //value of ascending or descending order; true when ascending
     
+    @Autowired
+    UserPreferences user;
     /**
      * Displays on the page all employees (HR, Tech.interviewer, Administrator)
      */
     @RequestMapping("admin/employees")
     public ModelAndView showEmployees() {
         
-        employees = new AdminJDBC().getAllEmployees();
-        checked = "checkedAll";
-        selected = "selectedAll";
-        
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/employeesView");
-        mv.addObject("employees", employees);
-        mv.addObject(checked, "checked");
-        mv.addObject(selected, "selected");
-        return mv;
+        
+        if(user.accessLevel==3) {
+            mv.setViewName("admin/employees");
+            employees = new AdminJDBC().getAllEmployees();
+            checked = "checkedAll";
+            selected = "selectedAll";
+            
+            mv.setViewName("admin/employeesView");
+            mv.addObject("employees", employees);
+            mv.addObject(checked, "checked");
+            mv.addObject(selected, "selected");
+            return mv;
+        }
+        else {
+         mv.setViewName("admin/messageView");
+         mv.addObject("title", "Ошибка");
+         mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор.");
+         mv.addObject("link","<a href='/Libra/'>Назад</a>");
+         return mv;
+        }
     }
     
     /**
@@ -244,7 +259,7 @@ public class UsersController {
                         @RequestParam("lastName") String lastName,
                         @RequestParam("email") String email) {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/doneView");
+        mv.setViewName("admin/messageView");
         //returns an empty string if the input value is ok (satisfies DB); otherwise - the message with the restriction
         String message = LengthService.checkFirstNameLength(firstName) + LengthService.checkLastNameLength(lastName) +
                         LengthService.checkEmailLength(email);
@@ -299,7 +314,7 @@ public class UsersController {
                         @RequestParam("email") String email, 
                         @RequestParam("password") String password) {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/doneView");
+        mv.setViewName("admin/messageView");
         //returns an empty string if the input value satisfies DB; otherwise - the message with the restriction
         String message = LengthService.checkFirstNameLength(firstName) + LengthService.checkLastNameLength(lastName) +
                         LengthService.checkEmailLength(email) + LengthService.checkPasswordLength(password);
@@ -345,7 +360,7 @@ public class UsersController {
         
         String message = "Служащий "+ employee.getFirstName() +" "+ employee.getLastName() +" успешно удален.";
         String link= "<a href=\"employees.html\">Список служащих</a>";
-        mv.setViewName("admin/doneView");
+        mv.setViewName("admin/messageView");
         mv.addObject("title", "Готово");
         mv.addObject("message", message);
         mv.addObject("link", link);
