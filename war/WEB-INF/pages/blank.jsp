@@ -8,21 +8,21 @@
 <html class="no-js">
 <!--<![endif]-->
 <head>
-	<jsp:include page="resources.jsp" />
+	<jsp:include page="../resources.jsp" />
 	
 	<title><!-- YOUR PAGE TITLE HERE --></title>
 </head>
 
 <body>
 	<div class="navmenu">
-		<jsp:include page="navbar.jsp" />
+		<jsp:include page="../navbar.jsp" />
 	</div>
 	
 	<div class="container-fluid">
 		<div class="row-fluid">
 		
-			<div class="span3">
-				<jsp:include page="sidebar.jsp" />
+			<div class="sidebar">
+				<jsp:include page="../sidebar.jsp" />
 			</div>
 			
 			<div class="span9">

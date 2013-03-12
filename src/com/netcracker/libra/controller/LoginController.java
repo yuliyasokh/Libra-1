@@ -26,14 +26,14 @@ public class LoginController {
 		 this.jdbcTemplateObject = new JdbcTemplate(dataSource);
 	}
 	
-   @RequestMapping(value = "/login", method = RequestMethod.GET)
+   @RequestMapping(value = "login", method = RequestMethod.GET)
    public ModelAndView login() {
       return new ModelAndView("login/login", "command", new Student());
    }
    
     @Autowired
     UserPreferences userPreferences;
-   @RequestMapping(value = "/submit", method = RequestMethod.POST)
+   @RequestMapping(value = "submit", method = RequestMethod.POST)
    public String verify(@ModelAttribute("Student") Student student) {
         try{
               int id=StudentJDBC.verifyLogin(student.getEmail(), Security.getMD5hash(student.getPassword()));	                 
@@ -47,7 +47,7 @@ public class LoginController {
              return "login/loginFailed";
         }   
      }
-   @RequestMapping(value = "/logout")
+   @RequestMapping(value = "logout")
    public ModelAndView logout() 
    {
       ModelAndView mav=new ModelAndView();

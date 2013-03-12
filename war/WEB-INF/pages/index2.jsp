@@ -20,7 +20,7 @@
 	
 	<div class="container-fluid">
 		<div class="row-fluid">
-			<div class="span3">
+		<div class="sidebar">
 				<jsp:include page="sidebar.jsp" />
 			</div>
 			<div class="span9">
@@ -28,8 +28,8 @@
 					<h1>Libra&nbsp;</h1>
 					<p>Войдите или зарегистрируйтесь.</p>
 					<p>
-						<button class="btn btn-large btn-primary" type="button">Вход</button>
-						<button class="btn btn-large btn-success" type="button">Регистрация</button>
+						<a href="login.html"><button class="btn btn-large btn-primary" type="button">Вход</button></a>
+						<a href="register.html"><button class="btn btn-large btn-success" type="button">Регистрация</button></a>
 					</p>
 				</div>
 			</div>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<div class="span3 well">
 	<ul class="nav  nav-pills nav-stacked">
 		<li class="nav-header">Управление шаблонами</li>
 		<li><a href="showTemplates.html">Шаблоны</a></li>
@@ -22,3 +23,4 @@
 		<li><a href="showStudentActivity.html">Посещаемость
 				собеседований</a></li>
 	</ul>
+	</div>
