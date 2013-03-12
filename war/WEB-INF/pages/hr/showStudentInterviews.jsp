@@ -9,20 +9,23 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Интервью</title>
+        <style type="text/css">
+        body { text-align: center}
+        table {margin: 0px auto;}
+        </style>
     </head>
     <body>
-    <center>
         
         <% int i = 1; %>
         
         <c:if test='${notAssigned != ""}'>
-            ● Собеседование №<%= i++ %>. ${notAssigned} <br>
+            Собеседование №<%= i++ %>. ${notAssigned} <hr><br>
         </c:if>
            
         <c:if test="${!dateAndInterviewerList.isEmpty()}">
             
             <table border="1" cellspacing="0" cellpadding="4">
-            <caption> ● Собеседование №<%= i++ %>. Информация о предстоящем собеседовании</caption>
+            <caption> Собеседование №<%= i++ %>. Информация о предстоящем собеседовании</caption>
             <tr>
                 <td>№ Анкеты</td>
                 <td>Дата</th>
@@ -40,12 +43,12 @@
                 </tr>
             </c:forEach>
             </table>
-            <br>
+            <hr><br>
         </c:if>
             
         <c:if test="${!dateAndInterviewerResultsList.isEmpty()}">
             <table border="1" cellspacing="0" cellpadding="4">
-            <caption> ● Собеседование №<%= i++ %>. Информация о пройденном собеседовании</caption>
+            <caption> Собеседование №<%= i++ %>. Информация о пройденном собеседовании</caption>
             <tr>
                 <td>№ анкеты</td>
                 <td>Дата</th>
@@ -68,15 +71,13 @@
                 </tr>
             </c:forEach>
         </table>
-            <br>
+            <hr><br>
         </c:if>
             
         <c:if test='${wasAbsent != ""}'>
-           ● Собеседование №<%= i++ %>. ${wasAbsent} <br>
+           Собеседование №<%= i++ %>. ${wasAbsent} <br>
         </c:if>
             
             <br>${view == 0 ? '<a href="showStudentbyIdView.html">Назад</a>' : '<a href="showStudentByEducation.html">Назад</a>'}
-      
-    </center>
     </body>
 </html>

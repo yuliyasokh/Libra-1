@@ -9,10 +9,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Служащие</title>
+        <style type="text/css">
+        body { text-align: center}
+        table {margin: 0px auto;}
+        </style>
     </head>
     <body>
-        <center>
-        
         <table border="1" cellspacing="0" cellpadding="4">
         <caption>Внесите данные, чтобы добавить нового служащего</caption>
         <tr>
@@ -34,8 +36,8 @@
         <td><input type="text" name="firstName"/></td>
         <td><input type="text" name="lastName"/></td>
         <td><input type="text" name="email"/></td>
-        <td><input type="text" name="password"/></td>
-        <td><input type="submit" value="OK"></td>
+        <td><input type="password" name="password"/></td>
+        <td><input type="submit" value="Ok"><input type=button value="Cancel" onCLick="history.back()"></td>
         </form>
         </table>
         
@@ -72,6 +74,5 @@
             </form>
             </c:forEach>
         </table>
-        </center>
     </body>
 </html>

@@ -9,7 +9,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${title}</title>
     </head>
-    <body>
+    <body style='text-align: center'>
         <!-- statement of changes -->
         <h1>${message}</h1>
             ${link} 

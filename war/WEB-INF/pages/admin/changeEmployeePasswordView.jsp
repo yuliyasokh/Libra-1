@@ -21,9 +21,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Служащие</title>
+        <style type="text/css">
+        body { text-align: center}
+        table {margin: 0px auto;}
+        </style>
     </head>
     <body>
-        <center>
         <form action="sortedEmployees.html" method="POST">
         <tr>
             <!-- radio buttons "role" -->
@@ -76,7 +79,7 @@
                         <td><a href="changeEmployeePassword.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img src="resources\images\edit.png"  width="25" height="25" border="0" title="Сменить пароль"/></a></td>
                     </c:when>
                     <c:otherwise> 
-                        <td><input type="text" name="passwordValue"><input type="submit" value="Ok"></td>
+                        <td><input type="password" name="passwordValue"><input type="submit" value="Ok"><input type=button value="Cancel" onCLick="history.back()"></td>
                         <input type="hidden" name="employeeId" value="${emp.getUserId()}">
                     </c:otherwise>
                     </c:choose>
@@ -90,6 +93,5 @@
         <c:if test="${employees.isEmpty()}"> ${noResults} </c:if>
         
         <br><a href="addEmployee.html">Добавить служащего</a>
-        </center>
     </body>
 </html>
