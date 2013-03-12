@@ -10,7 +10,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Редактировать</title>
         <style type="text/css">
-        body { text-align: center}
+        body {text-align: center; padding-top:100px }
         table {margin: 0px auto;}
         </style>
     </head>

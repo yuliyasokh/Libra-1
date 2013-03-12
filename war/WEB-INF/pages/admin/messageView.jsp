@@ -8,10 +8,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${title}</title>
+        <style>
+            body {text-align: center; padding-top:200px }
+        </style>
     </head>
-    <body style='text-align: center'>
+    <body>
         <!-- statement of changes -->
-        <h1>${message}</h1>
+        <b>${message}</b>
+             <br>
             ${link} 
     </body>
 </html>

@@ -22,7 +22,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Служащие</title>
         <style type="text/css">
-        body { text-align: center}
+        body {text-align: center; padding-top:100px }
         table {margin: 0px auto;}
         </style>
     </head>
