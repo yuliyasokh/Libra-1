@@ -6,56 +6,16 @@
 form .line {
     margin-bottom: 2px;
 }
-
-/*.formContainer{
-	padding:10px;
-	min-height:800px;
-	margin-top:20px;
-	background:#3366FF; 
-	 -webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-	
-	-webkit-box-shadow: 0px 0 50px #1a1a1a;
-	-moz-box-shadow: 0px 0 50px #1a1a1a;
-	box-shadow: 0px 0 50px #1a1a1a;	
-
+.container-fluid {
+  background: rgba(154, 179, 139, 0);
+  background-image: -moz-linear-gradient(270deg, rgba(154, 179, 139, 0) 33%, rgba(70, 76, 89, 0) 100%);
+  background-image: -webkit-linear-gradient(270deg, rgba(154, 179, 139, 0) 33%, rgba(70, 76, 89, 0) 100%);
+  background-image: -o-linear-gradient(270deg, rgba(154, 179, 139, 0) 33%, rgba(70, 76, 89, 0) 100%);
+  background-image: linear-gradient(180deg, rgba(154, 179, 139, 0) 33%, rgba(70, 76, 89, 0) 100%);
 }
-*/
-/*form { 
-    float: none;
-    border: 1px solid #ddd; 
-    padding: 30px 40px 20px 40px; 
-    margin-top:25px;
-    margin-left:auto;
-    margin-right:auto;
-    width: 368px;
-    background: #fff;
-    min-height:540px;
-    -webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-
-	-webkit-box-shadow: 0px 0 30px #1A1A1A;
-	-moz-box-shadow: 0px 0 30px #1A1A1A;
-	box-shadow: 0px 0 30px #1A1A1A;
+.container-fluid .row-fluid.row-fluid-1 {
+  margin: 0px 0px 30px 0px;
 }
-*/
-.appform {
-	    float: none;
-    border: 1px solid #ddd; 
-    padding: 30px 40px 20px 40px; 
-    margin-top:25px;
-    margin-left:auto;
-    margin-right:auto;
-    width: 368px;
-    background: #fff;
-    min-height:540px;
-    -webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-
-	-webkit-box-shadow: 0px 0 30px #1A1A1A;
-	-moz-box-shadow: 0px 0 30px #1A1A1A;
-	box-shadow: 0px 0 30px #1A1A1A;
+.container-fluid .row-fluid.row-fluid-2 {
+  margin: 0px 0px 50px 0px;
 }

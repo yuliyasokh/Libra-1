@@ -8,12 +8,12 @@ import com.netcracker.libra.model.BlockWithValues;
 public class BlockService {
 	
 	private static AppFormJDBC jdbc = new AppFormJDBC();
-	private static Map b1 = jdbc.getTextBlocks();
-	private static Map b2 = jdbc.getCheckboxBlocks();
-	private static Map b3 = jdbc.getGradeBlocks();
-	private static Map universities = jdbc.getAllUniversities();
-	private static Map faculties = jdbc.getAllFaculties(); 
-	private static Map departments = jdbc.getAllDepartments();
+	private static Map<Integer, BlockWithValues> b1 = jdbc.getTextBlocks();
+	private static Map<Integer, BlockWithValues> b2 = jdbc.getCheckboxBlocks();
+	private static Map<Integer, BlockWithValues> b3 = jdbc.getGradeBlocks();
+	private static Map<Integer, String> universities = jdbc.getAllUniversities();
+	private static Map<Integer, String> faculties = jdbc.getAllFaculties(); 
+	private static Map<Integer, String> departments = jdbc.getAllDepartments();
 	
 	public static Map<Integer, BlockWithValues> retrieveTextFieldBlocks() {
 		return b1;

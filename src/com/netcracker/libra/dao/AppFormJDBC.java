@@ -1,8 +1,5 @@
 package com.netcracker.libra.dao;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,11 +9,11 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import com.netcracker.libra.model.AppForm;
 import com.netcracker.libra.model.BlockWithValues;
 import com.netcracker.libra.model.FilledAppForm;
 import com.netcracker.libra.model.RegisterForm;
@@ -277,44 +274,126 @@ public class AppFormJDBC {
 
 			/*
 			 * Не работает по непонятной причине, неверный тип столбца
-			 * 
-			 * Map appFormMap = new HashMap();
-			 * 
-			 * appFormMap.put("USERID", userId);
-			 * System.out.println("Вставили userid " + userId);
-			 * 
-			 * appFormMap.put("PATRONYMIC", form.get("patronymic"));
-			 * System.out.println
-			 * ("Вставили PATRONYMIC "+form.get("patronymic"));
-			 * 
-			 * appFormMap.put("PHONENUMBER", form.get("phoneNumber"));
-			 * System.out.println("Вставили PHONENUMBER "
-			 * +form.get("phoneNumber"));
-			 * 
-			 * appFormMap.put("DEPARTMENTID", form.get("departmentid"));
-			 * System.out.println("Вставили DEPARTMENTID "+
-			 * form.get("departmentid"));
-			 * 
-			 * //appFormMap.put("ADVERTISINGID", form.get("advertisingid"));
-			 * appFormMap.put("ADVERTISINGID",1);
-			 * System.out.println("Вставили ADVERTISINGID "+ 1);
-			 * 
-			 * appFormMap.put("COURSE", form.get("course"));
-			 * System.out.println("Вставили COURSE " + form.get("course"));
-			 * 
-			 * appFormMap.put("GRADUATED", form.get("graduated"));
-			 * System.out.println("Вставили GRADUATED " +
-			 * form.get("graduated"));
-			 * 
-			 * appFormMap.put("TEMPLATEID",1);
-			 * System.out.println("Вставили TEMPLATEID "+ 1);
-			 * 
-			 * try { appId = insert5.withTableName("APPFORMCOPY")
-			 * .usingGeneratedKeyColumns("APPID")
-			 * .executeAndReturnKey(appFormMap); } catch
-			 * (UncategorizedSQLException e) { e.printStackTrace(); } }
+			  
+			  Map appFormMap = new HashMap();
+			  
+			  appFormMap.put("USERID", userId);	  
+			  appFormMap.put("PATRONYMIC", form.get("patronymic"));
+			  appFormMap.put("PHONENUMBER", form.get("phoneNumber"));
+			  appFormMap.put("DEPARTMENTID", form.get("departmentid"));
+			  //appFormMap.put("ADVERTISINGID", form.get("advertisingid"));
+			  appFormMap.put("ADVERTISINGID",1);
+			  appFormMap.put("COURSE", form.get("course"));	  
+			  appFormMap.put("GRADUATED", form.get("graduated"));
+			  appFormMap.put("TEMPLATEID",1);
+			  
+			  try { appId = insert5.withTableName("APPFORMCOPY")
+			  .usingGeneratedKeyColumns("APPID")
+			  .executeAndReturnKey(appFormMap); } catch
+			  (UncategorizedSQLException e) { e.printStackTrace(); } }
 			 */
 
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public AppForm queryForAppForm(Integer userID) {
+		
+		AppForm form = new AppForm();
+		
+		Map userRawData = jdbcTemplateObject.queryForMap(
+				"select * from users_copy natural join appformcopy" +
+				" where userid=?", userID);
+		
+		List<Map<String, Object>> tfaRawData = 
+				jdbcTemplateObject.queryForList(
+						"SELECT BLOCK.BLOCKHEADER, TEXTFIELDSANSWERS.TEXTFIELDANSWERVALUE " +
+								"from BLOCK " +
+								"natural join TEXTFIELDSANSWERS " +
+								"where TEXTFIELDSANSWERS.appid=(select appid from appformcopy where userid=?)", userID);
+		
+		List<Map<String, Object>> gradeRawData = 
+				jdbcTemplateObject.queryForList(
+						"select BLOCK.BLOCKHEADER, BLOCKVALUES.BLOCKVALUE, GRADEANSWERS.ANSWER " +
+								"from BLOCK " +
+								"natural join BLOCKVALUES " +
+								"natural join GRADEANSWERS " +
+								"where GRADEANSWERS.appid=(select appid from appformcopy where userid=?)", userID);
+		
+		List<Map<String, Object>> checkboxRawData = 
+				jdbcTemplateObject.queryForList (
+						"select BLOCK.BLOCKHEADER, CHECKBOXANSWERS.CHECKBOXANSWERVALUE " +
+								"from CHECKBOXANSWERS " +
+								"natural join BLOCK " +
+								"where CHECKBOXANSWERS.APPID=(select appid from APPFORMCOPY where userid=?)", userID);
+		
+		Map personal = form.getPersonal();
+		Map tfa = form.getTextFieldsAnswersList();
+		List<BlockWithValues> cba = form.getCheckboxAnswersList();
+		List<BlockWithValues> ga = form.getGradeAnswersList();
+		
+		personal.put("firstname", userRawData.get("firstname"));
+		personal.put("patronymic", userRawData.get("patronymic"));
+		personal.put("lastname", userRawData.get("lastname"));
+		personal.put("email", userRawData.get("email"));
+		personal.put("phonenumber", userRawData.get("phonenumber"));
+		personal.put("course", userRawData.get("course").toString());
+		personal.put("graduated", userRawData.get("graduated").toString());
+		
+		for (Map x : tfaRawData) {
+			tfa.put(x.get("BLOCKHEADER"), x.get("TEXTFIELDANSWERVALUE"));
+		}
+		
+		BlockWithValues block = new BlockWithValues();
+		Map grades = new HashMap();
+		String header = "header";
+		
+		for (Map x : gradeRawData) {
+			
+			if (!x.get("blockheader").equals(header)){
+				System.out.println("Comparing" + x.get("blockheader")+" and "+header);
+				block.setValues(grades);
+				ga.add(block);
+				grades = new HashMap();
+			}
+			else {
+				block.setValues(grades);
+				block = new BlockWithValues();
+				
+			}
+			grades.put(x.get("blockvalue"), x.get("answer"));
+			block.setHeader((String) x.get("blockheader"));
+			header = (String) x.get("blockheader");
+		}
+		
+		BlockWithValues block2 = new BlockWithValues();
+		ArrayList answers = new ArrayList();
+		
+		for (Map x : checkboxRawData) {
+			
+			
+			
+			if (!x.get("blockheader").equals(header)) {
+				block2.setCbAnswers(answers);
+				cba.add(block2);
+				answers = new ArrayList();
+			}
+			else {
+				answers.add(x.get("checkboxanswervalue"));
+				block2.setCbAnswers(answers);
+				block2 = new BlockWithValues();
+			}
+			
+			block2.setHeader((String) x.get("blockheader"));
+			header = (String) x.get("blockheader");
+		}
+		
+		form.setPersonal(personal);
+		form.setTextFieldsAnswersList(tfa);
+		form.setGradeAnswersList(ga);
+		form.setCheckboxAnswersList(cba);
+		
+		return form;
+		
 	}
 }
