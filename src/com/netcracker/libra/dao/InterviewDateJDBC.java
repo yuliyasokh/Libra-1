@@ -135,6 +135,21 @@ public class InterviewDateJDBC implements InterviewDateDAO {
         List<InterviewDate> interviewDate = jdbcTemplateObject.query(query, new WithInterviewersInterviewDateRowMapper(),Id);
         return interviewDate;
     }
+    public List<InterviewDate> getInterviewDatesSearch(String param, String value){
+        String query = "select  d.interviewdateid, "
+                        + "(select (case when u.roleid=2 then 'HR'  else 'Tech' end) "
+                        + "from users u join interviewerList i on i.userId=u.userId "
+                        + "where (u.roleId=2 or u.roleId=3) and rownum<2 and i.interviewDateId=d.interviewDateId) typeInterview, "
+                        + "to_char(d.dateStart,'dd.mm.yyyy') dateInter, to_char(d.dateStart,'hh24:mi')||' - '||  to_char(d.dateFinish,'hh24:mi') timeInter, d.InterviewDuration,"+
+                            "rtrim(xmlagg(xmlelement(e, u.firstname||' '||u.lastname,', ').extract('//text()')),', ') listInterviewers "+ 
+                                "from  interviewdate d left join  interviewerlist l on d.interviewdateid=l.interviewdateid " 
+                                    +"left join  users u on u.userid=l.userid "
+                                        + "where d.interviewdateid = ? "+
+                                        "group by d.interviewdateid,d.datestart,d.datefinish,d.InterviewDuration"
+                                            + " order by d.datestart";
+        List <InterviewDate> interviewDates;
+        return null;
+    }
     
     @Override
     public List <InterviewDate> getAllInterviewDates() {

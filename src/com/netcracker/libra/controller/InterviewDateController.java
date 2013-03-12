@@ -41,15 +41,25 @@ public class InterviewDateController
     public ModelAndView interSearch(@RequestParam("textBox") String textBox,
     @RequestParam("interSearch") int searchInt){
         ModelAndView mav=new ModelAndView();
+        List<InterviewDate> dates= null;
         if (searchInt==1){
             
         }
-        if(searchInt==2){
+        else {
+            if(searchInt==2){
             
-        }
-        if(searchInt==3){
+            }
+            else{
+                if(searchInt==3){
             
+                }
+                else {
+                    
+                }
+            }
         }
+        mav.addObject("textBox", textBox);
+        mav.addObject("searchInt", searchInt);
         return mav;
     }
     
