@@ -84,16 +84,23 @@ public class InterviewDateController
      * @param interviewers
      * @return 
      */
-      @RequestMapping(value="hr/interviewDateAdd", method= RequestMethod.POST)
+      @RequestMapping(value="hr/interviewDateAdded", method= RequestMethod.GET)
       public ModelAndView addInterviewDate(@RequestParam("begin") String begin,
+      @RequestParam("type") int typeInt,
       @RequestParam("end") String end,  
       @RequestParam("timeStart") String timeStart,
       @RequestParam("duration") int duration,
       @RequestParam("checkInterviewers[]") int [] interviewers){
-            ModelAndView mav=new ModelAndView(); 
-            iDateJdbc.createInterviewDate(begin+" "+timeStart,begin+" "+end, duration);
+            ModelAndView mav=new ModelAndView();
+            
+            int interviewDateId = iDateJdbc.createInterviewDate(begin+" "+timeStart,begin+" "+end, duration);
             for (int i=0;i<interviewers.length;i++){
-                iDateJdbc.insertInterviewers(interviewers[i]);
+               if (typeInt==1){
+                    iDateJdbc.insertInterviewersAndDates(interviewers[i],interviewDateId,"HR");
+                    }
+                else{
+                    iDateJdbc.insertInterviewersAndDates(interviewers[i],interviewDateId,"Tech");
+            }
             }
             List<InterviewDate> id=iDateJdbc.getAllInterviewDatesWithInterviewers();  
             List<Map<String,Object>> intersHr=iDateJdbc.getInterviewersHr();
@@ -102,6 +109,7 @@ public class InterviewDateController
             mav.addObject("Inters",intersHr); 
             mav.addObject("intersTech",intersTech);
             mav.setViewName("hr/interviewDate");
+            mav.addObject("msg", "Дата успешно добавлена");
             return mav;
       }
       

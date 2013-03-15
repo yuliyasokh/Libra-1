@@ -8,8 +8,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
     <head>
+        <jsp:include page="../resources.jsp" />
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
         <title>Управление датами - правка</title>
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript" charset="utf-8">   
@@ -41,6 +47,17 @@
 </script>
     </head>
     <body>
+        <div class="navmenu">
+		<jsp:include page="../navbar.jsp" />
+	</div>
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+		<div class="sidebar">
+				<jsp:include page="../sidebar.jsp" />
+			</div>
+			<div class="span9">
+				<div class="hero-unit">
         <center>
         <h2 align="center"> Правка даты интервью </h2>
         <form method="POST" action="doneDate.html">
@@ -99,5 +116,9 @@
         <input type="submit" name="submitDate" value="Изменить">
         </form>
         </center>
+                                </div>
+                        </div>
+                </div>
+        </div>
     </body>
 </html>

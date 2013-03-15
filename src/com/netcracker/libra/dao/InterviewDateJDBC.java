@@ -26,11 +26,14 @@ public class InterviewDateJDBC implements InterviewDateDAO {
     
     // Забито под конкретный формат даты и времени DD/MM/YYYY hh24:mi
     @Override
-    public void createInterviewDate(String startDateAndTime, String finishDateAndTime, Integer duration) {
+    public int createInterviewDate(String startDateAndTime, String finishDateAndTime, Integer duration) {
         String SQL = "INSERT INTO InterviewDate VALUES "+
                 "(InterDate_seq.NEXTVAL, TO_DATE(?, 'DD/MM/YYYY hh24:mi'), TO_DATE(?, 'DD/MM/YYYY hh24:mi'), ?)";
         jdbcTemplateObject.update(SQL, startDateAndTime, finishDateAndTime, duration);
+        String query="select max(interviewDateId) from interviewDate";
         interviewDateId++;
+        return jdbcTemplateObject.queryForInt(query);
+        
     }
     
     @Override

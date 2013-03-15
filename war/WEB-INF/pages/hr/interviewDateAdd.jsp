@@ -7,53 +7,20 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<!--<![endif]-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" >
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Управление датами интервью - добавление</title>
-<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8">   
-            </script>
+          <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js">    
+          </script>
+         <style type="text/css" media="all">@import "../resources/css/timePicker.css";</style>
+        <script type="text/javascript" src="../resources/js/jquery.timePicker.js"></script>
       <script type="text/javascript">
-			$(function() {
-				function sortTable($table, cellIndex, direction) {
-					var $rows = $table.find('tbody tr');
-					var data = [];
-					$rows.each(function() {
-						data.push({
-							cellText: $(this).find('td').eq(cellIndex).text(),
-							$row: $(this)
-						});
-					});
-
-					data.sort(function(a, b) {
-						if (a.cellText == b.cellText) {
-							return 0;
-						}
-						var sign = direction == "ASC" ? 1 : -1;
-						if(a.cellText == parseInt(a.cellText) && b.cellText == parseInt(b.cellText))
-                                                    return sign * ((parseInt(a.cellText) < parseInt(b.cellText)) ? -1 : 1);
-						return sign * ((a.cellText < b.cellText) ? -1 : 1);
-					});
-					
-					
-					$table.find('tbody').empty();
-					$(data).each(function() {
-						$table.find('tbody').append(this.$row);
-					});
-				}
-				
-				var $interviews = $('.interviewDate');
-				$interviews.find('thead th').each(function(cellIndex) {
-					$(this).on('click', function() {
-						var lastDirection = $(this).data('lastDirection') || "DESC";
-						var direction = lastDirection == "DESC" ? "ASC" : "DESC";
-						$(this).data('lastDirection', direction);
-					
-						sortTable($interviews, cellIndex, direction);
-					});
-				});
-			});
     $(document).ready(function() {
         $("#type").bind("change", function(){    
         if ($("#type").val()==1) {
@@ -66,87 +33,84 @@
         }
     });
  });
+  jQuery(function() {
+    $("#time3, #time4").timePicker();
+        
+    // Store time used by duration.
+    var oldTime = $.timePicker("#time3").getTime();
+    
+    // Keep the duration between the two inputs.
+    $("#time3").change(function() {
+      if ($("#time4").val()) { // Only update when second input has a value.
+        // Calculate duration.
+        var duration = ($.timePicker("#time4").getTime() - oldTime);
+        var time = $.timePicker("#time3").getTime();
+        // Calculate and update the time in the second input.
+        $.timePicker("#time4").setTime(new Date(new Date(time.getTime() + duration)));
+        oldTime = time;
+      }
+    });
+    // Validate.
+    $("#time4").change(function() {
+      if($.timePicker("#time3").getTime() > $.timePicker(this).getTime()) {
+        $(this).addClass("error");
+      }
+      else {
+        $(this).removeClass("error");
+      }
+    });
+    
+  });
 </script>
+        <link rel="stylesheet" type="text/css" href="../resources/css/tcal.css" />
+	<script type="text/javascript" src="../resources/js/tcal.js">   
+        </script> 
     </head>
     <body>
-        <center>
-            <form method="POST" action="interviewDateAdd.html">
-        <h2 align="center">Добавить новую дату интервью</h2>
-        Выберите тип: 
-        <select name="type" id="type" >
+                                    <center>
+        
+        <h2>Добавить новую дату интервью</h2>
+         <form name="Form" action="interviewDateAdded.html" method="get">
+       <br>
+         Тип:
+               <select name="type" id="type" style="width: 90px"  class="selectwidth">
             <option value="1" > Hr </option>
             <option value="2"> Tech </option>
-            </select>
-        <br>
-            Введите дату (20/05/2013): <input type="text" name="begin"><br>
-            Введите время начала и конца: 
-            <input type="text" name="timeStart" style="width: 50px" > 
+            </select> 
+         <br>
+               
+           <div>Дата:
+               <input type="text" name="begin" class="tcal" value=""  style="width: 100px" />
+           </div>
+	
+             <form name="Form" action="interviewDateAdded.html" method="get">
+                 <input type="hidden" value='${type}' name="type"> 
+                 <input type="hidden" value='${begin}' name="begin"> 
+             Время начала и конца: 
+            <div>
+                <input name="timeStart" type="text" id="time3" size="10" value="08:00" style="width: 50px"/> 
             - 
-            <input type="text" name="end" style="width: 50px" ><br>   
-            Введите продолжительность: <input type="text" name="duration" >  
+            <input name="end" type="text" id="time4" size="10" value="09:00" style="width: 50px"/>
+            </div>
+               Продолжительность: 
+               <input type="text" name="duration" style="width: 50px" >  
         <br> 
-        Выберите интервьюеров:<br> 
+        Выберите интервьюеров:</br> 
         <div id="hrDiv">
         <c:forEach items="${Inters}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" id="interviwers" value=<c:out value="${i.userid}"/> unchecked>
-            <label for="interviwers"> ${i.inters}</label> 
-            <br>
+            <input type="checkbox" name="checkInterviewers[]" id="<c:out value="${i.userid}"/>" value=<c:out value="${i.userid}"/> >
+           <label for="<c:out value="${i.userid}"/>">${i.inters} </label><br>
         </c:forEach>
         </div>
         <div style="display: none;"  id="techDiv">
         <c:forEach items="${intersTech}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" id="interviwers" value=<c:out value="${i.userid}"/> unchecked> 
-           <label for="interviwers"> ${i.inters}</label>  
-            <br>
+            <input type="checkbox" name="checkInterviewers[]" id="<c:out value="${i.userid}"/>" value=<c:out value="${i.userid}"/> > 
+           <label for="<c:out value="${i.userid}"/>">${i.inters}  </label> </br>
         </c:forEach>
         </div>
-            <br> 
-        <input type="submit" name="submitDate" value="Добавить">
-    </form>
-         <h2 align="center">Информация о рассписании собеседований</h2><br> 
-          <form method="GET" action="delInterviewDate.html">
-        <table border="1" cellspacing="0" cellpadding="4" class="interviewDate">
-            <thead>
-          <tr>
-            <th><a href="#">№ даты</a></th>
-            <th><a href="#">Тип</a></th>
-            <th><a href="#">Дата</a></th>
-            <th><a href="#">Время</a></th>
-            <th><a href="#">Продолжительность</a></th>
-            <th><a href="#">Интервьюеры</a></th>
-            <th><a href="#">Уведомить</a></th>
-            <th>Править</th>
-            <th>Удалить</th>
-          </tr>
-            </thead>
-            <tbody>
-    <c:forEach items="${Model}" var="d">
-    <tr>
-      <td><c:out value="${d.interviewDateId}"/></td>
-      <td><c:out value="${d.typeInterview}"/></td>
-      <td><c:out value="${d.dateInter}"/></td>
-      <td><c:out value="${d.timeInter}"/></td>
-      <td><c:out value="${d.interviewDuration}"/></td>
-      <td><c:out value="${d.listInterviewers}"/></td>
-      <td>
-      <input type="submit" name="sentEmails" value="Уведомить">
-      <input type="hidden" name="interviewDateId" value="<c:out value='${d.interviewDateId}  '/>"/>
-      </td>
-      <td>
-          <a href="editInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId}'/>&type=<c:out value='${d.typeInterview}'/> ">
-              править
-          </a>
-      </td>
-      <td>  
-       <a href="delInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId} '/>">
-         удалить 
-       </a>
-      </td>
-  </tr>
-    </c:forEach>
-            </tbody>
-    </table>
-   </form>
+            </br> 
+        <input type="submit" value="Добавить">
+    </form>                      
       </center>
     </body>
 </html>

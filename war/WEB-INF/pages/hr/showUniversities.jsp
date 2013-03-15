@@ -8,8 +8,14 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
     <head>
+         <jsp:include page="../resources.jsp" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Управление университетами</title>
          <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8">   
@@ -57,10 +63,19 @@
 		</script>
     </head>
     <body>
-        <br>
+        <div class="navmenu">
+		<jsp:include page="../navbar.jsp" />
+	</div>
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+		<div class="sidebar">
+				<jsp:include page="../sidebar.jsp" />
+			</div>
+			<div class="span9">
+				<div class="hero-unit">
         <center>
         <a href="addUniversities.html">Добавить новый университет</a>
-        <br>
         <br>
             <h3>${msg}</h3>
         <form name="myForm" action="showUniversitiesSearch.html" method="get">
@@ -72,10 +87,10 @@
         <input type="text" name ="textBox">
         <input type="submit" value="Показать" name="search"> </form>
         <br><br>
-        <table border ="1" class="university">
+        <table border ="4" class="university">
             <thead>
                 <tr>
-                    <th><a href="#">№ университета</a> </th>
+                    <th><a href="#"> Номер </a> </th>
                     <th><a href="#">Университет</a></th>
                     <th>Правка</th>
                     <th>Удалить</th>
@@ -101,5 +116,9 @@
             </tbody>
         </table>
         </center>
+                                </div>
+                        </div>
+                </div>
+        </div>
     </body>
 </html>

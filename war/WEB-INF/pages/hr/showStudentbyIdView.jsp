@@ -8,12 +8,30 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
     <head>
+         <jsp:include page="../resources.jsp" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Поиск студентов</title>
     </head>
     <body>
+         <div class="navmenu">
+		<jsp:include page="../navbar.jsp" />
+	</div>
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+		<div class="sidebar">
+				<jsp:include page="../sidebar.jsp" />
+			</div>
+			<div class="span9">
+				<div class="hero-unit">
       <center>
         <h1>Список студентов</h1>
         <h3>${msg}</h3>
@@ -69,6 +87,10 @@
     </c:forEach>
     </TABLE>
     <h3>${msg1}</h3>
-             </center>         
+             </center>    
+                                </div>
+                        </div>
+                </div>
+        </div>
     </body>
 </html>
