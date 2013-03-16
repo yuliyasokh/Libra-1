@@ -55,6 +55,7 @@ public class TypeController
             return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
+    
     /**
      * Метод передает данные о существующих типах
      * Вызывается при запросе по ссылке "showTypes.html"
@@ -187,4 +188,9 @@ public class TypeController
          mav.addObject("title",title);
          return mav;
      }
+    @RequestMapping(value="addType")
+    public String index(ModelMap model)  
+    {
+        return "addTypeView";
+    }
 }

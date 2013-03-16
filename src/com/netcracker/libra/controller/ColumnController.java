@@ -5,6 +5,7 @@
 package com.netcracker.libra.controller;
 
 import com.netcracker.libra.dao.ColumnJDBC;
+import com.netcracker.libra.dao.ColumnsJDBC;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,8 +15,10 @@ import com.netcracker.libra.dao.UserPreferences;
 import com.netcracker.libra.model.AppFormColumns;
 import com.netcracker.libra.model.ColumnFieldsModel;
 import com.netcracker.libra.model.InfoForDelete;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,6 +29,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @Controller
 public class ColumnController
 {
+    
+    @RequestMapping(value="index2")
+    public String index(ModelMap model)  
+    {
+        return "index2";
+    }
     TypeJDBC typeJDBC=new TypeJDBC();
     ColumnJDBC columnJDBC=new ColumnJDBC();
     @Autowired
@@ -122,12 +131,29 @@ public class ColumnController
     }
     
     //submitForm
-    
+         ColumnsJDBC columnsJDBS=new ColumnsJDBC();
     @RequestMapping(value="submitForm",method = RequestMethod.POST)
     public String submitForm(ModelMap model,
     @ModelAttribute("columnFields") ColumnFieldsModel columnFields)  
     {
-       Map<Integer,String> map=columnFields.getMap();   
+        Map<Integer,String> map=columnFields.getMap();   
+        
+        Set s=map.entrySet();
+        // Move next key and value of HashMap by iterator
+        Iterator it=s.iterator();
+        while(it.hasNext())
+        {
+            // key=value separator this by Map.Entry to get key and value
+            Map.Entry m =(Map.Entry)it.next();
+            // getKey is used to get key of HashMap
+            int key=(Integer)m.getKey();
+            // getValue is used to get value of key in HashMap
+            String value=(String)m.getValue();
+            if(!value.equalsIgnoreCase(""))
+            {
+                columnsJDBS.addColumnField(key, userPreferences.UserId, value, 1);
+            }
+        }
         return "appFormView";
     }
     

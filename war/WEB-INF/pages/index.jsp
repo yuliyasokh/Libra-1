@@ -25,7 +25,6 @@
         </ul>
         
         <a href="showTemplates.html">Шаблоны</a>
-        <a href="showTopics.html">Темы вопросов</a>
         <a href="showTypes.html">Типы</a>
         <a href="hr/showStudentbyIdView.html">Поиск1</a>
         <a href="hr/interviewDate.html">Расписание</a>

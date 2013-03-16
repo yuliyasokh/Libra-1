@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<div class="span3 well">
+	<div class="well">
 	<ul class="nav  nav-pills nav-stacked">
 		<li class="nav-header">Управление шаблонами</li>
 		<li><a href="showTemplates.html">Шаблоны</a></li>
-		<li><a href="showTopics.html">Топики</a></li>
-		<li><a href="showTypes.html">Типы</a></li>
+                <li><a href="addType.html">Добавить тип</a></li>
+		<li><a href="showTypes.html">Просмотреть типы</a></li>
 		<li class="nav-header">HR</li>
 		<li><a href="hr/showStudentbyIdView.html">Поиск студентов</a></li>
 		<li><a href="hr/showStudentByEducation.html">Поиск по
@@ -22,5 +22,7 @@
 		<li><a href="showAdvertise.html">Эффективность рекламы</a></li>
 		<li><a href="showStudentActivity.html">Посещаемость
 				собеседований</a></li>
+                <li class="nav-header">Студент</li>
+                <li><a href="showResults.html">Показать результаты</a></li>
 	</ul>
 	</div>

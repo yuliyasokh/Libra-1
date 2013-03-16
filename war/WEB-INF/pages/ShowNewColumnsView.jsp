@@ -9,6 +9,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Колонки</title>
+        <link href="resources/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="resources/css/docs.css" rel="stylesheet">
+    <link href="resources/js/google-code-prettify/prettify.css" rel="stylesheet">
+    <link href="resources/css/template.css" rel="stylesheet">		
+        <jsp:include page="resources.jsp" />
+
         <style type="text/css">
    SELECT {
     width: 300px; /* Ширина списка в пикселах */
@@ -16,23 +22,33 @@
   </style>
     </head>
     <body>
-    <form method="POST" action="SubmitColumn.html">
-            Введите имя колонки <input type="text" name="name" /></br>
-            Выберите тип колонки<select name="selType">
+        
+        <div class="navmenu">
+		<jsp:include page="navbar.jsp" />
+	</div>
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span3">
+				<jsp:include page="sidebar.jsp" />
+			</div>
+<%--<form class="well-template span8" method="POST" action="SubmitColumn.html">--%>
+            Введите имя колонки <input class="span-table" type="text" name="name" /></br>
+            Выберите тип колонки<select class="span-table" name="selType">
                 <option value="0">Колонка для инфорации</option>
                 <c:forEach items="${types}" var="t">
                     <option value="${t.getTypeId()}"><c:out value="${t.getInfoDescription()}" /></option>
                 </c:forEach>
             </select></br>
-            Выберите тип колонки<select name="parentColumn">
+            Выберите тип колонки<select class="span-table" name="parentColumn">
                 <option value="0">Нету родителя</option>
                 <c:forEach items="${columns}" var="c">
                     <option value="${c.getColumnId()}"><c:out value="${c.getName()}" /></option>
                 </c:forEach>
             </select></br>
             <input type="hidden" name="templateId" value="${templateId}"/>
-            <input type="submit" value="OK"/>
-    </form>
+            <input class="btn btn-primary "   type="submit" value="OK"/>
+</form>
             
  <script type="text/javascript">
 function checkAll(obj) {
@@ -56,13 +72,14 @@ function checkAll(obj) {
   }
 }
 </script>           
-           <%-- <form action="delColumns.html" method="POST">--%>
+          <%--  <form class="well-template span8" action="delColumns.html" method="POST">--%>
+          <div class="well-template span8">
     <table border="1" cellspacing="0" cellpadding="4">
         <caption>Информация о колонках</caption>
         <thead>
         <tr>
             <th>
-             <input type="image"  src="resources/images/del.jpg" width="25" height="25" title="Удалить" onclick="formSubmit()"/>
+             <input type="image"  src="resources/images/del.png" width="25" height="25" title="Удалить" onclick="formSubmit()"/>
              </br><input id="one" type="checkbox" name="one" value="all" onclick="checkAll(this)" />
             </th>
             <th>Номер</th>
@@ -106,6 +123,10 @@ function checkAll(obj) {
             </c:forEach>
         </tbody>
     </table>
-               <%-- </form>--%>
+                </div>
+            <%--    </form>--%>
+		</div>
+	</div>
+    
     </body>
 </html>
