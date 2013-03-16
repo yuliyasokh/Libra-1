@@ -1,79 +1,80 @@
-<%-- 
-    Author     : Alexander Lebed
---%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Служащие</title>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+
+<html class="no-js">
+<!--<![endif]-->
+<head>
+	<jsp:include page="../resources.jsp" />
+	<title>ADD</title>
         <style type="text/css">
-        body {text-align: center; padding-top:100px }
-        table {margin: 0px auto;}
+        body {text-align: center;}
         </style>
-    </head>
-    <body>
-        <table border="1" cellspacing="0" cellpadding="4">
-        <caption>Внесите данные, чтобы добавить нового служащего</caption>
-        <tr>
-            <th>Выберите должность</th>
-            <th>Имя</th>
-            <th>Фамилия</th>
-            <th>Email</th>
-            <th>Пароль</th>
-            <th>Подтвердить</th>
-        </tr>
-        <form action="doneAdd.html" method="POST">
-        <td>
-            <select name="roleId">
-                <option value="2">HR</option>
-                <option selected value="3">Tech</option>
-                <option value="4">Admin</option>
-            </select>
-        </td>
-        <td><input type="text" name="firstName"/></td>
-        <td><input type="text" name="lastName"/></td>
-        <td><input type="text" name="email"/></td>
-        <td><input type="password" name="password"/></td>
-        <td><input type="submit" value="Ok"><input type=button value="Cancel" onCLick="history.back()"></td>
-        </form>
-        </table>
-        <br>
-        
-        <table border="1" cellspacing="0" cellpadding="4">
-        <caption>Список служащих</caption>
-        <tr>
-            <th>Должность</th>
-            <th>ID</th>
-            <th>Имя</th>
-            <th>Фамилия</th>
-            <th>Email</th>
-            <th>Пароль</th>
-            <th>Редактировать</th>
-            <th>Удалить</th>
-        </tr>
-        <c:forEach items="${employees}" var="emp">
-            <form action="employees.html" method="POST">
-                <tr>
-                    <td>
-                        <c:if test="${emp.getRoleId() == 2}"><b>HR</b></c:if>
-                        <c:if test="${emp.getRoleId() == 3}"><b>Tech</b></c:if>
-                        <c:if test="${emp.getRoleId() == 4}"><b>Admin</b></c:if>
-                    </td>
-                    <td>${emp.getUserId()}</td>
-                    <td>${emp.getFirstName()}</td>
-                    <td>${emp.getLastName()}</td>
-                    <td>${emp.getEmail()}</td>
-                    <td>${emp.getPassword()}</td>
-                    <td><a href="editEmployee.html?employeeId=<c:out value='${emp.getUserId()}'/>">
-                            <img src="resources\images\edit.png"  width="25" height="25" border="0" title="Редактировать"/></a></td>
-                    <td><a href="deleteSure.html?employeeId=<c:out value='${emp.getUserId()}'/>">
-                            <img src="resources\images\del.jpg"  width="25" height="25" border="0" title="Удалить"/></a></td>
-                </tr>
-            </form>
-            </c:forEach>
-        </table>
-    </body>
+</head>
+
+<body>
+	<div class="navmenu">
+		<jsp:include page="../navbar.jsp" />
+	</div>
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="sidebar">
+				<jsp:include page="../sidebar.jsp" />
+			</div>
+			<div class="span9">
+                            
+                            <form class="form-horizontal" action="doneAdd.html" method="POST">
+                                
+                                <div class="control-group">
+                                    <div class="controls">
+                                    <select name="roleId">
+                                        <option value="2">HR</option>
+                                        <option selected value="3">TECH</option>
+                                        <option value="4">ADMIN</option>
+                                    </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" name="firstName" placeholder="Имя">
+                                    </div>
+                                </div>
+                                
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" name="lastName" placeholder="Фамилия">
+                                    </div>
+                                </div>
+                                
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" name="email" placeholder="Эл. почта">
+                                    </div>
+                                </div>
+                                
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="password" name="password" placeholder="Пароль">
+                                    </div>
+                                </div>
+                                
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <button class="btn btn-success" type="submit"><i class="icon-white icon-ok"></i> Add</button>
+                                        <button type=button class="btn" onClick="parent.location='currentEmployees.html'">Cancel</button>
+                                    </div>
+                                </div>
+                                
+                            </form>
+                            
+                            
+                    </div>
+            </div>
+    </div>
+</body>
 </html>

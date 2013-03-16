@@ -22,5 +22,8 @@
 		<li><a href="showAdvertise.html">Эффективность рекламы</a></li>
 		<li><a href="showStudentActivity.html">Посещаемость
 				собеседований</a></li>
+                                
+                <li class="nav-header">ADMIN</li> 
+                <li><a href="admin/employees.html">Панель админа</a></li>
 	</ul>
 	</div>

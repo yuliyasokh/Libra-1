@@ -55,7 +55,7 @@
                     <option ${selectedAll} value="ALL">Показать всех</option>
                     <option ${selectedFull} value="FULL_NAME">По имени и фамилии</option>
                     <option ${selectedFirst} value="FIRST_NAME">По имени</option>
-                    <option ${selectedLast} value="LAST_NAME">По фамилии</option>
+                    <option ${selectedLast} value="LAST_NAME">По фимилии</option>
                     <option ${selectedEmail} value="EMAIL">По email</option>
                 </select>
              </td>
@@ -87,9 +87,20 @@
                         <c:if test="${emp.getRoleId() == 4}"><b>ADMIN</b></c:if>
                     </td>
                     <td>${emp.getEmail()}</td>
-                    <td><a href="changeEmployeePassword.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img src="resources\images\edit.png"  width="25" height="25" border="0" title="Сменить пароль"/></a></td>
-                    <td><a href="editEmployee.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img src="resources\images\edit.png"  width="25" height="25" border="0" title="Редактировать"/></a></td>
-                    <td><a href="deleteSure.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img src="resources\images\del.jpg"  width="25" height="25" border="0" title="Удалить"/></a></td>
+                    <td><div class="btn-group">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                        <!-- dropdown menu links -->
+                        <li><a tabindex="-1" href="#">Action</a></li>
+                        <li><a tabindex="-1" href="#">Another action</a></li>
+                        <li><a tabindex="-1" href="#">Something else here</a></li>
+                        <li><a href="changeEmployeePassword.html?employeeId=<c:out value='${emp.getUserId()}'/>"><i class="icon-white icon-ok"></i> Сменить пароль</a></li>
+                        <li><a href="changeEmployeePassword.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img src="resources\images\edit.png"  width="25" height="25" border="0" title="Сменить пароль"/></a></li>
+                        <li><a href="editEmployee.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img src="resources\images\edit.png"  width="25" height="25" border="0" title="Редактировать"/></a></li>
+                        <li><a href="deleteSure.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img src="resources\images\del.jpg"  width="25" height="25" border="0" title="Удалить"/></a></li>
+                        </ul>
+                        </div>
+                    </td>
                 </tr>
             </form>
         </c:forEach>

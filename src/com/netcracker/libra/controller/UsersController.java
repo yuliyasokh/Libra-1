@@ -33,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Alexander Lebed
  */
 @Controller
+@RequestMapping("admin")
 public class UsersController {
  
     List <User> employees;  //outputting list of employees
@@ -44,22 +45,24 @@ public class UsersController {
     boolean order;      //value of ascending or descending order; true when ascending
     
     @Autowired
-    UserPreferences user;
+    UserPreferences user;   // contains ID and access level
+    AdminJDBC jdbc = new AdminJDBC(); //works with date base
+    
     /**
      * Displays on the page all employees (HR, Tech.interviewer, Administrator)
      */
-    @RequestMapping("admin/employees")
+    @RequestMapping("employees")
     public ModelAndView showEmployees() {
         
         ModelAndView mv = new ModelAndView();
         
         if(user.accessLevel==3) {
-            mv.setViewName("admin/employees");
-            employees = new AdminJDBC().getAllEmployees();
+            
+            employees = jdbc.getAllEmployees();
             checked = "checkedAll";
             selected = "selectedAll";
             
-            mv.setViewName("admin/employeesView");
+            mv.setViewName("admin/employeesView2"); // !!!!!!!!!!!! employeesView2
             mv.addObject("employees", employees);
             mv.addObject(checked, "checked");
             mv.addObject(selected, "selected");
@@ -68,10 +71,26 @@ public class UsersController {
         else {
          mv.setViewName("admin/messageView");
          mv.addObject("title", "Ошибка");
-         mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор.");
+         mv.addObject("message","<div class=\"alert\">Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор.</div>");
          mv.addObject("link","<a href='/Libra/'>Назад</a>");
          return mv;
         }
+    }
+    
+    /**
+     * Returns settings and employees who have been showed before
+     * Invokes when user cliks "Cancel"
+     */
+    @RequestMapping("currentEmployees")
+    public ModelAndView showCurrentEmployees() {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin/employeesView");
+        mv.addObject(checked, "checked");
+        mv.addObject(selected, "selected");
+        mv.addObject("text", text);
+        mv.addObject("employees", employees);
+        mv.addObject("noResults", noResults);
+        return mv;
     }
     
     /**
@@ -83,7 +102,7 @@ public class UsersController {
      * @param textValue the value entered in the text field
      * @param byWhat - the value of sorting (by first name/email etc.)
      */
-    @RequestMapping("admin/sortedEmployees")
+    @RequestMapping("sortedEmployees")
     public ModelAndView showRequiredEmployees(
                 @RequestParam("role") int role,
                 @RequestParam("textValue") String textValue,
@@ -110,7 +129,6 @@ public class UsersController {
         
         mv.addObject(checked, "checked");
         mv.addObject("text", text);
-        AdminJDBC jdbc = new AdminJDBC();
         
         //defining the search value and saving this value
         switch(byWhat) {
@@ -197,7 +215,7 @@ public class UsersController {
      * 
      * @param orderBy the value of sorting (like by the "ID" or "FIRST_NAME")
      */
-    @RequestMapping("admin/sortEmployees")
+    @RequestMapping("sortEmployees")
     public ModelAndView sortEmployees(@RequestParam("orderBy") String orderBy) {
         
         ModelAndView mv = new ModelAndView();
@@ -239,11 +257,11 @@ public class UsersController {
     /**
      * Displays the page for edit the data of certain employee by his or her ID
      */
-    @RequestMapping("admin/editEmployee")
+    @RequestMapping("editEmployee")
     public ModelAndView editEmployee(@RequestParam("employeeId") int employeeId) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/editEmployeeView");
-        mv.addObject("emp", (new AdminJDBC()).getEmployee(employeeId));
+        mv.addObject("emp", jdbc.getEmployee(employeeId));
         return mv;
     }
     
@@ -251,7 +269,7 @@ public class UsersController {
      * Changes the employee's data by his or her ID 
      * and displays the statement of changes
      */
-    @RequestMapping(value="admin/doneEdit", method = RequestMethod.POST)
+    @RequestMapping(value="doneEdit", method = RequestMethod.POST)
     public ModelAndView updateEmployee (
                         @RequestParam("roleId") int roleId,
                         @RequestParam("employeeId") int employeeId,
@@ -274,8 +292,8 @@ public class UsersController {
         }
         else if(message.equals("")) {
             
-            (new AdminJDBC()).updateEmployee(employeeId, firstName, lastName, email, roleId);
-            User employee = (new AdminJDBC()).getEmployee(employeeId);
+            jdbc.updateEmployee(employeeId, firstName, lastName, email, roleId);
+            User employee = jdbc.getEmployee(employeeId);
             String link= "<a href=\"employees.html\">Список служащих</a>";
             mv.addObject("title", "Готово");
             mv.addObject("message", "Служащий "+ employee.getFirstName() +" "+ employee.getLastName() +" успешно изменен.");
@@ -295,18 +313,17 @@ public class UsersController {
      * Displays on the page all employees (HR, Tech.interviewer, Administrator)
      * and the ability to add the new one
      */
-    @RequestMapping("admin/addEmployee")
+    @RequestMapping("addEmployee")
     public ModelAndView addEmployeeView() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/addEmployeeView");
-        mv.addObject("employees", new AdminJDBC().getAllEmployees());
         return mv;
     }
     
     /**
      * Adds a new employee and displays the statement of changes
      */
-    @RequestMapping(value="admin/doneAdd", method = RequestMethod.POST)
+    @RequestMapping(value="doneAdd", method = RequestMethod.POST)
     public ModelAndView addEmployee (
                         @RequestParam("roleId") int roleId,
                         @RequestParam("firstName") String firstName, 
@@ -319,8 +336,16 @@ public class UsersController {
         String message = LengthService.checkFirstNameLength(firstName) + LengthService.checkLastNameLength(lastName) +
                         LengthService.checkEmailLength(email) + LengthService.checkPasswordLength(password);
         
+        //checks the duplicate emails, true if there are
+        if(checkDublicateValues(email, employees)){
+            String link= "<a href=\"addEmployee.html\">Назад</a>";
+            mv.addObject("title", "Ошибка");
+            mv.addObject("message", "<div class=\"alert\">Сотрудник с адресом эл.почты \""+email+"\" уже был загерестрирован.<br> Пожалуйста, введите другой эл.адрес</div>");
+            mv.addObject("link", link);
+            return mv;
+        }
         if(message.equals("")) {
-            (new AdminJDBC()).addEmployee(firstName, lastName, email, Security.getMD5hash(password), roleId);
+            jdbc.addEmployee(firstName, lastName, email, Security.getMD5hash(password), roleId);
             String link= "<a href=\"employees.html\">Список служащих</a>";
             mv.addObject("title", "Готово");
             mv.addObject("message", "Служащий "+ firstName +" "+ lastName +" успешно добавлен.");
@@ -328,9 +353,9 @@ public class UsersController {
             return mv;
         }
         else {
-            String link= "<a href=\"addEmloyee.html\">Назад</a>";
+            String link= "<a href=\"addEmployee.html\">Назад</a>";
             mv.addObject("title", "Ошибка");
-            mv.addObject("message", message);
+            mv.addObject("message", "<div class=\"alert\">"+message+"</div>");
             mv.addObject("link", link);
             return mv;
         }
@@ -339,11 +364,11 @@ public class UsersController {
     /**
      * Displays the page with confirmation about deleting the employee (Y/N)
      */
-    @RequestMapping("admin/deleteSure")
+    @RequestMapping("deleteSure")
     public ModelAndView deleteSure(@RequestParam("employeeId") int employeeId) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/deleteSureView");
-        mv.addObject("emp", (new AdminJDBC()).getEmployee(employeeId));
+        mv.addObject("emp", jdbc.getEmployee(employeeId));
         return mv;
     }
     
@@ -351,12 +376,12 @@ public class UsersController {
      * Deleting of employee from all database tabels
      * and displays the statement of changes
      */
-    @RequestMapping(value="admin/deleteEmployee", method = RequestMethod.GET)
+    @RequestMapping(value="deleteEmployee", method = RequestMethod.GET)
     public ModelAndView deleteEmployee (@RequestParam("employeeId") int employeeId) {
         ModelAndView mv = new ModelAndView();
-        User employee = (new AdminJDBC()).getEmployee(employeeId);
+        User employee = jdbc.getEmployee(employeeId);
         //deleting of employee from all database tabels
-        (new AdminJDBC()).deleteEmployee(employeeId);
+        jdbc.deleteEmployee(employeeId);
         
         String message = "Служащий "+ employee.getFirstName() +" "+ employee.getLastName() +" успешно удален.";
         String link= "<a href=\"employees.html\">Список служащих</a>";
@@ -370,11 +395,10 @@ public class UsersController {
     /**
      * Displays the page with changing the password of employee
      */
-    @RequestMapping("admin/changeEmployeePassword")
+    @RequestMapping("changeEmployeePassword")
     public ModelAndView changeEmployeePassword (@RequestParam("employeeId") int employeeId) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/changeEmployeePasswordView");
-        
         mv.addObject("id", employeeId);
         mv.addObject(checked, "checked");
         mv.addObject(selected, "selected");
@@ -387,7 +411,7 @@ public class UsersController {
      * Changes the password of employee, goes to the page with employees
      * and displays the message of changing
      */
-    @RequestMapping("admin/changedEmployeePassword")
+    @RequestMapping("changedEmployeePassword")
     public ModelAndView changedEmployeePassword (@RequestParam("employeeId") int employeeId,
                                                  @RequestParam("passwordValue") String passwordValue) {
         ModelAndView mv = new ModelAndView();
@@ -402,7 +426,7 @@ public class UsersController {
         
         if(message.equals("")) {
             String password = Security.getMD5hash(passwordValue);
-            new AdminJDBC().changePassword(password, employeeId);
+            jdbc.changePassword(password, employeeId);
             mv.addObject("message", "Пароль был изменен");
         }
         else {
@@ -522,6 +546,23 @@ public class UsersController {
                 dublicate = true;
                 }
             }
+        }
+        return dublicate;
+    }
+    
+    public boolean checkDublicateValues(String email, List <User> users) {
+        
+        List <User> list = users;
+        Set set = new TreeSet();
+        //add the changed email first
+        set.add(email);
+        boolean dublicate = false;
+        //check all emails except for the old employee's email
+        for(User user : list) {
+            if(!set.add(user.getEmail())) {
+                dublicate = true;
+            }
+            
         }
         return dublicate;
     }
