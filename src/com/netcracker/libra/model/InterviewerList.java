@@ -1,7 +1,8 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ * InterviewerList contains the ID of InterviewDate (which has an information about
+ * the date, time and duration) and ID of interviewers (HR, Tech.interviewer)
  * @author Alexander Lebed
  */
 public class InterviewerList {

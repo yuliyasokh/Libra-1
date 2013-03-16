@@ -20,7 +20,7 @@ public class WithInterviewersInterviewDateRowMapper implements RowMapper <Interv
         interviewDate.setTimeInter(rs.getString("timeInter"));
         interviewDate.setInterviewDuration(rs.getInt("InterviewDuration"));
         interviewDate.setListInterviewers(rs.getString("listInterviewers"));
-
+        interviewDate.setTypeInterview(rs.getString("typeInterview"));
         return interviewDate;
     }
     

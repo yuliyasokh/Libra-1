@@ -1,6 +1,9 @@
 package com.netcracker.libra.model;
 
 /**
+ * InterviewResults is filled after interviewing.
+ * The class contains ID of interview, ID of interviewer,
+ * interviewer's mark and comment for the interview
  * @author Alexander Lebed
  */
 public class InterviewResults {

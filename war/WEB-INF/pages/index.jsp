@@ -17,7 +17,13 @@
         <h1>HR</h1>
         <p>hr@mail.ru</p>
         <p>12345</p>
-        </br>
+         
+        <ul>
+            <b>Admin</b>
+            <li>admin@gmail.com</li>
+            <li>54321</li>
+        </ul>
+        
         <a href="showTemplates.html">Шаблоны</a>
         <a href="showTopics.html">Темы вопросов</a>
         <a href="showTypes.html">Типы</a>

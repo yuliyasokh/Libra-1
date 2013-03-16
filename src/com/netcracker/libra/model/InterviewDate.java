@@ -1,5 +1,11 @@
 package com.netcracker.libra.model;
-import java.util.Date;
+import java.sql.Date;
+
+
+/*
+ * Uses for displaying possible interview dates
+ * Interview date can be created, edited or deleted.
+ */
 
 public class InterviewDate {
     
@@ -10,6 +16,8 @@ public class InterviewDate {
     private String listInterviewers;
     private String timeInter;
     private String dateInter;
+    private String typeInterview;
+    
 
     
     public void setListInterviewers(String listInterviewers){
@@ -17,6 +25,12 @@ public class InterviewDate {
     }
     public String getListInterviewers(){
         return listInterviewers;
+    }
+    public void setTypeInterview(String typeInterview){
+        this.typeInterview=typeInterview;
+    }
+    public String getTypeInterview(){
+        return typeInterview;
     }
     public void setTimeInter(String timeInter){
         this.timeInter=timeInter;

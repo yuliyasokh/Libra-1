@@ -1,9 +1,8 @@
 package com.netcracker.libra.service;
 
 /**
- * Проверяет вводимые (админом) значения на возможность их отсутствия или избыточности
- * для таблицы в БД - Users
- * 
+ * Checks the input values by administrator ​​to the possibility of their absence or redundancy
+ * (for the database table Users)
  * @author Alexander Lebed
  */
 public class LengthService {
@@ -17,8 +16,8 @@ public class LengthService {
     private final static String OK = "";
     
     /**
-     * Проверяет длину имени
-     * Если длина удовлетворяет условиям в БД - возвращает пустую строку
+     * Checks the length of the first name
+     * If the length satisfies the database - returns an empty string
      */
     public static String checkFirstNameLength(String firstName) {
         int length = firstName.length();
@@ -27,8 +26,8 @@ public class LengthService {
     }
     
     /**
-     * Проверяет длину фамилии
-     * Если длина удовлетворяет условиям в БД - возвращает пустую строку
+     * Checks the length of the last name
+     * If the length satisfies the database - returns an empty string
      */
     public static String checkLastNameLength(String lastName) {
         int length = lastName.length();
@@ -37,8 +36,8 @@ public class LengthService {
     }
     
     /**
-     * Проверяет длину эл.почты
-     * Если длина удовлетворяет условиям в БД - возвращает пустую строку
+     * Checks the length of the email
+     * If the length satisfies the database - returns an empty string
      */
     public static String checkEmailLength(String email) {
         int length = email.length();
@@ -47,8 +46,8 @@ public class LengthService {
     }
     
     /**
-     * Проверяет длину пароля
-     * Если длина удовлетворяет условиям в БД - возвращает пустую строку
+     * Checks the length of the password
+     * If the length satisfies the database - returns an empty string
      */
     public static String checkPasswordLength(String password) {
         int length = password.length();

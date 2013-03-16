@@ -8,5 +8,6 @@
 </head>
 <body>
 	<h2>Вы успешно вошли</h2>
+        <br><a href="/Libra/">На главную</a>
 </body>
 </html>

@@ -8,8 +8,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
     <head>
+        <jsp:include page="../resources.jsp" />
+        <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Управление кафедрами - Правка</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript" charset="utf-8">   
@@ -25,11 +32,22 @@
         </script>
     </head>
     <body>
+        <div class="navmenu">
+		<jsp:include page="../navbar.jsp" />
+	</div>
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+		<div class="sidebar">
+				<jsp:include page="../sidebar.jsp" />
+			</div>
+			<div class="span9">
+				<div class="hero-unit">
     <center>        
         <h2>Редактирование кафедры</h2>
         <h3>${msg}</h3>
         <form method="POST" action="editedDepartment.html">
-         <table border="1" cellspacing="0" cellpadding="4">
+         <table border="1" class="bordered">
              <tr>
                   <td>№ кафедры</td>
                   <td>Кафедра</td>
@@ -68,6 +86,9 @@
         
         <input value="Назад" onclick="location.href='showDepartments.html'" type="button"/>
     </center>
-        
+                                </div>
+                        </div>
+                </div>
+        </div>
     </body>
 </html>

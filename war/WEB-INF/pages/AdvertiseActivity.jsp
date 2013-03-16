@@ -3,7 +3,7 @@
     Created on : 19.02.2013, 23:42:32
     Author     : MorrDeck
 --%>
-
+    
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -21,14 +21,15 @@
         <title>AdvertiseActivity</title>
     </head>
     <body>
-        
+
         <h1 align="center">Advertise Activity</h1>
         <br>
     <center> <div id="chartdiv" style="height:500px;width:500px; alignment-adjust: middle " ></div></center>
-        <script language="javascript" type="text/javascript">
+    <script language="javascript" type="text/javascript">
             var data = [${data}];
             var plot1 = jQuery.jqplot ('chartdiv', [data],
             {
+                title:'Эффективность рекламы',
                 seriesDefaults: {
                     renderer: jQuery.jqplot.PieRenderer,
                     rendererOptions: {
@@ -40,6 +41,6 @@
             }
         );
             
-        </script>
-    </body>
+    </script>
+</body>
 </html>

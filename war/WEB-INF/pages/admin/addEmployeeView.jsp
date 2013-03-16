@@ -9,9 +9,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Служащие</title>
+        <style type="text/css">
+        body {text-align: center; padding-top:100px }
+        table {margin: 0px auto;}
+        </style>
     </head>
     <body>
-        
         <table border="1" cellspacing="0" cellpadding="4">
         <caption>Внесите данные, чтобы добавить нового служащего</caption>
         <tr>
@@ -33,10 +36,11 @@
         <td><input type="text" name="firstName"/></td>
         <td><input type="text" name="lastName"/></td>
         <td><input type="text" name="email"/></td>
-        <td><input type="text" name="password"/></td>
-        <td><input type="submit" value="OK"></td>
+        <td><input type="password" name="password"/></td>
+        <td><input type="submit" value="Ok"><input type=button value="Cancel" onCLick="history.back()"></td>
         </form>
         </table>
+        <br>
         
         <table border="1" cellspacing="0" cellpadding="4">
         <caption>Список служащих</caption>
@@ -65,7 +69,7 @@
                     <td>${emp.getPassword()}</td>
                     <td><a href="editEmployee.html?employeeId=<c:out value='${emp.getUserId()}'/>">
                             <img src="resources\images\edit.png"  width="25" height="25" border="0" title="Редактировать"/></a></td>
-                    <td><a href="deleteEmployee.html?employee=<c:out value='${emp.getUserId()}'/>">
+                    <td><a href="deleteSure.html?employeeId=<c:out value='${emp.getUserId()}'/>">
                             <img src="resources\images\del.jpg"  width="25" height="25" border="0" title="Удалить"/></a></td>
                 </tr>
             </form>
