@@ -16,7 +16,7 @@
 <!--<![endif]-->
     <head>
         <jsp:include page="../resources.jsp" />
-
+        <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Управление кафедрами - Правка</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript" charset="utf-8">   
@@ -47,7 +47,7 @@
         <h2>Редактирование кафедры</h2>
         <h3>${msg}</h3>
         <form method="POST" action="editedDepartment.html">
-         <table border="1" cellspacing="0" cellpadding="4">
+         <table border="1" class="bordered">
              <tr>
                   <td>№ кафедры</td>
                   <td>Кафедра</td>

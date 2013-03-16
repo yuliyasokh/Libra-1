@@ -18,6 +18,7 @@
         <jsp:include page="../resources.jsp" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Управление факультетами - Правка</title>
+        <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
     </head>
     <body>
         <div class="navmenu">
@@ -35,7 +36,7 @@
         <h2>Редактирование факультета</h2>
         <h3>${msg}</h3>
         <form method="POST" action="editedFaculty.html">
-         <table border="1" cellspacing="0" cellpadding="4">
+         <table border="1" class="bordered">
              <tr>
                  <td>№ факультета</td>
                   <td>Факультет</td>

@@ -19,6 +19,7 @@
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Управление кафедрами - Добавить кафедру</title>
+        <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
         <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8">   
             </script>
       <script type="text/javascript">
@@ -50,7 +51,7 @@
 					});
 				}
 				
-				var $interviews = $('.department');
+				var $interviews = $('.bordered');
 				$interviews.find('thead th').each(function(cellIndex) {
 					$(this).on('click', function() {
 						var lastDirection = $(this).data('lastDirection') || "DESC";
@@ -117,7 +118,7 @@ function getFact(){
         <input type="submit" value="Показать" name="search">
             </form>
         <br><br>
-        <table border ="1" class="department">
+        <table border ="1" class="bordered">
             <thead>
             <tr>            
                 <th><a href="#">№ кафедры </a></th>

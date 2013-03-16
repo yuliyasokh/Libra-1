@@ -18,6 +18,7 @@
         <jsp:include page="../resources.jsp" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Управление кафедрами</title>
+        <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
         <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8">   
             </script>
       <script type="text/javascript">
@@ -49,7 +50,7 @@
 					});
 				}
 				
-				var $interviews = $('.department');
+				var $interviews = $('.bordered');
 				$interviews.find('thead th').each(function(cellIndex) {
 					$(this).on('click', function() {
 						var lastDirection = $(this).data('lastDirection') || "DESC";
@@ -90,7 +91,7 @@
         <input type="submit" value="Показать" name="search">
             </form>
         <br><br>
-        <table border ="1" class="department">
+        <table border ="1" class="bordered">
             <thead>
             <tr>  
                 <th><a href="#">№ кафедры</a> </th>
@@ -102,8 +103,9 @@
             </tr>
             </thead>
             <tbody>
+               
            <c:forEach items="${depts}" var="d">
-                <tr>                   
+                <tr>                
                     <td><c:out value="${d.departmentId}"/></td>
                     <td><c:out value="${d.departmentName}"/></td>
                     <td><c:out value="${d.facultyName}"/></td>
@@ -119,13 +121,14 @@
                         </a> 
                     </td>
                 </tr>
+                
         </c:forEach>
             </tbody>
         </table>
         </center>
                                 </div>
+                                </div>
                         </div>
                 </div>
-        </div>
     </body>
 </html>

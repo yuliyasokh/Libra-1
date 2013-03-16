@@ -16,6 +16,7 @@
 <!--<![endif]-->
    <head>
        <jsp:include page="../resources.jsp" />
+       <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Find students</title> 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript" charset="utf-8">   
@@ -39,7 +40,6 @@ function getFact(){
 </script>
 </head>
    <body>
-       <body>
          <div class="navmenu">
 		<jsp:include page="../navbar.jsp" />
 	</div>
@@ -52,7 +52,7 @@ function getFact(){
 			<div class="span9">
 				<div class="hero-unit">
     <center>
-       <h2 align="center">Список студентов</h2>   
+       <h2>Список студентов</h2>   
         <form method="post" action="showStudentByEducation.html">
        Университет:
        <select onchange="getFact();" name="univ" id="univ">
@@ -77,7 +77,7 @@ function getFact(){
        <input type="submit" value="Поиск">
         </form>
           <form method="GET">
-          <table border ="1"> 
+              <table border ="1" class="bordered"> 
             <th>
                 <a href="sortedByEducation.html?orderBy=appId&direction=asc&universityId=<c:out value='${univ}'/>&facultyId=<c:out value='${fact}'/>&departmentId=<c:out value='${dept}'/>">
                     № анкеты

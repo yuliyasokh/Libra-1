@@ -10,6 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Управление датами - поиск</title>
+        <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
         <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8">   
             </script>
       <script type="text/javascript">
@@ -41,7 +42,7 @@
 					});
 				}
 				
-				var $interviews = $('.interviewDate');
+				var $interviews = $('.bordered');
 				$interviews.find('thead th').each(function(cellIndex) {
 					$(this).on('click', function() {
 						var lastDirection = $(this).data('lastDirection') || "DESC";
@@ -58,7 +59,6 @@
         <center>
             <a href="interviewDateAdd.html">Добавить новую дату интервью</a>
             <br>
-            <br>
             <h3>${msg}</h3>
             <form name="myForm" action="showInterviewDateSearch.html" method="get">
         <select name="interSearch">
@@ -74,7 +74,7 @@
          <h2 align="center">Информация о рассписании собеседований</h2>
          <br> 
           <form method="GET" action="delInterviewDate.html">
-              <table border="1" cellspacing="0" cellpadding="4" class="interviewDate">
+              <table border="1" class="bordered">
                   <thead>
            <tr>
                <th><a href="#">№ даты</a></th>

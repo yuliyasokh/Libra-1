@@ -16,6 +16,7 @@
 <!--<![endif]-->
     <head>
         <jsp:include page="../resources.jsp" />
+        <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Управление университетами - Поиск</title>
         <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8">   
@@ -49,7 +50,7 @@
 					});
 				}
 				
-				var $interviews = $('.university');
+				var $interviews = $('.bordered');
 				$interviews.find('thead th').each(function(cellIndex) {
 					$(this).on('click', function() {
 						var lastDirection = $(this).data('lastDirection') || "DESC";
@@ -90,7 +91,7 @@
             </form>
         <br>
         <br>
-        <table border ="1" class="university">
+        <table border ="1" class="bordered">
             <thead>
                 <tr>
                     <th><a href="#">№ университета</a> </th>

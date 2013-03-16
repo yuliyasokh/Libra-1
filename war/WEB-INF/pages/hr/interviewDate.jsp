@@ -8,22 +8,21 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
     <head>
+         <jsp:include page="../resources.jsp" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Управление датами интервью</title>
-        <link rel="stylesheet" href="/Libra/resources/css/main.css;jsessionid=FA938E18B7E9988F3F7B07F9C08278BD" />
-<link rel="stylesheet" href="/Libra/resources/css/bootstrap-responsive.min.css;jsessionid=FA938E18B7E9988F3F7B07F9C08278BD" />
-<link rel="stylesheet" href="/Libra/resources/css/bootstrap.min.css;jsessionid=FA938E18B7E9988F3F7B07F9C08278BD" />
-<link rel="stylesheet" href="/Libra/resources/css/style.css;jsessionid=FA938E18B7E9988F3F7B07F9C08278BD" />
-<script src="/Libra/resources/js/jquery-1.9.0.min.js;jsessionid=FA938E18B7E9988F3F7B07F9C08278BD"></script>
-<script src="/Libra/resources/js/modernizr-2.6.2-respond-1.1.0.min.js;jsessionid=FA938E18B7E9988F3F7B07F9C08278BD"></script>
-
 <script src="http://code.jquery.com/jquery-migrate-1.1.1.min.js"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8">   
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript">   
             </script>
-        <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8">   
-            </script>
+            <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
+
       <script type="text/javascript">
 			$(function() {
 				function sortTable($table, cellIndex, direction) {
@@ -53,7 +52,7 @@
 					});
 				}
 				
-				var $interviews = $('.interviewDate');
+				var $interviews = $('.bordered');
 				$interviews.find('thead th').each(function(cellIndex) {
 					$(this).on('click', function() {
 						var lastDirection = $(this).data('lastDirection') || "DESC";
@@ -68,49 +67,13 @@
     </head>
     <body>
         <div class="navmenu">
-		
-<div class="navbar">
-	<div class="navbar-inner">
-		<div class="container">
-			<a class="brand">Libra</a>
-			<div class="navbar-content">
-				<ul class="nav">
-					<li class="active"><a href="/Libra">Главная</a></li>
-					<li><a href="#">Информация</a></li>
-					<li><a href="#">Контакты</a></li>
-				</ul>
-			</div>
-		</div>
+		<jsp:include page="../navbar.jsp" />
 	</div>
-</div>
-	</div>
-        <div class="container-fluid">
+	
+	<div class="container-fluid">
 		<div class="row-fluid">
 		<div class="sidebar">
-	<div class="span3 well">
-	<ul class="nav  nav-pills nav-stacked">
-		<li class="nav-header">Управление шаблонами</li>
-		<li><a href="showTemplates.html">Шаблоны</a></li>
-		<li><a href="showTopics.html">Топики</a></li>
-		<li><a href="showTypes.html">Типы</a></li>
-		<li class="nav-header">HR</li>
-		<li><a href="hr/showStudentbyIdView.html">Поиск студентов</a></li>
-		<li><a href="hr/showStudentByEducation.html">Поиск по
-				университету</a></li>
-		<li><a href="hr/showUniversities.html">Управление
-				университетами</a></li>
-		<li><a href="hr/showFaculties.html">Управление факультетами</a></li>
-		<li><a href="hr/showDepartments.html">Управление кафедрами</a></li>
-		<li><a href="hr/interviewDate.html">Расписание собеседований</a></li>
-
-		<li class="nav-header">Отчеты</li>
-		<li><a href="showStudentRecords.html">График записи студентов</a></li>
-		<li><a href="showRegReport.html">Зарегистрировались/пришли</a></li>
-		<li><a href="showAdvertise.html">Эффективность рекламы</a></li>
-		<li><a href="showStudentActivity.html">Посещаемость
-				собеседований</a></li>
-	</ul>
-	</div>
+				<jsp:include page="../sidebar.jsp" />
 			</div>
 			<div class="span9">
 				<div class="hero-unit">
@@ -134,7 +97,7 @@
             <br>
          <h2 align="center">Информация о рассписании собеседований</h2><br> 
           <form method="GET">
-              <table border="1" cellspacing="0" cellpadding="4" class="interviewDate">
+              <table border="1" class="bordered">
                   <thead>
           <tr>
             <th><a href="#">№ даты</a></th>

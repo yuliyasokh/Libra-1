@@ -16,9 +16,10 @@
 <!--<![endif]-->
     <head>
         <jsp:include page="../resources.jsp" />
-        <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Управление датами - правка</title>
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript" charset="utf-8">   
+        <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript">   
 </script>
 <script>
     $(document).ready(function() {
@@ -61,7 +62,7 @@
         <center>
         <h2 align="center"> Правка даты интервью </h2>
         <form method="POST" action="doneDate.html">
-         <table border="1" cellspacing="0" cellpadding="4">
+         <table border="1" class="bordered">
              <tr>
                  <td>№ Даты</td>
                   <td>Тип</td>

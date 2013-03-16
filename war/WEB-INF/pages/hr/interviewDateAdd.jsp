@@ -7,18 +7,21 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
+<html class="no-js">
 <!--<![endif]-->
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" >
     <head>
+         <jsp:include page="../resources.jsp" />
         <title>Управление датами интервью - добавление</title>
           <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js">    
           </script>
+          
          <style type="text/css" media="all">@import "../resources/css/timePicker.css";</style>
+         
         <script type="text/javascript" src="../resources/js/jquery.timePicker.js"></script>
       <script type="text/javascript">
     $(document).ready(function() {
@@ -41,7 +44,8 @@
     
     // Keep the duration between the two inputs.
     $("#time3").change(function() {
-      if ($("#time4").val()) { // Only update when second input has a value.
+      if ($("#time4").val()) { 
+          // // Only update when second input has a value.
         // Calculate duration.
         var duration = ($.timePicker("#time4").getTime() - oldTime);
         var time = $.timePicker("#time3").getTime();
@@ -56,17 +60,34 @@
         $(this).addClass("error");
       }
       else {
+          console.log("hell9!");
         $(this).removeClass("error");
       }
     });
     
-  });
+  $("#time4").change(function() {
+  if (($("#time4").val()) && (($("#time3").val())) && ($("#date").val())) {
+      
+  }
+});
+});
 </script>
-        <link rel="stylesheet" type="text/css" href="../resources/css/tcal.css" />
+       <link rel="stylesheet" type="text/css" href="../resources/css/tcal.css" />
 	<script type="text/javascript" src="../resources/js/tcal.js">   
         </script> 
     </head>
     <body>
+        <div class="navmenu">
+		<jsp:include page="../navbar.jsp" />
+	</div>
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+		<div class="sidebar">
+				<jsp:include page="../sidebar.jsp" />
+			</div>
+			<div class="span9">
+				<div class="hero-unit">
                                     <center>
         
         <h2>Добавить новую дату интервью</h2>
@@ -80,7 +101,7 @@
          <br>
                
            <div>Дата:
-               <input type="text" name="begin" class="tcal" value=""  style="width: 100px" />
+               <input type="text" id="date" name="begin" class="tcal" value=""  style="width: 100px" />
            </div>
 	
              <form name="Form" action="interviewDateAdded.html" method="get">
@@ -112,5 +133,9 @@
         <input type="submit" value="Добавить">
     </form>                      
       </center>
+                                </div>
+                        </div>
+                </div>
+        </div>
     </body>
 </html>

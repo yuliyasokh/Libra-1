@@ -189,6 +189,12 @@ public class InterviewDateJDBC implements InterviewDateDAO {
         List<Map<String, Object>> interviewers = jdbcTemplateObject.queryForList(query,interviewDateId) ;
         return interviewers;
     }
+    public List<Map<String, Object>> getFreeInterviewersHr(){
+        String query="select userid, lastname||' '||firstname as inters " 
+                + "from users where roleid=2";
+        List<Map<String, Object>> interviewers = jdbcTemplateObject.queryForList(query) ;
+        return interviewers;
+    }
     
     public List<Map<String, Object>> getInterviewersHr(){
         String query="select userid, lastname||' '||firstname as inters " 
