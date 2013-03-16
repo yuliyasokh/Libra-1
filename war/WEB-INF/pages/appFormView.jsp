@@ -20,56 +20,49 @@
 <script src="/Libra/resources/js/jquery-1.9.0.min.js"></script>
 <script src="/Libra/resources/js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 <script src="/Libra/resources/js/bootstrap-fileupload.min.js"></script>
-<title>Регистрация</title>
+<title>заполнение анкеты</title>
     </head>
     <body>
         <div class="container">
             <div class="appform" >
-                <form:form method="POST" commandName="columnFields"> 
-                    <c:forEach items="${topics}" var="t">
-                        <c:if test="${t.getLevel()==1}">
-                            <h1> ${t.getTopicName()}</h1>
+                <form:form action="submitForm.html" method="POST" commandName="columnFields"> 
+                    <c:forEach items="${columns}" var="c">
+                         <c:if test="${c.getLevel()==1}">
+                            <h1> ${c.getName()}</h1>
                         </c:if>
-                        <c:if test="${t.getLevel()!=1}">
-                            <h4> ${t.getTopicName()}</h4>
-                        </c:if>   
-                        <c:forEach items="${columns}" var="c">
-                            <c:if test="${c.getTopicId()==t.getTopicId()}">
-                              <label>${c.getName()}:</label>
-                                <c:if test="${c.getTypeName()=='enum'}">
-                                    <c:forEach items="${enums}" var="e">
-                                        <c:if test="${e.key==c.getTypeId()}">
-                                            <c:forEach items="${e.value}" var="ee">                                  
-                                               <form:radiobutton path="map[${c.getColumnId()}]" value="${ee}"/>${ee}
-                                            </c:forEach>
-                                        </c:if>  
-                                    </c:forEach>  
-                                </c:if>  
-                                <c:if test="${c.getTypeName()=='multienum'}">
-                                    <c:forEach items="${enums}" var="e">
-                                        <c:if test="${e.key==c.getTypeId()}">
-                                            <c:forEach items="${e.value}" var="ee">                                  
-                                                <form:checkbox path="map[${c.getColumnId()}]" value="${ee}"/>${ee}
-                                            </c:forEach>
-                                        </c:if>  
-                                    </c:forEach>  
-                                </c:if>  
-                                <c:if test="${c.getTypeName()=='integer'}">
-                                   <form:input path="map[${c.getColumnId()}]"  size="5" class="span3"/>
-                                    </br>
-                                </c:if>  
-                                <c:if test="${c.getTypeName()=='string'}">
-                                    <form:input path="map[${c.getColumnId()}]" class="span3" />
-                                    </br>
-                                </c:if>     
-                            </c:if>          
-                        </c:forEach>
-                            <c:if test="${t.getRequireOther()==1}">
-                                <form:input path="otherMap[${t.getTopicId()}].columnName" class="span3"/></br>
-                                <form:textarea path="otherMap[${t.getTopicId()}].Value" /></br>
-                            </c:if>     
+                        <c:if test="${c.getLevel()!=1}">
+                             ${c.getName()}
+                             <c:if test="${c.getTypeName()=='areastring'}">
+                                 <textarea name="map[${c.getColumnId()}]" ></textarea>
+                             </c:if>
+                             <c:if test="${c.getTypeName()=='textstring'}">
+                                 <input name="map[${c.getColumnId()}]"  type="text"/>
+                             </c:if>
+                             <c:if test="${c.getTypeName()=='selectenum'}">
+                                 <form:select path="map[${c.getColumnId()}]">
+                                     <c:forEach items="${c.getcT().getEmums()}" var="t">
+                                         <form:option value="${t}">${t}</form:option>
+                                    </c:forEach>
+                                 </form:select>
+                             </c:if>
+                             <c:if test="${c.getTypeName()=='checkboxenum'}">
+                                     <c:forEach items="${c.getcT().getEmums()}" var="t">
+                                         <form:checkbox  path="map[${c.getColumnId()}]" value="${t}"/>${t}
+                                    </c:forEach>
+                             </c:if>
+                             <c:if test="${c.getTypeName()=='radioenum'}">
+                                     <c:forEach items="${c.getcT().getEmums()}" var="t">
+                                         <form:radiobutton  path="map[${c.getColumnId()}]" value="${t}"/>${t}
+                                    </c:forEach>
+                             </c:if>
+                                 
+                             <c:if test="${c.getTypeName()=='integer'}">
+                                 <input name="map[${c.getColumnId()}]"  type="number" size="30"  min="${c.getcT().getMin()}" max="${c.getcT().getMax()}" value="1"/>     
+                             </c:if>
+                                 </br>
+                        </c:if>                          
                     </c:forEach>
-                                <input type="submit" />
+                                 <input type="submit"  value="ОК"/>
                 </form:form>
             </div>
       </div>

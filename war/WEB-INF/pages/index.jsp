@@ -32,5 +32,7 @@
         <a href="hr/showFaculties.html">Управление факультетами</a>
         <a href="hr/showDepartments.html">Управление кафедрами</a>
         <br>
+        </br>
+                <a href="showResults.html">Показать результаты</a>
 </body>
 </html>

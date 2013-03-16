@@ -4,223 +4,140 @@
  */
 package com.netcracker.libra.controller;
 
+import com.netcracker.libra.dao.ColumnJDBC;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import com.netcracker.libra.dao.TopicJDBC;
-import com.netcracker.libra.dao.ColumnsJDBC;
-import com.netcracker.libra.model.Topic;
 import com.netcracker.libra.dao.TypeJDBC;
 import com.netcracker.libra.dao.UserPreferences;
-import com.netcracker.libra.model.Columns;
-import com.netcracker.libra.model.ColumnsShow;
+import com.netcracker.libra.model.AppFormColumns;
+import com.netcracker.libra.model.ColumnFieldsModel;
 import com.netcracker.libra.model.InfoForDelete;
-import com.netcracker.libra.model.Type;
-import com.netcracker.libra.service.TemplateService;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 /**
  *
  * @author Sashenka
  */
 @Controller
-public class ColumnController 
+public class ColumnController
 {
     TypeJDBC typeJDBC=new TypeJDBC();
-    ColumnsJDBC columnsJDBC=new ColumnsJDBC();
-    TopicJDBC topicJDBC=new TopicJDBC();
-    int topicId;
+    ColumnJDBC columnJDBC=new ColumnJDBC();
     @Autowired
     UserPreferences userPreferences;
-    /**
-     * Метод который передает данные на страничку для
-     * формирования странички добавления колонки
-     * @param topic номер темы
-     */
-    @RequestMapping(value="addColumn", method= RequestMethod.GET)    
-    public ModelAndView processGet(@RequestParam("topic") int topic)
+    int templateId;
+    @RequestMapping(value="showColumn",method = RequestMethod.GET)
+    public String showColumns(ModelMap model,
+    @RequestParam int templateId)  
     {
-        if(userPreferences.accessLevel==1)
-        {
-            ModelAndView mav = new ModelAndView();
-            mav.setViewName("addColumnView");
-            List<Type> types=typeJDBC.getAllInfo();
-            if(topicJDBC.existTopic(topic)==0)
-            {
-                return message("<a href='showColumns.html?topic="+topicId+"'>Вернуться назад</a>", "Такой темы нету", "Ошибка"); 
-            }
-            mav.addObject("topic",topicJDBC.getTopic(topic));
-            topicId=topic;
-            mav.addObject("id",topic);
-            mav.addObject("types",types);
-            return mav;
-        } 
-        else
-        {
-            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
-        }
+        this.templateId=templateId;
+        model.addAttribute("types", typeJDBC.getAllInfo());
+        model.addAttribute("templateId", templateId);    
+        model.addAttribute("columns", columnJDBC.getColumnsInfo(templateId));
+        return "ShowNewColumnsView";
     }
     
-    /**
-     * Обрабатывает запрос по добавлению новой колонки
-     * @param name имя колонки
-     * @param selType номер типа колонки
-     */
-    @RequestMapping(value="SubmitColumn", method= RequestMethod.POST)
-    public ModelAndView processPost(@RequestParam("name") String name,
-    @RequestParam("selType") int selType)
-    {   
-        if(userPreferences.accessLevel==1)
-        {
-            ModelAndView mav = new ModelAndView();
-            mav.setViewName("messageView");
-            String message=TemplateService.checkColumn(name);
-             if(!message.equals(""))
-             {
-                 return message("<a href='addColumn.html?topic="+topicId+"'>Вернуться назад</a>", message, "Ошибка");
-             }
-             if(typeJDBC.existType(selType)==0)
-             {
-                 return message("<a href='addColumn.html?topic="+topicId+"'>Вернуться назад</a>", "Нету такого типа", "Ошибка");   
-             }
-            Columns col=columnsJDBC.getColumn(columnsJDBC.add(topicId, name, selType, 1));
-            return showGetTopics(topicId);
-         } 
-        else
-        {
-            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
-        }
-    }
-    
-    /**
-     * Метод передает данные о существубщих колонках
-     * Вызывается при запросе по ссылке "showColumns.html"
-     */
-    @RequestMapping(value="showColumns", method= RequestMethod.GET)
-    public ModelAndView showGetTopics(@RequestParam("topic") int topic)
+    @RequestMapping(value="changeOrder",method = RequestMethod.POST)
+    public String changeOrder(ModelMap model,
+    @RequestParam(required=true,value="column1") int column1,
+    @RequestParam(required=true,value="column2") int column2)  
     {
-        topicId=topic;
-        ModelAndView mav = new ModelAndView();
-        List<ColumnsShow> columns=columnsJDBC.getColumnsShow(topicId);
-        mav.addObject("columns",columns);
-        mav.addObject("topic", topicJDBC.getTopic(topic));
         
-        List<Type> types=typeJDBC.getAllInfo();
-        mav.addObject("types",types);
-        mav.setViewName("showColumnsView");       
-        return mav;
+        return "redirect:showColumn.html?templateId="+templateId;
     }
-    
-    /**
-     * Передает информацию о колонке перед ее редактированием
-     * @param column номер колонки
-     */
-    @RequestMapping(value="editColumn", method= RequestMethod.GET)
-    public ModelAndView editColumn(@RequestParam("column") int column)
-    {
-        ModelAndView mav = new ModelAndView();
-        if(columnsJDBC.existColumn(column)==0)
-        {
-            return message("<a href='showColumns.html?topic="+topicId+"'>Посмотреть все типы</a>", "Такой темы нету", "Ошибка"); 
-        }
-        Columns c=columnsJDBC.getColumn(column);
-        Topic topic=topicJDBC.getTopic(c.getTopicId());
-        mav.setViewName("showColumnView");
-        List<Type> types=typeJDBC.getAllInfo();
-        mav.addObject("types",types);
-        mav.addObject("topic",topic);
-        mav.addObject("column",c);
-        mav.addObject("type",c.getTypeId());
-        return mav;
-    }
-    /**
-     * Метод обрабатывает запрос по редактированию колонки.
-     * @param name новое имя колонки
-     * @param selType номер типа
-     * @param topic номер темы
-     * @param column колонка
-     * @param require кем добавлена
-     */
-    @RequestMapping(value="showColumns", method= RequestMethod.POST)
-    public ModelAndView editPost(@RequestParam("name") String name,
+    @RequestMapping(value="SubmitColumn",method = RequestMethod.POST)
+    public String addColumn(ModelMap model,
+    @RequestParam("name") String name,
     @RequestParam("selType") int selType,
-            @RequestParam("topic") int topic,
-            @RequestParam("column") int column)
+    @RequestParam("parentColumn") int parentColumn,
+    @RequestParam("templateId") int templateId)  
     {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("messageView");
-        String message=TemplateService.checkColumn(name);
-         if(!message.equals(""))
-         {
-             mav.addObject("link","addColumn.html?topic="+topicId);
-             mav.addObject("message",message);
-             mav.addObject("title","Ошибка");
-             return mav;
-         }
-         //update(int id, int topicId,String name, int typeId, int require) 
-         if(typeJDBC.existType(selType)==0)
-         {
-             return message("<a href='addColumn.html?topic="+topicId+"'>Вернуться назад</a>", "Нету такого типа", "Ошибка");   
-         }
-         if(topicJDBC.existTopic(topic)==0)
-         {
-             return message("<a href='addColumn.html?topic="+topicId+"'>Вернуться назад</a>", "Нету такой темы", "Ошибка");   
-         }
-        columnsJDBC.update(column, topic, name, selType, 1);
-        return showGetTopics(topicId);
-    }
-    /**
-     * Метод передает информацию о колнке для 
-     * предварительно просмотра ее колонки перед удалением
-     * @param columnId номер колонки
-     */
-    @RequestMapping(value="delColumn", method= RequestMethod.GET)
-    public ModelAndView delType(@RequestParam("column") int columnId)
-    {
-        ModelAndView mav = new ModelAndView();
-        if(columnsJDBC.existColumn(columnId)==0)
-        {
-            mav.setViewName("messageView");
-            return message("<a href='showColumns.html?topic="+topicId+"'>Посмотреть все типы</a>", "Такой темы нету", "Ошибка"); 
-        }
-        mav.setViewName("delColumnView");          
-        mav.addObject("column", columnId);
-        //getInfoUsers
-        //            List<InfoForDelete> info=columnsJDBC.getInfoForDelete(columnId);
-        //int infoSize=info.size();
-        //mav.addObject("info", info);
-        //mav.addObject("infoSize",infoSize);
-        return mav;
-    }
-    /**
-     * Обрабатывает запрос по удалению колонки.
-     * @param column номер колонки, который хотим удалить. Передается в POST запросе.
-     */
-    @RequestMapping(value="delSubmitColumn", method= RequestMethod.POST)
-    public ModelAndView delSubmitType(@RequestParam("column") int column)
-    {     
-        ModelAndView mav = new ModelAndView();
-        if(columnsJDBC.existColumn(column)==0)
-        {
-            return message("<a href='showColumns.html?topic="+topicId+"'>Посмотреть все типы</a>","Такой темы нету","Ошибка"); 
-        }
-        columnsJDBC.delete(column);
-        List<ColumnsShow> columns=columnsJDBC.getColumnsShow(topicId);
-        mav.addObject("columns",columns);
-      //  mav.addObject("topics",topicJDBC.getAllTopics());
-        mav.setViewName("showColumnsView");
-        return mav;
+        columnJDBC.add(templateId, name, selType, parentColumn);
+        return "redirect:showColumn.html?templateId="+templateId;
     }
     
-     public ModelAndView message(String link,String message,String title)
-     {
-         ModelAndView mav=new ModelAndView();
-         mav.setViewName("messageView");
-         mav.addObject("link",link);
-         mav.addObject("message",message);
-         mav.addObject("title",title);
-         return mav;
-     }
+    @RequestMapping(value="editColumn",method = RequestMethod.GET)
+    public String editColumn(ModelMap model,
+    @RequestParam("columnId") int columnId)  
+    {
+        model.addAttribute("columnId", columnId);
+        model.addAttribute("columns", columnJDBC.getColumns(templateId));
+        model.addAttribute("types", typeJDBC.getAllInfo());
+        model.addAttribute("current",columnJDBC.getColumnInfo(columnId));
+        return "editNewColumnView";
+    }
+    
+    @RequestMapping(value="editSubmitColumn",method = RequestMethod.POST)
+    public String editSubmitColumn(ModelMap model,
+    @RequestParam("name") String name,
+    @RequestParam("selType") int selType,
+    @RequestParam("parentColumn") int parentColumn,
+    @RequestParam("columnId") int columnId)  
+    {
+        columnJDBC.update(name, selType, parentColumn, columnId);
+        return "redirect:showColumn.html?templateId="+templateId;
+    }
+    
+    @RequestMapping(value="delColumns",method = RequestMethod.POST)
+    public String delColumns(ModelMap model,
+    @RequestParam("delete[]") int[] delete)  
+    {
+        List<InfoForDelete> info=columnJDBC.getInfoForDelete(delete);
+        int infoSize=info.size();
+        model.addAttribute("delete", delete);
+        model.addAttribute("info", info);
+        model.addAttribute("infoSize",infoSize);
+        model.addAttribute("title","Удалить колонки");
+        model.addAttribute("h1","Вы действительно хотите удалить эти колонки?");
+        model.addAttribute("submit","delSubmitColumns");
+        model.addAttribute("location","addColumn.html?templateId="+templateId);
+        return "delInfoView";
+    }
+    
+    @RequestMapping(value="delSubmitColumns",method = RequestMethod.POST)
+    public String delSubmiteColumns(ModelMap model,
+    @RequestParam("delete[]") int[] delete)  
+    {
+        for(int i=0;i<delete.length;i++)
+        {
+            columnJDBC.delete(delete[i]);
+        }
+        return "redirect:showColumn.html?templateId="+templateId;
+    }
+    
+    @RequestMapping(value="showAppForm",method = RequestMethod.GET)
+    public String showAppForm(ModelMap model,
+    @RequestParam("templateId") int templateId)  
+    {
+        ColumnFieldsModel columnFields = new ColumnFieldsModel();
+        List<AppFormColumns> appList=columnJDBC.getAppFormColumns(templateId);
+        model.addAttribute("columns", appList);
+        model.addAttribute("columnFields", columnFields);
+        return "appFormView";
+    }
+    
+    //submitForm
+    
+    @RequestMapping(value="submitForm",method = RequestMethod.POST)
+    public String submitForm(ModelMap model,
+    @ModelAttribute("columnFields") ColumnFieldsModel columnFields)  
+    {
+       Map<Integer,String> map=columnFields.getMap();   
+        return "appFormView";
+    }
+    
+    @RequestMapping(value="changeColumn",method = RequestMethod.POST)
+    public String ChangeColumn(ModelMap model,
+    @RequestParam("column1") int column1,
+    @RequestParam("column2") int column2)  
+    {
+        columnJDBC.swop(column1, column2);
+        //model.addAttribute("columns", columnJDBC.getBrothers(column,parentColumn));
+          return "redirect:showColumn.html?templateId="+templateId;
+   }
 }

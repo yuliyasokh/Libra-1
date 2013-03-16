@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 /**
  *
@@ -134,12 +135,29 @@ public class TemplateController
             return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
+    
+    
+    @RequestMapping(value="delTemplate", method= RequestMethod.POST)
+    public String delTemplate(ModelMap model,
+    @RequestParam(value="templates[]",required=false ) int[] delete)  
+    {
+        List<InfoForDelete> info=templateJDBC.getInfoForDelete(delete);
+        int infoSize=info.size();
+        model.addAttribute("delete", delete);
+        model.addAttribute("info", info);
+        model.addAttribute("infoSize",infoSize);
+        model.addAttribute("title","Удалить анкеты");
+        model.addAttribute("h1","Вы действительно хотите удалить этот шаблон?");
+        model.addAttribute("submit","delSubmitTemplate");
+        model.addAttribute("location","delSubmitTemplate.html");
+        return "delInfoView";
+    }
     /**
      * Метод, который передает в вид информацию о шаблоне(для предварительного просмотра),
      * перед удаленим удалить
      * @param templateId номер шаблона, который хотим удалить. Передается GET запросом
      */
-    @RequestMapping(value="delTemplate", method= RequestMethod.POST)
+   /* @RequestMapping(value="delTemplate", method= RequestMethod.POST)
     public ModelAndView delTemplate(@RequestParam(value="templates[]",required=false ) int[] templates)
   //  public ModelAndView delTemplate()
     {
@@ -169,24 +187,24 @@ public class TemplateController
         {
             return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
-    }
+    }*/
     /**
      * Обрабатывает запрос по удалению шаблона
      * @param templateId номер шаблона, который удаляется. передается POST запросом 
      */
      @RequestMapping(value="delSubmitTemplate", method= RequestMethod.POST)
-    public ModelAndView delSubmitTemplate(@RequestParam("templates[]") int[] templates)
+    public ModelAndView delSubmitTemplate(@RequestParam("delete[]") int[] delete)
     {
         ModelAndView mav = new ModelAndView();
         if(userPreferences.accessLevel==1)
         {
-            for(int i=0;i<templates.length;i++)
+            for(int i=0;i<delete.length;i++)
             {
-                if(templateJDBC.existTemplate(templates[i])==0)
+                if(templateJDBC.existTemplate(delete[i])==0)
                 {
                     return message("<a href='showTemplates.html'>Посмотреть все типы</a>", "Такого шаблона нету", "Ошибка"); 
                 }
-                templateJDBC.delete(templates[i]);
+                templateJDBC.delete(delete[i]);
             }
             return showTemplate();
         } 

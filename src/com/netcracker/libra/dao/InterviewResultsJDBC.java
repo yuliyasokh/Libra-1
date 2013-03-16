@@ -36,7 +36,11 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
                     "where ir.InterviewId=?";
         return jdbcTemplateObject.query(SQL, new InterviewResultRowMapper(),interviewId);
     }
-    
+    public int exists(int InterviewId)
+    {
+        String SQL="select count(*) from interviewResults where interviewId=?";
+        return jdbcTemplateObject.queryForInt(SQL,InterviewId);
+    }
     public int existsComment(int userId, int InterviewId)
     {
         String SQL="select count(*) from interviewResults where userId=? and interviewId=?";

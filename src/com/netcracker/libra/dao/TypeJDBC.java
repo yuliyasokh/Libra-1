@@ -50,14 +50,21 @@ public class TypeJDBC implements TypeDAO
     @Override
     public List<Type> getAll() 
     {
-          String SQL = "select * from Types order by typeId";
+          String SQL = "select TypeId, Name, Descroption from Types order by typeId";
         List <Type> types = jdbcTemplateObject.query(SQL, new TypeRowMapper());
         return types;
     }
     public List<Type> getAllInfo() 
     {
-          String SQL ="select TypeId, Name, "+
-                  "Decode(Name, 'string','Максимальная длина строки '||Description||' символов','integer',regexp_replace(Description,'(\\d+)(,)(\\d+)','Диапазон: от \\1 до \\3'),'Возможны значения :'||Description)  as Description "+
+        String SQL ="select TypeId, Name, "+
+                  "Description, "+
+                  "Decode(Name, 'textstring','Однострочное текстовое поле с максимальной длиной '||Description||' символов',"
+                  +" 'areastring','Многострочный текст с максимальной длиной '||Description||' символов',"
+                  + "'integer',regexp_replace(Description,'(\\d+)(;)(\\d+)','Число в диапазоне: от \\1 до \\3'),"
+                  + " 'radioenum','Переключатели со значениями :'||Description,"
+                  + " 'checkboxenum','Флажки со значениями :'||Description,"
+                  + " 'selectenum','Выпадающий список со значениями :'||Description"
+                  + ")  as InfoDescription "+
                   "from Types order by typeId";
                   
                   List <Type> types = jdbcTemplateObject.query(SQL, new TypeRowMapper());
@@ -84,6 +91,7 @@ public class TypeJDBC implements TypeDAO
        jdbcTemplateObject.update(SQL, id);
     }
     
+    // Уже не надо!
     public int getOtherType()
     {
         String SQL = "select typeId from types where (description) =("+
