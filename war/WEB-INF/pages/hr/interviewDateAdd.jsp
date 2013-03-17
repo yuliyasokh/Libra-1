@@ -119,8 +119,9 @@
         Выберите интервьюеров:</br> 
         <div id="hrDiv">
         <c:forEach items="${Inters}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" id="<c:out value="${i.userid}"/>" value=<c:out value="${i.userid}"/> >
-           <label for="<c:out value="${i.userid}"/>">${i.inters} </label><br>
+            <label for="<c:out value="${i.userid}"/>">${i.inters}
+                <input type="checkbox" name="checkInterviewers[]" id="<c:out value="${i.userid}"/>" value=<c:out value="${i.userid}"/> >
+            </label><br>
         </c:forEach>
         </div>
         <div style="display: none;"  id="techDiv">

@@ -298,6 +298,7 @@ public class EducationController {
             return mav;
     }
     }
+    
     @RequestMapping(value="/hr/addFaculties", method=RequestMethod.GET)
     public ModelAndView addFac(
     org.springframework.web.context.request.WebRequest webRequest){

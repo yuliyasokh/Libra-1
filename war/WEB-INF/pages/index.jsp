@@ -36,6 +36,7 @@
         <a href="hr/showUniversities.html">Управление универами</a>
         <a href="hr/showFaculties.html">Управление факультетами</a>
         <a href="hr/showDepartments.html">Управление кафедрами</a>
+        <a href="hr/showLanguages.html">Управление языками</a>
         <br>
         </br>
                 <a href="showResults.html">Показать результаты</a>

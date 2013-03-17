@@ -190,11 +190,24 @@ public class InterviewDateJDBC implements InterviewDateDAO {
         return interviewers;
     }
     public List<Map<String, Object>> getFreeInterviewersHr(){
-        String query="select userid, lastname||' '||firstname as inters " 
-                + "from users where roleid=2";
+        String query="select u.userid userid,u.firstname||' '||u.lastname inters "
+                + "from users u where u.roleid=2 and u.userid != ALL("
+                + "select ll.userid from interviewerList ll "
+                + "join interviewDate ii on ii.interviewDateId=ll.InterviewDateId "
+                + "where not ((sysdate>ii.dateStart)or((sysdate<ii.dateStart) and (sysdate<ii.dateFinish))))";
         List<Map<String, Object>> interviewers = jdbcTemplateObject.queryForList(query) ;
         return interviewers;
     }
+    public List<Map<String, Object>> getFreeInterviewersTech(){
+        String query="select u.userid userid,u.firstname||' '||u.lastname inters "
+                + "from users u where u.roleid=3 and u.userid != ALL("
+                + "select ll.userid from interviewerList ll "
+                + "join interviewDate ii on ii.interviewDateId=ll.InterviewDateId "
+                + "where not ((sysdate>ii.dateStart)or((sysdate<ii.dateStart) and (sysdate<ii.dateFinish))))";
+        List<Map<String, Object>> interviewers = jdbcTemplateObject.queryForList(query) ;
+        return interviewers;
+    }
+
     
     public List<Map<String, Object>> getInterviewersHr(){
         String query="select userid, lastname||' '||firstname as inters " 
