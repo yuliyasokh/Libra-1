@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import com.netcracker.libra.model.AppForm;
 import com.netcracker.libra.model.BlockWithValues;
+import com.netcracker.libra.model.Fieldset;
 import com.netcracker.libra.model.FilledAppForm;
 import com.netcracker.libra.model.RegisterForm;
 import com.netcracker.libra.util.security.Security;
@@ -395,5 +396,37 @@ public class AppFormJDBC {
 		
 		return form;
 		
+	}
+	
+	public List<Fieldset> queryForActiveTemplate() {
+		
+		
+		Map<Integer, String> map = new HashMap<>();
+		List<Fieldset> fieldsetList = new ArrayList<>();
+		
+		List<Map<String, Object>> topics = jdbcTemplateObject
+				.queryForList("select topicid, name from topic where templateid=50");
+		
+		for (Map x: topics) {
+			map.put(((BigDecimal) x.get("topicid")).intValueExact(),
+					(String) x.get("name"));
+		}
+		
+		for (Integer x : map.keySet()) {
+			List<Map<String, Object>> columns = jdbcTemplateObject
+					.queryForList("select columnid, name, typeid from columns where topicid=?", x);
+			
+			Map<Integer, String> values = new HashMap<>();
+			for (Map y : columns) {
+				values.put(((BigDecimal) y.get("columnid")).intValueExact(), (String) y.get("name"));
+			}
+			
+			Fieldset fieldset = new Fieldset(x, map.get(x));
+			fieldset.setTypeId(((BigDecimal) columns.get(0).get("typeid")).intValueExact());
+			fieldset.setFieldList(values);
+			fieldsetList.add(fieldset);
+		}
+		
+		return fieldsetList;
 	}
 }

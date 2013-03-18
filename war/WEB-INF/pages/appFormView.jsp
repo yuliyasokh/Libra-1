@@ -10,20 +10,19 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="/Libra/resources/css/main.css"/>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--  <link rel="stylesheet" href="/Libra/resources/css/main.css"/>
 <link rel="stylesheet" href="/Libra/resources/css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" href="/Libra/resources/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/Libra/resources/css/bootstrap-fileupload.min.css" />
 <link rel="stylesheet" href="/Libra/resources/css/style.css" />
 <script src="/Libra/resources/js/jquery-1.9.0.min.js"></script>
 <script src="/Libra/resources/js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-<script src="/Libra/resources/js/bootstrap-fileupload.min.js"></script>
+<script src="/Libra/resources/js/bootstrap-fileupload.min.js"></script>-->
 <title>Регистрация</title>
-    </head>
+</head>
     <body>
-        <div class="container">
             <div class="appform" >
                 <form:form method="POST" commandName="columnFields"> 
                     <c:forEach items="${topics}" var="t">
@@ -56,11 +55,11 @@
                                 </c:if>  
                                 <c:if test="${c.getTypeName()=='integer'}">
                                    <form:input path="map[${c.getColumnId()}]"  size="5" class="span3"/>
-                                    </br>
+                                    <br>
                                 </c:if>  
                                 <c:if test="${c.getTypeName()=='string'}">
                                     <form:input path="map[${c.getColumnId()}]" class="span3" />
-                                    </br>
+                                    <br>
                                 </c:if>     
                             </c:if>          
                         </c:forEach>
@@ -72,6 +71,5 @@
                                 <input type="submit" />
                 </form:form>
             </div>
-      </div>
     </body>
 </html>

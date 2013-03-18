@@ -139,17 +139,5 @@ public class TopicJDBC implements TopicDAO
         List<AppFormTopics> topicList=jdbcTopicObject.query(SQL, new AppFormTopicRowMapper(),id);
         return topicList;
     }
-    
-    //Added 02.02.2013
-    public List<Columns> getTopicColumns(Integer id) 
-    {
-        String SQL = "select * from Columns where TopicId =?";
-        List<Columns> columns = jdbcTopicObject.query(SQL, new ColumnsRowMapper(), id);    
-        return columns;
-    }
-    
-    //added 03.02.2013
-    public String getTopicLabel(Integer id) {
-    	return jdbcTopicObject.queryForObject("select label from topic where topicid=?", String.class, id);
-    }
+
 }

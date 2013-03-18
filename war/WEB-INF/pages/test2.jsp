@@ -27,31 +27,9 @@
 </head>
 <body>
 	<div class="container">
-	<form:form commandName="fieldset" method="POST">
-		<c:forEach items="${form}" var="t">
-			<h6>${t.header}</h6>
-			<c:if test="${t.typeId == 51}">
-			<c:forEach items="${t.fieldList}" var="y">
-				<label class="checkbox">${y.value} <input
-								type="checkbox" 
-								name="fieldList['${y.key}']"
-								value="1" />
-							</label>
-			</c:forEach>
-			</c:if>
-			<c:if test="${t.typeId == 50}">
-			<c:forEach items="${t.fieldList}" var="y">
-				<textarea name="fieldList['${y.key}']" rows="2"></textarea><br>
-			</c:forEach>
-			</c:if>
-			<c:if test="${t.typeId == 52}">
-				<c:forEach items="${t.fieldList}" var="y">
-					${y.value}<input type="text" name="fieldList['${y.key}']" class="span1"><br>
-				</c:forEach>
-			</c:if>
+		<c:forEach items="${fieldset.fieldList}" var="t">
+		${t}<br>
 		</c:forEach>
-		<button type="submit">Success</button>
-	</form:form>
 	</div>
 </body>
 </html>

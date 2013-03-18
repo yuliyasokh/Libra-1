@@ -26,17 +26,6 @@
 	src="<c:url value="resources/js/modernizr-2.6.2-respond-1.1.0.min.js"/>"></script>
 </head>
 <body>
-		<div class="span3">
-			${appForm.getName()}<br>
-			${appForm.getLastName()}<br>
-			${appForm.getEmail()}<br>
-			${appForm.getPhoneNumber()}<br><br>
-			
-			${appForm.getUniversity()}<br>
-			${appForm.getUniverTerm()}<br>
-			${appForm.getFaculty()}<br>
-			${appForm.getGraduated()}<br>
-				
-		</div>
+success
 </body>
 </html>

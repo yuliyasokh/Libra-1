@@ -1,5 +1,5 @@
 /*
- * Содержит набор значений для вопроса, соответствующих шаблону
+ * Contains fieldset for application form
  * 
  */
 

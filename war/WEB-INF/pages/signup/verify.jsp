@@ -28,18 +28,18 @@
 <body>
 	<div class="container">
 
-		<form:form method="POST" commandName="registerForm" action="register/proceed.html">
+		<form:form method="POST" commandName="regForm" action="register/proceed.html">
 			<h2>Добро пожаловать</h2>
 			<h5>Вы ввели следующую информацию: </h5>
 			<table>
 				<tr>
-					<td><strong>Фамилия: </strong> ${registerForm.lastName}</td>
+					<td><strong>Фамилия: </strong> ${regForm.lastName}</td>
 				</tr>
 				<tr>
-					<td><strong>Имя: </strong>${registerForm.name}</td>
+					<td><strong>Имя: </strong>${regForm.name}</td>
 				</tr>
 				<tr>
-					<td><strong>Email: </strong>${registerForm.email}</td>
+					<td><strong>Email: </strong>${regForm.email}</td>
 				</tr>
 			</table>
 			<br>

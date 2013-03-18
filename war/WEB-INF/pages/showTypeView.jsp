@@ -75,11 +75,11 @@
             <c:if test="${t.getTypeName()=='integer'}">
             <td>Число </td>
             </c:if>
-            <c:if test="${(t.getTypeName()=='enum')||(t.getTypeName()=='multienum')}">
+            <c:if test="${t.getTypeName()=='enum'||(t.getTypeName()=='multienum')}">
             <td>Перечислимый тип</td>            
             </c:if>
             <td>${t.getDescription()}</td>
-            <c:if test="${(t.getTypeName()!='enum')&&(t.getTypeName()!='multienum')&&(t.getTypeName()!='integer')&&(t.getTypeName()!='string')}">
+            <c:if test="${t.getTypeName()!='enum'&&(t.getTypeName()!='multienum')&&(t.getTypeName()!='integer')&&(t.getTypeName()!='string')}">
             <td>${t.getTypeName()}</td>
             <td>${t.getDescription()}</td>
             </c:if>

@@ -5,6 +5,7 @@
 package com.netcracker.libra.model;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -18,9 +19,7 @@ public class Topic
     private int templateId;
     private int parentTopic;
     private int requierOther;
-    private com.netcracker.libra.dao.TopicJDBC tdbc = new com.netcracker.libra.dao.TopicJDBC();
-    
-
+    private List<Map> columnsList;
     
     public void setTopicId(int topicId) 
     {
@@ -70,14 +69,10 @@ public class Topic
     {
         return this.requierOther;
     }
-    
-    //Added 02.02.2013
-    public List<Columns> getColumns() {
-    	return tdbc.getTopicColumns(getTopicId());
-    }
-    
-    //Added 03.02.2013
-    public String getLabel() {
-    	return tdbc.getTopicLabel(getTopicId());
-    }
+	public List<Map> getColumnsList() {
+		return columnsList;
+	}
+	public void setColumnsList(List<Map> columnsList) {
+		this.columnsList = columnsList;
+	}
 }

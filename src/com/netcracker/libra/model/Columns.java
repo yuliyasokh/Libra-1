@@ -10,11 +10,11 @@ package com.netcracker.libra.model;
  */
 public class Columns 
 {
-    int columnId;
-    int topicId;
-    String name;
-    int TypeId;
-    int required;
+    private int columnId;
+    private int topicId;
+    private String name;
+    private int TypeId;
+    private int required;
 
     /**
      * Метод для получения Id колонки
