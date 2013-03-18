@@ -21,6 +21,7 @@ public class TypeRowMapper implements RowMapper<Type>
       type.setTypeId(rs.getInt("TypeId"));
       type.setTypeName(rs.getString("Name"));
       type.setDescription(rs.getString("Description"));
+      type.setInfoDescription(rs.getString("InfoDescription"));
       return type;
    }
 }

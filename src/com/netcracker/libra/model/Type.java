@@ -13,7 +13,18 @@ public class Type
     int typeId;
     String typeName;
     String description;
+    String infoDescription;
 
+    public String getInfoDescription() 
+    {
+        return infoDescription;
+    }
+
+    public void setInfoDescription(String infoDescription) 
+    {
+        this.infoDescription = infoDescription;
+    }
+    
     public String getDescription() 
     {
         return description;

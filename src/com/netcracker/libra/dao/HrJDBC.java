@@ -9,6 +9,7 @@ import com.netcracker.libra.model.University;
 import com.netcracker.libra.model.User;
 import com.netcracker.libra.model.UserResult;
 import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -22,7 +23,9 @@ import org.springframework.stereotype.Repository;
 public class HrJDBC implements HrDAO {
 
         private static JdbcTemplate jdbcTemplateObject;
-       
+       /*
+        * Returns all students
+        */
         public List<Student> listStudents() {
         String SQL = "select a.appid, u.firstname,u.lastname,u.email from Users u "
                 + "join AppForm a on u.userId=a.userId and u.roleid=1";
@@ -50,7 +53,7 @@ public class HrJDBC implements HrDAO {
         
         @Override
         public void deleteFormById(Integer id){
-           String SQL = "delete from AppForm where appid = ?)";
+           String SQL = "delete from AppForm where appid = ?";
            jdbcTemplateObject.update(SQL, id);
         }
 
@@ -86,6 +89,9 @@ public class HrJDBC implements HrDAO {
             jdbcTemplateObject = new JdbcTemplate(dataSource);
         }
 
+        /*
+         * Returns student by AppForm Id
+         */
     public List<Student> getStudent(Integer id) {
         String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u "
                 + "join appform a on u.userid=a.userid and a.appid=?";
@@ -101,6 +107,9 @@ public class HrJDBC implements HrDAO {
         students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
         return students;
      }
+        /*
+         * Returns students by any field
+         */
         public List<Student> getStudentsByAllFields(String value){
         String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u "
                         + "join appform a on u.userid=a.userid and "
@@ -311,7 +320,55 @@ public class HrJDBC implements HrDAO {
                                 + "where "+param+" = ?";
         return jdbcTemplateObject.queryForInt(query, id);
     }
-    
+    /*
+     * Returns all languages 
+     */
+    public List<Map<String, Object>> getAllLanguages(){
+        String query="select languageId, languageName from languages";
+        List<Map<String, Object>> languages=jdbcTemplateObject.queryForList(query);
+        return languages;
+    }
+    /*
+     * Creates new language
+     */
+    public void createLanguage(String name){
+        String query="insert into languages values(Lang_seq.nextval, ?)";
+        jdbcTemplateObject.update(query, name);
+    }
+    /*
+     * deletes language 
+     */
+    public void deleteLanguage(int id){
+        String query="delete from languages where languageid=?";
+        jdbcTemplateObject.update(query, id);
+    }
+    /*
+     * Changes name of Language
+     */
+    public void updateLanguage(int id, String name){
+        String query="update languages set languageName=? where languageId=?";
+        jdbcTemplateObject.update(query, name, id);
+    }
+    /*
+     * Finds language by Id
+     */
+    public List<Map<String, Object>> showLangById(int id){
+        String query="select languageId, languageName from languages where languageId=?";
+        List<Map<String, Object>> langs=jdbcTemplateObject.queryForList(query, id);
+        return langs;
+    }
+    /**
+     * finds languages by name or part of name
+     * @return list of langs
+     */
+    public List<Map<String, Object>> showLangByName(String name){
+        String query="select languageId, languageName from languages where languageName like '%"+name+"%'";
+        List<Map<String, Object>> langs=jdbcTemplateObject.queryForList(query);
+        return langs;
+    }
+    /*
+     * Returns list of Sorted Students with filter
+     */
     public List<Student> getOrderStudent(String param, String value, String orderBy){
         if (param.equals("getAll")){
             String query="select a.appid, u.firstname,u.lastname,u.email from users u "
@@ -357,7 +414,9 @@ public class HrJDBC implements HrDAO {
         }
         return null;
     }
-    
+    /*
+     * Returns sorted List of Stundents 
+     */
     public List<Student> getOrderedStudentByEdu(String param, String value, String orderBy){
         String query=null;
         if (param.equals("getAll")){

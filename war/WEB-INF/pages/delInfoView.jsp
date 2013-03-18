@@ -8,15 +8,15 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Удаление шаблона</title>
+        <title>${title}</title>
     </head>
     <body>
-        <h1>Вы действительно хотите удалить этот шаблон?</h1>
+        <h1>${h1}</h1>
         <c:if test="${infoSize == 0  }">
-            <p>Смело удаляйте этот шаблон! Ни одна анкета при этом не удалится.</p>
+            <p>Смело удаляйте! </p>
         </c:if>
         <c:if test="${infoSize > 0  }">
-            <p>При это будут удалены анкеты ${infoSize} студентов</p>
+            <p>При это будут изменены анкеты ${infoSize} студентов</p>
             <table>
                 <tr>
                     <th>номер анкеты</th>
@@ -36,10 +36,12 @@
            </c:forEach>
             </table>
         </c:if>
-        <form action="delSubmitTemplate.html" method="POST">
-            <input type="hidden" name="template" value="${template}"/>
+            <form action="<c:out value='${submit}'/>.html" method="POST">
+            <c:forEach items="${delete}" var="d">
+                <input type="hidden" name="delete[]" value="<c:out value='${d}'/>"/>
+            </c:forEach>
         <input type="submit" value="удалить"/>    
-        <input value="НЕТ" onclick="location.href='showTemplates.html'" type="button"/>
+        <input value="НЕТ" onclick="location.href='${location}'" type="button"/>
         </form>
     </body>
 </html>

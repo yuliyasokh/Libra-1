@@ -135,7 +135,8 @@ public class TopicJDBC implements TopicDAO
                     "from topic top "+
                     "where  top.templateId=? "+
                     "START WITH  top.parentTopic is null "+
-                    "CONNECT BY  prior  top.topicId =  top.parentTopic ";
+                    "CONNECT BY  prior  top.topicId =  top.parentTopic "+
+                    "order siblings by top.name Desc ";
         List<AppFormTopics> topicList=jdbcTopicObject.query(SQL, new AppFormTopicRowMapper(),id);
         return topicList;
     }

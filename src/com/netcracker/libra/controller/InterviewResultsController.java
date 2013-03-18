@@ -30,17 +30,21 @@ public class InterviewResultsController
     @RequestMapping(value="addResult", method= RequestMethod.GET)
     public ModelAndView addResult(@RequestParam("InterviewId") int InterviewId)
     {
-        if(userPreferences.accessLevel==1)
+        if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2 )
         {
-        this.InterviewId=InterviewId;
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("addResultView");       
-        List<InterviewResult> intres=iresults.getResult(InterviewId);
-        mav.addObject("existsComment", iresults.existsComment(userPreferences.UserId, InterviewId));
-        mav.addObject("userId", userPreferences.UserId);
-        mav.addObject("interviewResult",intres);
-        mav.addObject("InterviewId", InterviewId);
-        return mav; 
+            if(iresults.exists(InterviewId)==0)
+            {
+                return message("<a href='/Libra/'>Вернуться назад</a>","Такого интервью нету","Ошибка");
+            }
+            this.InterviewId=InterviewId;
+            ModelAndView mav = new ModelAndView();
+            mav.setViewName("addResultView");       
+            List<InterviewResult> intres=iresults.getResult(InterviewId);
+            mav.addObject("existsComment", iresults.existsComment(userPreferences.UserId, InterviewId));
+            mav.addObject("userId", userPreferences.UserId);
+            mav.addObject("interviewResult",intres);
+            mav.addObject("InterviewId", InterviewId);
+            return mav; 
         }
         else
         {
@@ -52,29 +56,43 @@ public class InterviewResultsController
     public ModelAndView addResultSubmit(@RequestParam("mark") int mark,
     @RequestParam("comment") String comment)
     {
-        iresults.addResult(InterviewId, userPreferences.UserId, mark, comment);        
-        return showResults();  
+        if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2)
+        { 
+            iresults.addResult(InterviewId, userPreferences.UserId, mark, comment);        
+            return showResults();  
+        }
+        else
+        {
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
+        }
     }
     
     @RequestMapping(value="updateResultSubmit", method= RequestMethod.POST)
     public ModelAndView updateResultSubmit(@RequestParam("mark") int mark,
     @RequestParam("comment") String comment)
     {
-        iresults.updateResult(InterviewId, userPreferences.UserId, mark, comment);
-        return  showResults();
+        if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2)
+        {         
+            iresults.updateResult(InterviewId, userPreferences.UserId, mark, comment);
+            return  showResults();
+        }
+        else
+        {
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
+        }
     }
     
     @RequestMapping("showResults")
     public ModelAndView showResults()
     {
-        if(userPreferences.accessLevel==1)
+        if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2)
         {
-        ModelAndView mav = new ModelAndView();
-        List<InterviewResultsInfo> inf=iresults.getInfo();
-        mav.addObject("showStudents", inf);
-        mav.setViewName("showResultsView");        
-        return mav; 
-                }
+            ModelAndView mav = new ModelAndView();
+            List<InterviewResultsInfo> inf=iresults.getInfo();
+            mav.addObject("showStudents", inf);
+            mav.setViewName("showResultsView");        
+            return mav; 
+        }
         else
         {
             return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
@@ -84,17 +102,24 @@ public class InterviewResultsController
     @RequestMapping(value="deleteResult", method= RequestMethod.GET)
     public ModelAndView delResultSubmit(@RequestParam("interviewId") int interviewId)
     {
-        iresults.deleteResult(interviewId,userPreferences.UserId);
-        return  showResults();
+        if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2)
+        {
+            iresults.deleteResult(interviewId,userPreferences.UserId);
+            return  showResults();
+        }
+        else
+        {
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
+        }
     }
     
     public ModelAndView message(String link,String message,String title)
-     {
+    {
          ModelAndView mav=new ModelAndView();
          mav.setViewName("messageView");
          mav.addObject("link",link);
          mav.addObject("message",message);
          mav.addObject("title",title);
          return mav;
-     }
+    }
 }

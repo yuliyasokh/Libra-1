@@ -8,99 +8,135 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+         <jsp:include page="../resources.jsp" />
         <title>Управление датами интервью - добавление</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript" charset="utf-8">   
-</script>
-<script>
+          <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js">    
+          </script>
+          
+         <style type="text/css" media="all">@import "../resources/css/timePicker.css";</style>
+         
+        <script type="text/javascript" src="../resources/js/jquery.timePicker.js"></script>
+      <script type="text/javascript">
     $(document).ready(function() {
         $("#type").bind("change", function(){    
         if ($("#type").val()==1) {
-        $("#hrDiv").css("display","block");
-        $("#techDiv").css("display","none");
+            $("#hrDiv").css("display","block");
+            $("#techDiv").css("display","none");
         }
         else {
-        $("#hrDiv").css("display","none");
-        $("#techDiv").css("display","block");
+            $("#hrDiv").css("display","none");
+            $("#techDiv").css("display","block");
         }
-       
     });
  });
+  jQuery(function() {
+    $("#time3, #time4").timePicker();
+        
+    // Store time used by duration.
+    var oldTime = $.timePicker("#time3").getTime();
+    
+    // Keep the duration between the two inputs.
+    $("#time3").change(function() {
+      if ($("#time4").val()) { 
+          // // Only update when second input has a value.
+        // Calculate duration.
+        var duration = ($.timePicker("#time4").getTime() - oldTime);
+        var time = $.timePicker("#time3").getTime();
+        // Calculate and update the time in the second input.
+        $.timePicker("#time4").setTime(new Date(new Date(time.getTime() + duration)));
+        oldTime = time;
+      }
+    });
+    // Validate.
+    $("#time4").change(function() {
+      if($.timePicker("#time3").getTime() > $.timePicker(this).getTime()) {
+        $(this).addClass("error");
+      }
+      else {
+          console.log("hell9!");
+        $(this).removeClass("error");
+      }
+    });
+    
+  $("#time4").change(function() {
+  if (($("#time4").val()) && (($("#time3").val())) && ($("#date").val())) {
+      
+  }
+});
+});
 </script>
+       <link rel="stylesheet" type="text/css" href="../resources/css/tcal.css" />
+	<script type="text/javascript" src="../resources/js/tcal.js">   
+        </script> 
     </head>
     <body>
-        <center>
-            <form method="POST" action="interviewDateAdd.html">
-        <h2 align="center">Добавить новую дату интервью</h2>
-        Выберите тип: 
-        <select name="type" id="type" >
+        <div class="navmenu">
+		<jsp:include page="../navbar.jsp" />
+	</div>
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+		<div class="sidebar">
+				<jsp:include page="../sidebar.jsp" />
+			</div>
+			<div class="span9">
+				<div class="hero-unit">
+                                    <center>
+        
+        <h2>Добавить новую дату интервью</h2>
+         <form name="Form" action="interviewDateAdded.html" method="get">
+       <br>
+         Тип:
+               <select name="type" id="type" style="width: 90px"  class="selectwidth">
             <option value="1" > Hr </option>
             <option value="2"> Tech </option>
-            </select>
-        <br>
-            Введите дату (20/05/2013): <input type="text" name="begin"><br>
-            Введите время начала и конца: 
-            <input type="text" name="timeStart" style="width: 50px" > 
+            </select> 
+         <br>
+               
+           <div>Дата:
+               <input type="text" id="date" name="begin" class="tcal" value=""  style="width: 100px" />
+           </div>
+	
+             <form name="Form" action="interviewDateAdded.html" method="get">
+                 <input type="hidden" value='${type}' name="type"> 
+                 <input type="hidden" value='${begin}' name="begin"> 
+             Время начала и конца: 
+            <div>
+                <input name="timeStart" type="text" id="time3" size="10" value="08:00" style="width: 50px"/> 
             - 
-            <input type="text" name="end" style="width: 50px" ><br>   
-            Введите продолжительность: <input type="text" name="duration" >  
+            <input name="end" type="text" id="time4" size="10" value="09:00" style="width: 50px"/>
+            </div>
+               Продолжительность: 
+               <input type="text" name="duration" style="width: 50px" >  
         <br> 
-        Выберите интервьюеров:<br> 
+        Выберите интервьюеров:</br> 
         <div id="hrDiv">
         <c:forEach items="${Inters}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" value=<c:out value="${i.userid}"/> unchecked> <c:out value="${i.inters}"/> <br>
+            <label for="<c:out value="${i.userid}"/>">${i.inters}
+                <input type="checkbox" name="checkInterviewers[]" id="<c:out value="${i.userid}"/>" value=<c:out value="${i.userid}"/> >
+            </label><br>
         </c:forEach>
         </div>
         <div style="display: none;"  id="techDiv">
         <c:forEach items="${intersTech}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" value=<c:out value="${i.userid}"/> unchecked> <c:out value="${i.inters}"/> <br>
+            <input type="checkbox" name="checkInterviewers[]" id="<c:out value="${i.userid}"/>" value=<c:out value="${i.userid}"/> > 
+           <label for="<c:out value="${i.userid}"/>">${i.inters}  </label> </br>
         </c:forEach>
         </div>
-            <br> 
-        <input type="submit" name="submitDate" value="Добавить">
-    </form>
-         <h2 align="center">Информация о рассписании собеседований</h2><br> 
-          <form method="GET" action="delInterviewDate.html">
-        <table border="1" cellspacing="0" cellpadding="4">
-          <tr>
-            <th>№ даты</th>
-            <th>Тип</th>
-            <th>Дата</th>
-            <th>Время</th>
-            <th>Продолжительность</th>
-            <th>Интервьюеры</th>
-            <th>Уведомить</th>
-            <th>Править</th>
-            <th>Удалить</th>
-          </tr>
-    <c:forEach items="${Model}" var="d">
-    <tr>
-      <td><c:out value="${d.interviewDateId}"/></td>
-      <td><c:out value="${d.typeInterview}"/></td>
-      <td><c:out value="${d.dateInter}"/></td>
-      <td><c:out value="${d.timeInter}"/></td>
-      <td><c:out value="${d.interviewDuration}"/></td>
-      <td><c:out value="${d.listInterviewers}"/></td>
-      <td>
-      <input type="submit" name="sentEmails" value="Уведомить">
-      <input type="hidden" name="interviewDateId" value="<c:out value='${d.interviewDateId}  '/>"/>
-      </td>
-      <td>
-          <a href="editInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId}'/>&type=<c:out value='${d.typeInterview}'/> ">
-              править
-          </a>
-      </td>
-      <td>  
-       <a href="delInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId} '/>">
-         удалить 
-       </a>
-      </td>
-  </tr>
-    </c:forEach>
-    </table>
-   </form>
+            </br> 
+        <input type="submit" value="Добавить">
+    </form>                      
       </center>
+                                </div>
+                        </div>
+                </div>
+        </div>
     </body>
 </html>

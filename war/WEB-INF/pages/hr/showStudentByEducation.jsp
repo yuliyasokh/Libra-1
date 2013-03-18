@@ -4,15 +4,19 @@
     Author     : Yuliya
 --%>
 
-<%@page import="java.util.List"%>
-<%@page import="com.netcracker.libra.dao.HrJDBC"%>
-<%@page import="com.netcracker.libra.model.Faculty"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
    <head>
+       <jsp:include page="../resources.jsp" />
+       <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Find students</title> 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript" charset="utf-8">   
@@ -36,8 +40,19 @@ function getFact(){
 </script>
 </head>
    <body>
+         <div class="navmenu">
+		<jsp:include page="../navbar.jsp" />
+	</div>
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+		<div class="sidebar">
+				<jsp:include page="../sidebar.jsp" />
+			</div>
+			<div class="span9">
+				<div class="hero-unit">
     <center>
-       <h2 align="center">Список студентов</h2>   
+       <h2>Список студентов</h2>   
         <form method="post" action="showStudentByEducation.html">
        Университет:
        <select onchange="getFact();" name="univ" id="univ">
@@ -62,7 +77,7 @@ function getFact(){
        <input type="submit" value="Поиск">
         </form>
           <form method="GET">
-          <table border ="1"> 
+              <table border ="1" class="bordered"> 
             <th>
                 <a href="sortedByEducation.html?orderBy=appId&direction=asc&universityId=<c:out value='${univ}'/>&facultyId=<c:out value='${fact}'/>&departmentId=<c:out value='${dept}'/>">
                     № анкеты
@@ -96,7 +111,6 @@ function getFact(){
       <td><input type="hidden" name="email" value="<c:out value='${s.getEmail()}'/>"/>${s.getEmail()}</td>
       <input type="hidden" name="view" value="1"/>
       <td> <input type="submit" value="Анкета"></td>
-          
                 <td> <input type="submit" value="Интервью"></td>
           </form>
       <td> <input type="submit" value="Удалить"></td>
@@ -104,5 +118,9 @@ function getFact(){
     </c:forEach>
     </table>
        </center>
+                                </div>
+                        </div>
+                </div>
+        </div>
     </body>
 </html>

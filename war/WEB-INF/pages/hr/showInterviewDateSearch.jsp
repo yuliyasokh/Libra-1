@@ -10,16 +10,59 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Управление датами - поиск</title>
+        <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
+        <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8">   
+            </script>
+      <script type="text/javascript">
+			$(function() {
+				function sortTable($table, cellIndex, direction) {
+					var $rows = $table.find('tbody tr');
+					var data = [];
+					$rows.each(function() {
+						data.push({
+							cellText: $(this).find('td').eq(cellIndex).text(),
+							$row: $(this)
+						});
+					});
+
+					data.sort(function(a, b) {
+						if (a.cellText == b.cellText) {
+							return 0;
+						}
+						var sign = direction == "ASC" ? 1 : -1;
+						if(a.cellText == parseInt(a.cellText) && b.cellText == parseInt(b.cellText))
+                                                    return sign * ((parseInt(a.cellText) < parseInt(b.cellText)) ? -1 : 1);
+						return sign * ((a.cellText < b.cellText) ? -1 : 1);
+					});
+					
+					
+					$table.find('tbody').empty();
+					$(data).each(function() {
+						$table.find('tbody').append(this.$row);
+					});
+				}
+				
+				var $interviews = $('.bordered');
+				$interviews.find('thead th').each(function(cellIndex) {
+					$(this).on('click', function() {
+						var lastDirection = $(this).data('lastDirection') || "DESC";
+						var direction = lastDirection == "DESC" ? "ASC" : "DESC";
+						$(this).data('lastDirection', direction);
+					
+						sortTable($interviews, cellIndex, direction);
+					});
+				});
+			});
+		</script>
     </head>
     <body>
         <center>
             <a href="interviewDateAdd.html">Добавить новую дату интервью</a>
             <br>
-            <br>
             <h3>${msg}</h3>
             <form name="myForm" action="showInterviewDateSearch.html" method="get">
         <select name="interSearch">
-            <option value="0"> - </option>
+            <option value="0">Все </option>
             <option value="1">№ даты</option>
             <option value="2">Дата</option>
             <option value="3">Интервьер</option>
@@ -31,18 +74,21 @@
          <h2 align="center">Информация о рассписании собеседований</h2>
          <br> 
           <form method="GET" action="delInterviewDate.html">
-              <table border="1" cellspacing="0" cellpadding="4">
+              <table border="1" class="bordered">
+                  <thead>
            <tr>
-            <th>№ даты</th>
-            <th>Тип</th>
-            <th>Дата</th>
-            <th>Время</th>
-            <th>Продолжительность</th>
-            <th>Интервьюеры</th>
+               <th><a href="#">№ даты</a></th>
+            <th><a href="#">Тип</a></th>
+            <th><a href="#">Дата</a></th>
+            <th><a href="#">Время</a></th>
+            <th><a href="#">Продолжительность</a></th>
+            <th><a href="#">Интервьюеры</a></th>
             <th>Уведомить</th>
             <th>Править</th>
             <th>Удалить</th>
            </tr>
+                  </thead>
+                  <tbody>
     <c:forEach items="${Model}" var="d">
     <tr>
       <td><c:out value="${d.interviewDateId}"/></td>
@@ -67,9 +113,9 @@
         </td>
   </tr>
     </c:forEach>
-    </table>
+              </tbody>
+            </table>
           </form>
          </center>
-    </body>
     </body>
 </html>

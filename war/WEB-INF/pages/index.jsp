@@ -25,7 +25,6 @@
         </ul>
         
         <a href="showTemplates.html">Шаблоны</a>
-        <a href="showTopics.html">Темы вопросов</a>
         <a href="showTypes.html">Типы</a>
         <a href="hr/showStudentbyIdView.html">Поиск1</a>
         <a href="hr/interviewDate.html">Расписание</a>
@@ -37,11 +36,9 @@
         <a href="hr/showUniversities.html">Управление универами</a>
         <a href="hr/showFaculties.html">Управление факультетами</a>
         <a href="hr/showDepartments.html">Управление кафедрами</a>
+        <a href="hr/showLanguages.html">Управление языками</a>
         <br>
-        <a href="showStudentRecords.html">Отчет График записи студентов</a>
-        <a href="showRegReport.html">Отчет зарегистрировались/пришли</a>
-        <a href="showAdvertise.html">Отчет эффективности рекламы</a>
-        <a href="showStudentActivity.html">Отчет посещаемости собеседований</a>
-        <br>
+        </br>
+                <a href="showResults.html">Показать результаты</a>
 </body>
 </html>
